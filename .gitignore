@@ -1,0 +1,9 @@
+build/
+*.egg-info/
+.vscode
+
+data/
+doc/figs/*
+tests/*.pdf
+
+todo.txt

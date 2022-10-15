@@ -1,0 +1,29 @@
+# Data directory
+C:\dev\StellarAtmospheres2\data
+
+# Output spectrum
+synthetic.dat
+
+# Wavelength range
+4000 7000
+
+# Number of wavelength points
+1000
+
+# Max tau
+100
+
+# Number of zones
+256
+
+# Maximum iterations for convergence
+2
+
+# Order of Gaussian quadrature
+2
+
+# Thermalization
+0.1
+
+# Effective temperature
+6000
