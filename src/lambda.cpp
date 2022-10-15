@@ -10,7 +10,8 @@ using namespace std;
 
 namespace myLib
 {
-    void calcLambda(RadModel &radModel)
+    void calcLambda(RadModel &radModel,
+                    vector<double> &A, vector<double> &B, vector<double> &C)
     {
         const int &nZones = radModel.params.nZones;
         const int &nQuad = radModel.params.nQuad;
@@ -36,14 +37,10 @@ namespace myLib
         vector<vector<double>> betaM(nZones, vector<double>(halfQuad));
         vector<vector<double>> gammaM(nZones, vector<double>(halfQuad));
 
-        vector<double> A(nZones);
-        vector<double> B(nZones);
-        vector<double> C(nZones);
-
         // Calc delta tau's
         for (int i=0; i < nZones - 1; i++)
         {
-            for (int j=0; j < halfQuad; i++)
+            for (int j=0; j < halfQuad; j++)
             {
                 Dtau[i][j] = (tau[i + 1] - tau[i]) / quadMu[j];
                 expDtau[i][j] = exp(-Dtau[i][j]);
@@ -53,7 +50,7 @@ namespace myLib
         // Calc e's
         for (int i=1; i < nZones; i++)
         {
-            for (int j=0; j < halfQuad; i++)
+            for (int j=0; j < halfQuad; j++)
             {
                 e0[i][j] = 1.0 - expDtau[i - 1][j];
                 e1[i][j] = Dtau[i - 1][j] - e0[i][j];
@@ -61,10 +58,10 @@ namespace myLib
             }
         }
 
-        // Calc parabolic coefficients
-        for (int i=1; i < nZones - 1; i++)
+        // Calc parabolic coefficients (from zone N - 1 to 1)
+        for (int i=nZones - 2; i > -1; i--)
         {
-            for (int j=0; j < halfQuad; i++)
+            for (int j=0; j < halfQuad; j++)
             {
                 alphaM[i][j] = e0[i][j] +
                                (e2[i][j] - (Dtau[i][j] + 2 * Dtau[i - 1][j]) * e1[i][j]) /
@@ -85,16 +82,12 @@ namespace myLib
         }
 
         // Integrate mu first (Quadrature)
-        // C[nZones - 1] = 
-        // B[nZones - 1] = 
-        // B[0] = 
-        // A[0] =
 
+        // C integral
         for (int i=1; i < nZones - 1; i++)
         {
-            // C integral
             quadSum = 0.0;
-            for (int j=0; j < halfQuad; i++)
+            for (int j=0; j < halfQuad; j++)
             {
                 quadSum += quadW[j] * (gammaM[i - 1][j] +
                                        gammaP[i - 1][j] + expDtau[i - 1][j] *
@@ -102,20 +95,26 @@ namespace myLib
             }
 
             C[i - 1] = 0.5 * quadSum;
+        }
 
-            // B integral
+        // B integral
+        for (int i=1; i < nZones - 1; i++)
+        {
             quadSum = 0.0;
-            for (int j=0; j < halfQuad; i++)
+            for (int j=0; j < halfQuad; j++)
             {
                 quadSum += quadW[j] * (betaM[i][j] + gammaM[i - 1][j] * expDtau[i - 1][j] +
                                        betaP[i][j] + alphaP[i + 1][j] * expDtau[i][j]);
             }
 
             B[i] = 0.5 * quadSum;
+        }
 
-            // A integral
+        // A integral
+        for (int i=1; i < nZones - 1; i++)
+        {
             quadSum = 0.0;
-            for (int j=0; j < halfQuad; i++)
+            for (int j=0; j < halfQuad; j++)
             {
                 quadSum += quadW[j] * (alphaM[i + 1][j] + expDtau[i][j] *
                                                           (gammaM[i - 1][j] * expDtau[i - 1][j] + betaM[i][j]) +
@@ -125,7 +124,39 @@ namespace myLib
             A[i + 1] = 0.5 * quadSum;
         }
 
-        // Integrate across wavelengths
+        // 4 unknown matrix elements at i = 1 and i = N
+        quadSum = 0.0;
+        for (int j=0; j < halfQuad; j++)
+        {
+            quadSum += quadW[j] * (betaP[nZones - 1][j] * expDtau[nZones - 2][j] + gammaP[nZones - 2][j]);
+        }
+        C[nZones - 1] = quadSum;
+
+        quadSum = 0.0;
+        for (int j=0; j < halfQuad; j++)
+        {
+            quadSum += quadW[j] * (e1[nZones - 1][j] / Dtau[nZones - 2][j] +
+                                   (Dtau[nZones - 1][j] - 1 + expDtau[nZones - 1][j]) / Dtau[nZones - 1][j]);
+        }
+        B[nZones - 1] = quadSum;
+
+        quadSum = 0.0;
+        for (int j=0; j < halfQuad; j++)
+        {
+            // Remember i^-(0) = 0 so this is just i^+(0) in integral
+            quadSum += quadW[j] * (e1[1][j] / Dtau[0][j]);
+        }
+        B[0] = quadSum;
+
+        quadSum = 0.0;
+        for (int j=0; j < halfQuad; j++)
+        {
+            // Remember i^-(0) = 0 so i^-_{1 + 1} = alphaM_{1 + 1}
+            quadSum += quadW[j] * (alphaM[1][j]);
+        }
+        A[0] = quadSum;
+
+        // Finally integrate across wavelengths
         for (int i=1; i < nZones - 1; i++)
         {
             // C[i - 1] = 

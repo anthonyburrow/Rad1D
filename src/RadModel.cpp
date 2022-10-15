@@ -49,7 +49,11 @@ namespace myLib
         auto t0 = chrono::high_resolution_clock::now();
 
         // Calculate Lambda operator
-        calcLambda(*this);
+        vector<double> lambdaA(params.nZones);
+        vector<double> lambdaB(params.nZones);
+        vector<double> lambdaC(params.nZones);
+
+        calcLambda(*this, lambdaA, lambdaB, lambdaC);
 
         auto t1 = chrono::high_resolution_clock::now();
         chrono::duration<double> sec = t1 - t0;
