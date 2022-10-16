@@ -10,7 +10,7 @@ params = {
     'n_wave'      : 1000,
     'tau_max'     : 100,
     'eps'         : 0.1,
-    'T_eff'         : 6000,
+    'T_eff'       : 6000,
     'n_zones'     : 256,
     'max_iter'    : 100,
     'n_quad'      : 8

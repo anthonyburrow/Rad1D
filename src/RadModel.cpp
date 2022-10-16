@@ -2,6 +2,7 @@
 #include <string>
 #include <chrono>
 #include <iomanip>
+#include <vector>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/numpy.h>
@@ -47,6 +48,7 @@ namespace myLib
     {
         cout << "Generating spectrum..." << endl;
         auto t0 = chrono::high_resolution_clock::now();
+        chrono::duration<double> sec;
 
         // Calculate Lambda operator
         vector<double> lambdaA(params.nZones);
@@ -56,7 +58,7 @@ namespace myLib
         calcLambda(*this, lambdaA, lambdaB, lambdaC);
 
         auto t1 = chrono::high_resolution_clock::now();
-        chrono::duration<double> sec = t1 - t0;
+        sec = t1 - t0;
         cout << "Calculated Lambda matrix in "<< fixed << setprecision(3)
              << sec.count() << " sec" << endl;
 
@@ -70,7 +72,7 @@ namespace myLib
         rescaleFlux();
 
         auto t2 = chrono::high_resolution_clock::now();
-        chrono::duration<double> sec = t2 - t1;
+        sec = t2 - t1;
         cout << "Generated spectrum in "<< fixed << setprecision(3)
              << sec.count() << " sec" << endl;
 

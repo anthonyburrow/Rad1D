@@ -10,7 +10,7 @@ using namespace std;
 
 namespace myLib
 {
-    void calcLambda(RadModel &radModel,
+    void calcLambda(const RadModel &radModel,
                     vector<double> &A, vector<double> &B, vector<double> &C)
     {
         const int &nZones = radModel.params.nZones;
@@ -58,8 +58,8 @@ namespace myLib
             }
         }
 
-        // Calc parabolic coefficients (from zone N - 1 to 1)
-        for (int i=nZones - 2; i > -1; i--)
+        // Calc parabolic coefficients (from zone 2 to N - 1)
+        for (int i=1; i < nZones; i++)
         {
             for (int j=0; j < halfQuad; j++)
             {
@@ -70,7 +70,13 @@ namespace myLib
                               ((Dtau[i][j] * Dtau[i - 1][j]));
                 gammaM[i][j] = (e2[i][j] - Dtau[i - 1][j] * e1[i][j]) /
                                (Dtau[i][j] * (Dtau[i][j] + Dtau[i - 1][j]));
+            }
+        }
 
+        for (int i=1; i < nZones - 1; i++)
+        {
+            for (int j=0; j < halfQuad; j++)
+            {
                 alphaP[i][j] = (e2[i + 1][j] - Dtau[i][j] * e1[i + 1][j]) /
                                (Dtau[i - 1][j] * (Dtau[i][j] + Dtau[i - 1][j]));
                 betaP[i][j] = ((Dtau[i][j] + Dtau[i - 1][j]) * e1[i + 1][j] - e2[i + 1][j]) /
@@ -159,7 +165,7 @@ namespace myLib
         // Finally integrate across wavelengths
         for (int i=1; i < nZones - 1; i++)
         {
-            // C[i - 1] = 
+
         }
     }
 }

@@ -120,7 +120,7 @@ namespace myLib
             params.eps = dictParams["eps"].cast<double>();
         }
         if (dictParams.contains("T_eff")) {
-            params.eps = dictParams["T_eff"].cast<double>();
+            params.Teff = dictParams["T_eff"].cast<double>();
         }
         if (dictParams.contains("n_wave")) {
             params.nWave = dictParams["n_wave"].cast<int>();

@@ -16,7 +16,7 @@ namespace myLib
         double waveStart = 4000.0;
         double waveEnd = 7000.0;
         double tauMax = 100.0;
-        double eps = 1.0;
+        double eps = 0.001;
         double Teff = 6000.0;
         int nWave = 1000;
         int nZones = 256;

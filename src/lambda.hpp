@@ -1,9 +1,11 @@
 #pragma once
 
+#include <vector>
+
 #include "RadModel.hpp"
 
 namespace myLib
 {
-    void calcLambda(RadModel &radModel,
-                    vector<double> &A, vector<double> &B, vector<double> &C);
+    void calcLambda(const RadModel &radModel, std::vector<double> &A,
+                    std::vector<double> &B, std::vector<double> &C);
 }
