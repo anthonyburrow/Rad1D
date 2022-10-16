@@ -17,13 +17,13 @@ namespace myLib
         // Physical arrays
         std::vector<double> B;
         std::vector<double> S;
-        // std::vector<std::vector<double>> I;
         std::vector<double> J;
 
         // Methods
         NuModel(const double &lam, const RadModel &radModel);
 
-        const double getFlux();
+        const double calcFlux();
+        void iterate();
 
     private:
         void setBoundary();

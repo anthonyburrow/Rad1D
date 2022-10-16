@@ -8,7 +8,7 @@ params = {
     'wave_start'  : 4000.,
     'wave_end'    : 7000.,
     'n_wave'      : 1000,
-    'tau_max'     : 100,
+    'tau_max'     : 1000,
     'eps'         : 0.1,
     'T_eff'       : 6000,
     'n_zones'     : 256,
@@ -43,3 +43,10 @@ ax.set_ylabel('Temperature [K]')
 
 fn = './T_tau.pdf'
 fig.savefig(fn, dpi=125)
+
+
+# Plot convergence test
+lam = 5000.
+results = model.convergence_test(lam)
+
+# print(results)

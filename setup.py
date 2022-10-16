@@ -14,7 +14,6 @@ src_files = (
     'lambdaIterate',
     'main',
     'NuModel',
-    'process',
     'RadModel',
     'util',
 )

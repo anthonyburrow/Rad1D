@@ -11,7 +11,6 @@
 #include "NuModel.hpp"
 #include "io.hpp"
 #include "initialize.hpp"
-#include "process.hpp"
 #include "constants.hpp"
 #include "lambda.hpp"
 
@@ -30,6 +29,7 @@ namespace myLib
         T(params.nZones, zero)
     {
         initialize(*this);
+        initLambda();
     }
 
     RadModel::RadModel(const py::dict &dictParams)
@@ -39,9 +39,27 @@ namespace myLib
         quadW(params.nQuad, zero),
         spectrum(params.nWave, vector<double>(2, zero)),
         tau(params.nZones, zero),
-        T(params.nZones, zero)
+        T(params.nZones, zero),
+        lambdaA(params.nZones, zero),
+        lambdaB(params.nZones, zero),
+        lambdaC(params.nZones, zero)
     {
         initialize(*this);
+        initLambda();
+    }
+
+    void RadModel::initLambda()
+    {
+        cout << "Calculating Lambda matrix..." << endl;
+        auto t0 = chrono::high_resolution_clock::now();
+        chrono::duration<double> sec;
+
+        calcLambda(*this, lambdaA, lambdaB, lambdaC);
+
+        auto t1 = chrono::high_resolution_clock::now();
+        sec = t1 - t0;
+        cout << "Calculated Lambda matrix in "<< fixed << setprecision(3)
+             << sec.count() << " sec" << endl;
     }
 
     vector<vector<double>> RadModel::genSpectrum()
@@ -50,29 +68,17 @@ namespace myLib
         auto t0 = chrono::high_resolution_clock::now();
         chrono::duration<double> sec;
 
-        // Calculate Lambda operator
-        vector<double> lambdaA(params.nZones);
-        vector<double> lambdaB(params.nZones);
-        vector<double> lambdaC(params.nZones);
-
-        calcLambda(*this, lambdaA, lambdaB, lambdaC);
-
-        auto t1 = chrono::high_resolution_clock::now();
-        sec = t1 - t0;
-        cout << "Calculated Lambda matrix in "<< fixed << setprecision(3)
-             << sec.count() << " sec" << endl;
-
         // Calc flux at each wavepoint - parallelize this in the future?
         for (int i=0; i < params.nWave; i++)
         {
             NuModel nuModel = NuModel(spectrum[i][0], *this);
-            spectrum[i][1] = nuModel.getFlux();
+            spectrum[i][1] = nuModel.calcFlux();
         }
 
         rescaleFlux();
 
-        auto t2 = chrono::high_resolution_clock::now();
-        sec = t2 - t1;
+        auto t1 = chrono::high_resolution_clock::now();
+        sec = t1 - t0;
         cout << "Generated spectrum in "<< fixed << setprecision(3)
              << sec.count() << " sec" << endl;
 
@@ -84,8 +90,28 @@ namespace myLib
         // Rescale with constants from Planck function
         for (int i=0; i < params.nWave; i++)
         {
-            // spectrum[i][1] *= 2.0 * hc * c * 1e8;
+            spectrum[i][1] *= 2.0 * hc * c * 1e8;
         }
+    }
+
+    vector<vector<double>> RadModel::convergenceTest(const double &lam)
+    {
+        vector<vector<double>> results(params.maxIter,
+                                       vector<double>(params.nZones));
+
+        NuModel nuModel = NuModel(lam, *this);
+
+        for (int i=0; i < params.maxIter; i++)
+        {
+            nuModel.iterate();
+
+            for (int j=0; j < params.nZones; j++)
+            {
+                results[i][j] = nuModel.S[j] / nuModel.B[j];
+            }
+        }
+
+        return results;
     }
 
     // Properties
@@ -100,6 +126,10 @@ PYBIND11_MODULE(Rad1D, module_handle) {
         )
         .def("gen_spectrum", [](myLib::RadModel &self) {
             py::array out = py::cast(self.genSpectrum());
+            return out;
+        })
+        .def("convergence_test", [](myLib::RadModel &self, double &lam) {
+            py::array out = py::cast(self.convergenceTest(lam));
             return out;
         })
         // Properties

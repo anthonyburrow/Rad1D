@@ -6,7 +6,7 @@
 
 namespace myLib
 {
-    // void calcJ(NuModel &nuModel);
+    void calcJ(NuModel &nuModel);
     void calcS(NuModel &nuModel);
 
     void lambdaIteration(NuModel &nuModel);
