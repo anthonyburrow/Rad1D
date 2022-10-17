@@ -4,7 +4,9 @@ A simple 1D radiative transfer code.
 
 ## Requirements
 
-To use Rad1D as a Python-wrapped module, the following are needed:
+Currently this may be compiled and run on either Windows or Linux platforms
+with a. available C++ compiler. To use Rad1D as a Python-wrapped module, the
+following are needed:
 
 * Python 3.6+
 * `pybind11` package
