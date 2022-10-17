@@ -58,8 +58,8 @@ namespace myLib
 
         auto t1 = chrono::high_resolution_clock::now();
         sec = t1 - t0;
-        cout << "Calculated Lambda matrix in "<< fixed << setprecision(3)
-             << sec.count() << " sec" << endl;
+        // cout << "Calculated Lambda matrix in "<< fixed << setprecision(3)
+        //      << sec.count() << " sec" << endl;
     }
 
     vector<vector<double>> RadModel::genSpectrum()

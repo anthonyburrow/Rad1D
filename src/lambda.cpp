@@ -5,6 +5,7 @@
 #include "lambda.hpp"
 #include "RadModel.hpp"
 #include "util.hpp"
+#include "constants.hpp"
 
 using namespace std;
 
@@ -92,7 +93,7 @@ namespace myLib
         // C integral
         for (int i=1; i < nZones - 1; i++)
         {
-            quadSum = 0.0;
+            quadSum = zero;
             for (int j=0; j < halfQuad; j++)
             {
                 quadSum += quadW[j] * (gammaM[i - 1][j] +
@@ -100,13 +101,13 @@ namespace myLib
                                                           (alphaP[i + 1][j] * expDtau[i][j] + betaP[i][j]));
             }
 
-            C[i - 1] = 0.5 * quadSum;
+            C[i] = 0.5 * quadSum;
         }
 
         // B integral
         for (int i=1; i < nZones - 1; i++)
         {
-            quadSum = 0.0;
+            quadSum = zero;
             for (int j=0; j < halfQuad; j++)
             {
                 quadSum += quadW[j] * (betaM[i][j] + gammaM[i - 1][j] * expDtau[i - 1][j] +
@@ -119,7 +120,7 @@ namespace myLib
         // A integral
         for (int i=1; i < nZones - 1; i++)
         {
-            quadSum = 0.0;
+            quadSum = zero;
             for (int j=0; j < halfQuad; j++)
             {
                 quadSum += quadW[j] * (alphaM[i + 1][j] + expDtau[i][j] *
@@ -127,26 +128,26 @@ namespace myLib
                                        alphaP[i + 1][j]);
             }
 
-            A[i + 1] = 0.5 * quadSum;
+            A[i] = 0.5 * quadSum;
         }
 
         // 4 unknown matrix elements at i = 1 and i = N
-        quadSum = 0.0;
+        quadSum = zero;
         for (int j=0; j < halfQuad; j++)
         {
             quadSum += quadW[j] * (betaP[nZones - 1][j] * expDtau[nZones - 2][j] + gammaP[nZones - 2][j]);
         }
         C[nZones - 1] = quadSum;
 
-        quadSum = 0.0;
-        for (int j=0; j < halfQuad; j++)
-        {
-            quadSum += quadW[j] * (e1[nZones - 1][j] / Dtau[nZones - 2][j] +
-                                   (Dtau[nZones - 1][j] - 1 + expDtau[nZones - 1][j]) / Dtau[nZones - 1][j]);
-        }
-        B[nZones - 1] = quadSum;
+        // quadSum = zero;
+        // for (int j=0; j < halfQuad; j++)
+        // {
+        //     quadSum += quadW[j] * (e1[nZones - 1][j] / Dtau[nZones - 2][j] +
+        //                            (Dtau[nZones - 1][j] - 1 + expDtau[nZones - 1][j]) / Dtau[nZones - 1][j]);
+        // }
+        B[nZones - 1] = 1.0;
 
-        quadSum = 0.0;
+        quadSum = zero;
         for (int j=0; j < halfQuad; j++)
         {
             // Remember i^-(0) = 0 so this is just i^+(0) in integral
@@ -154,7 +155,7 @@ namespace myLib
         }
         B[0] = quadSum;
 
-        quadSum = 0.0;
+        quadSum = zero;
         for (int j=0; j < halfQuad; j++)
         {
             // Remember i^-(0) = 0 so i^-_{1 + 1} = alphaM_{1 + 1}

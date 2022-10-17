@@ -18,15 +18,16 @@ namespace myLib
         const vector<double> &lambdaB = nuModel.radModel.lambdaB;
         const vector<double> &lambdaC = nuModel.radModel.lambdaC;
 
-        nuModel.J[0] = lambdaB[0] * nuModel.S[0] + lambdaC[0] * nuModel.S[1];
-        nuModel.J[nZones - 1] = lambdaA[nZones - 1] * nuModel.S[nZones - 2] +
-                                lambdaB[nZones - 1] * nuModel.S[nZones - 1];
+        nuModel.J[0] = lambdaB[0] * nuModel.S[0] + lambdaC[1] * nuModel.S[1];
+        // nuModel.J[nZones - 1] = lambdaA[nZones - 2] * nuModel.S[nZones - 2] +
+        //                         lambdaB[nZones - 1] * nuModel.S[nZones - 1];
+        nuModel.J[nZones - 1] = nuModel.S[nZones - 1];
 
         for (int i=1; i < nZones - 1; i++)
         {
             nuModel.J[i] = lambdaA[i - 1] * nuModel.S[i - 1] +
                            lambdaB[i] * nuModel.S[i] +
-                           lambdaC[i] * nuModel.S[i + 1];
+                           lambdaC[i + 1] * nuModel.S[i + 1];
         }
     }
 
