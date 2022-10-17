@@ -35,5 +35,5 @@ params = {
 model = RadModel(params)
 ```
 
-See "./tests/example.py" for a list of input parameters and how `RadModel` may
+See "./examples/example1.py" for a list of input parameters and how `RadModel` may
 be used.

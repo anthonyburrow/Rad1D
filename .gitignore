@@ -1,6 +1,7 @@
 build/
 *.egg-info/
 .vscode
+__pycache__/
 
 data/
 doc/figs/*
