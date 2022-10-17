@@ -2,12 +2,36 @@
 
 A simple 1D radiative transfer code.
 
+## Requirements
+
+To use Rad1D as a Python-wrapped module, the following are needed:
+
+* Python 3.6+
+* `pybind11` package
+
 ## Installing the code
 
 Rad1D may be installed with `pip` (setuptools) by:
 
-`git clone https://github.com/anthonyburrow/Rad1D.git`
+```
+git clone https://github.com/anthonyburrow/Rad1D.git
+pip install ./Rad1D/
+```
 
-`pip install ./Rad1D/`
+## Running with Python
 
-## Running the code
+The `RadModel` class is exposed to Python and instantiated in the following
+way:
+
+```python
+from Rad1D import RadModel
+
+params = {
+    # Parameter key-values here
+}
+
+model = RadModel(params)
+```
+
+See "./tests/example.py" for a list of input parameters and how `RadModel` may
+be used.
