@@ -14,7 +14,7 @@ namespace myLib
         const RadModel &radModel;
         const radParams &params;
 
-        // Physical arrays
+        // Physical quantites
         std::vector<double> B;
         std::vector<double> S;
         std::vector<double> J;
@@ -23,6 +23,7 @@ namespace myLib
         NuModel(const double &lam, const RadModel &radModel);
 
         const double calcFlux();
+        const double calcF0();
         void iterate();
 
     private:

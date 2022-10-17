@@ -22,7 +22,7 @@ namespace myLib
         const vector<double> &quadW = radModel.quadW;
         double quadSum;
 
-        // Yes they are nZones even though I only use nZones - 1 or - 2 #YOLO
+        // Yes they are nZones even though I sometimes use nZones - 1 or - 2 #YOLO
         vector<vector<double>> Dtau(nZones, vector<double>(halfQuad));
         vector<vector<double>> expDtau(nZones, vector<double>(halfQuad));
 
