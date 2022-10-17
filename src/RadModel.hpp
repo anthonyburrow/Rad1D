@@ -28,8 +28,7 @@ namespace myLib
         RadModel(const pybind11::dict &dictParams);
 
         void initLambda();
-        std::vector<std::vector<double>> genSpectrum();
-        void rescaleFlux();
+        std::vector<std::vector<double>> genSpectrum(bool normalize = false);
         std::vector<std::vector<double>> convergenceTest(const double &lam);
 
         // Properties
@@ -37,6 +36,7 @@ namespace myLib
         std::vector<double> getT();
 
     private:
-
+        void normalizeFlux();
+        void scaleFlux();
     };
 }

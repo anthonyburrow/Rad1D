@@ -19,8 +19,7 @@ params = {
 
 model = RadModel(params)
 
-synth = model.gen_spectrum()
-synth[:, 1] /= synth[:, 1].max()
+synth = model.gen_spectrum(True)
 
 
 # Plot spectrum

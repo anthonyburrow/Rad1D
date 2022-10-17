@@ -49,7 +49,7 @@ namespace myLib
         //      << sec.count() << " sec" << endl;
     }
 
-    vector<vector<double>> RadModel::genSpectrum()
+    vector<vector<double>> RadModel::genSpectrum(bool normalize)
     {
         cout << "Generating spectrum..." << endl;
         auto t0 = chrono::high_resolution_clock::now();
@@ -62,7 +62,8 @@ namespace myLib
             spectrum[i][1] = nuModel.calcFlux();
         }
 
-        rescaleFlux();
+        if (normalize) { normalizeFlux(); }
+        else { scaleFlux(); }
 
         auto t1 = chrono::high_resolution_clock::now();
         sec = t1 - t0;
@@ -72,7 +73,18 @@ namespace myLib
         return spectrum;
     }
 
-    void RadModel::rescaleFlux()
+    void RadModel::normalizeFlux()
+    {
+        double maxFlux = (*max_element(begin(spectrum), end(spectrum),
+                          [](auto &a, auto &b){ return a[1] < b[1]; }))[1];
+
+        for (int i=0; i < params.nWave; i++)
+        {
+            spectrum[i][1] /= maxFlux;
+        }
+    }
+
+    void RadModel::scaleFlux()
     {
         // Rescale with constants from Planck function
         const double scale = 2.0 * hc * c * 1e8;
@@ -113,8 +125,8 @@ PYBIND11_MODULE(Rad1D, module_handle) {
     py::class_<myLib::RadModel>(module_handle, "RadModel")
         .def(py::init<const py::dict &>()
         )
-        .def("gen_spectrum", [](myLib::RadModel &self) {
-            py::array out = py::cast(self.genSpectrum());
+        .def("gen_spectrum", [](myLib::RadModel &self, bool normalize) {
+            py::array out = py::cast(self.genSpectrum(normalize));
             return out;
         })
         .def("convergence_test", [](myLib::RadModel &self, double &lam) {
