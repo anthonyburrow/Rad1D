@@ -24,7 +24,6 @@ namespace myLib
         int nQuad = 8;
     };
 
-    radParams readParams(const std::string &fileName);
     radParams dictToParams(const pybind11::dict &dictParams);
     void printParams(const radParams &params);
 }

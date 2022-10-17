@@ -25,7 +25,6 @@ namespace myLib
         std::vector<double> lambdaC;
 
         // Methods
-        RadModel(const radParams &params);
         RadModel(const pybind11::dict &dictParams);
 
         void initLambda();

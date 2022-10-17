@@ -19,19 +19,6 @@ namespace py = pybind11;
 
 namespace myLib
 {
-    RadModel::RadModel(const radParams &params)
-      : params(params),
-        // Allocate vectors
-        quadMu(params.nQuad, zero),
-        quadW(params.nQuad, zero),
-        spectrum(params.nWave, vector<double>(2, zero)),
-        tau(params.nZones, zero),
-        T(params.nZones, zero)
-    {
-        initialize(*this);
-        initLambda();
-    }
-
     RadModel::RadModel(const py::dict &dictParams)
       : params(dictToParams(dictParams)),
         // Allocate vectors
