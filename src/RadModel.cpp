@@ -27,9 +27,10 @@ namespace myLib
         spectrum(params.nWave, vector<double>(2, zero)),
         tau(params.nZones, zero),
         T(params.nZones, zero),
-        lambdaA(params.nZones, zero),
-        lambdaB(params.nZones, zero),
-        lambdaC(params.nZones, zero)
+        lambda(params.nZones, vector<double>(params.nZones, zero))
+        // lambdaA(params.nZones, zero),
+        // lambdaB(params.nZones, zero),
+        // lambdaC(params.nZones, zero)
     {
         initialize(*this);
         initLambda();
@@ -41,7 +42,8 @@ namespace myLib
         auto t0 = chrono::high_resolution_clock::now();
         chrono::duration<double> sec;
 
-        calcLambda(*this, lambdaA, lambdaB, lambdaC);
+        // calcLambda(*this, lambdaA, lambdaB, lambdaC);
+        calcLambda(*this, lambda);
 
         auto t1 = chrono::high_resolution_clock::now();
         sec = t1 - t0;
@@ -108,7 +110,7 @@ namespace myLib
 
             for (int j=0; j < params.nZones; j++)
             {
-                results[i][j] = nuModel.S[j] / nuModel.B[j];
+                results[i][j] = nuModel.J[j] / nuModel.B[j];
             }
         }
 

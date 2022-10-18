@@ -5,7 +5,6 @@ __pycache__/
 
 data/
 doc/figs/*
-tests/*.pdf
-tests/my_test.py
+examples/*.pdf
 
 todo.txt

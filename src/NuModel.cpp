@@ -53,7 +53,7 @@ namespace myLib
             // Check/break for convergence?
         }
 
-        // Calc F based on converged S/J/I
+        // Calc F based on converged S & J
         return calcF0();
     }
 
