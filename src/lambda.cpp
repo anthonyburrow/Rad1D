@@ -181,10 +181,11 @@ namespace myLib
         double quadSum;
         double Ip;
         double Im;
+        double deltaIp;
+        double deltaIm;
         double ImPrev;
         double IpPrev;
 
-        // Yes they are nZones even though I sometimes use nZones - 1 or - 2 #YOLO
         vector<vector<double>> Dtau(nZones, vector<double>(halfQuad, zero));
         vector<vector<double>> expDtau(nZones, vector<double>(halfQuad, zero));
 
@@ -233,6 +234,9 @@ namespace myLib
                               ((Dtau[i][j] * Dtau[i - 1][j]));
                 gammaM[i][j] = (e2[i][j] - Dtau[i - 1][j] * e1[i][j]) /
                                (Dtau[i][j] * (Dtau[i][j] + Dtau[i - 1][j]));
+
+                // Can't be < 0 because it is an intensity value
+                gammaM[i][j] = max(gammaM[i][j], zero);
             }
         }
 
@@ -247,6 +251,9 @@ namespace myLib
                 gammaP[i][j] = e0[i + 1][j] +
                                (e2[i + 1][j] - (Dtau[i - 1][j] + 2 * Dtau[i][j]) * e1[i + 1][j]) /
                                (Dtau[i][j] * (Dtau[i][j] + Dtau[i - 1][j]));
+
+                // Can't be < 0 because it is an intensity value
+                alphaP[i][j] = max(alphaP[i][j], zero);
             }
         }
 
@@ -273,9 +280,12 @@ namespace myLib
             quadSum = zero;
             for (int j=0; j < halfQuad; j++)
             {
-                Im = gammaM[i - 1][j];
+                deltaIm = max(gammaM[i - 1][j], zero);
+                deltaIp = max(gammaP[i - 1][j], zero);
+
+                Im = deltaIm;
                 Ip = (alphaP[i + 1][j] * expDtau[i][j] + betaP[i][j]) * expDtau[i - 1][j] +
-                     gammaP[i - 1][j];
+                     deltaIp;
                 quadSum += quadW[j] * (Im + Ip);
             }
             lambda[i - 1][i] = 0.5 * quadSum;
@@ -284,8 +294,11 @@ namespace myLib
             quadSum = zero;
             for (int j=0; j < halfQuad; j++)
             {
-                Im = gammaM[i - 1][j] * expDtau[i - 1][j] + betaM[i][j];
-                Ip = alphaP[i + 1][j] * expDtau[i][j] + betaP[i][j];
+                deltaIm = max(betaM[i][j], zero);
+                deltaIp = max(betaP[i][j], zero);
+
+                Im = gammaM[i - 1][j] * expDtau[i - 1][j] + deltaIm;
+                Ip = alphaP[i + 1][j] * expDtau[i][j] + deltaIp;
                 quadSum += quadW[j] * (Im + Ip);
             }
             lambda[i][i] = 0.5 * quadSum;
@@ -294,8 +307,11 @@ namespace myLib
             quadSum = zero;
             for (int j=0; j < halfQuad; j++)
             {
-                Im = (gammaM[i - 1][j] * expDtau[i - 1][j] + betaM[i][j]) * expDtau[i][j] + alphaM[i + 1][j];
-                Ip = alphaP[i + 1][j];
+                deltaIm = max(alphaM[i + 1][j], zero);
+                deltaIp = max(alphaP[i + 1][j], zero);
+
+                Im = (gammaM[i - 1][j] * expDtau[i - 1][j] + betaM[i][j]) * expDtau[i][j] + deltaIm;
+                Ip = deltaIp;
                 quadSum += quadW[j] * (Im + Ip);
             }
             lambda[i + 1][i] = 0.5 * quadSum;
@@ -304,7 +320,9 @@ namespace myLib
             for (int j=0; j < halfQuad; j++)
             {
                 // This is the A I^- calculation
-                ImPrev = (gammaM[i - 1][j] * expDtau[i - 1][j] + betaM[i][j]) * expDtau[i][j] + alphaM[i + 1][j];
+                deltaIm = max(alphaM[i + 1][j], zero);
+                ImPrev = (gammaM[i - 1][j] * expDtau[i - 1][j] + betaM[i][j]) * expDtau[i][j] +
+                         deltaIm;
                 for (int k=i + 2; k < nZones; k++)
                 {
                     Im = ImPrev * expDtau[k - 1][j];
@@ -317,9 +335,10 @@ namespace myLib
             for (int j=0; j < halfQuad; j++)
             {
                 // This is the C I^+ calculation
+                deltaIp = max(gammaP[i - 1][j], zero);
                 IpPrev = (alphaP[i + 1][j] * expDtau[i][j] + betaP[i][j]) * expDtau[i - 1][j] +
-                         gammaP[i - 1][j];
-                for (int k=i - 1; k > -1; k--)
+                         deltaIp;
+                for (int k=i - 2; k > -1; k--)
                 {
                     Ip = IpPrev * expDtau[k][j];
                     lambda[k][i] += 0.5 * quadW[j] * Ip;
@@ -333,7 +352,8 @@ namespace myLib
         for (int j=0; j < halfQuad; j++)
         {
             // i^-(0) = 0 so this is just i^+(0) in integral
-            quadSum += quadW[j] * betaP[0][j];
+            deltaIp = max(betaP[0][j], zero);
+            quadSum += quadW[j] * deltaIp;
         }
         lambda[0][0] = 0.5 * quadSum;
 
@@ -341,7 +361,8 @@ namespace myLib
         for (int j=0; j < halfQuad; j++)
         {
             // i^-(0) = 0 so i^-_{1 + 1} = alphaM_{1 + 1}
-            quadSum += quadW[j] * alphaM[1][j];
+            deltaIm = max(alphaM[1][j], zero);
+            quadSum += quadW[j] * deltaIm;
         }
         lambda[1][0] = 0.5 * quadSum;
 
@@ -349,7 +370,8 @@ namespace myLib
         for (int j=0; j < halfQuad; j++)
         {
             // This is the lambda[1][0] I^- calculation above
-            ImPrev = alphaM[1][j];
+            deltaIm = max(alphaM[1][j], zero);
+            ImPrev = deltaIm;
             for (int k=2; k < nZones; k++)
             {
                 Im = ImPrev * expDtau[k - 1][j];
@@ -359,12 +381,22 @@ namespace myLib
         }
 
         // Column N
-        lambda[nZones - 1][nZones - 1] = 1.0;   // Not sure about this one
+        quadSum = zero;
+        for (int j=0; j < halfQuad; j++)
+        {
+            deltaIm = max(betaM[nZones - 1][j], zero);
+            Im = deltaIm;
+            Ip = 1.0;
+            quadSum += quadW[j] * (Im + Ip);
+        }
+        lambda[nZones - 1][nZones - 1] = 0.5 * quadSum;
 
         quadSum = zero;
         for (int j=0; j < halfQuad; j++)
         {
-            Ip = 1.0 * expDtau[nZones - 2][j] + gammaP[nZones - 2][j];
+            // Here assume I^+(tau_max) = 1 (normalized)?
+            deltaIp = max(gammaP[nZones - 2][j], zero);
+            Ip = 1.0 * expDtau[nZones - 2][j] + deltaIp;
             quadSum += quadW[j] * Ip;
         }
         lambda[nZones - 2][nZones - 1] = 0.5 * quadSum;
@@ -373,7 +405,8 @@ namespace myLib
         for (int j=0; j < halfQuad; j++)
         {
             // This is the C I^+ calculation
-            IpPrev = 1.0 * expDtau[nZones - 2][j] + gammaP[nZones - 2][j];
+            deltaIp = max(gammaP[nZones - 2][j], zero);
+            IpPrev = 1.0 * expDtau[nZones - 2][j] + deltaIp;
             for (int k=nZones - 3; k > -1; k--)
             {
                 Ip = IpPrev * expDtau[k][j];
@@ -381,5 +414,14 @@ namespace myLib
                 IpPrev = Ip;
             }
         }
+
+        // for (int i=0; i < nZones; i++)
+        // {
+        //     for (int j=0; j < nZones; j++)
+        //     {
+        //         cout << lambda[i][j] << "  ";
+        //     }
+        //     cout << endl;
+        // }
     }
 }

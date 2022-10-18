@@ -19,9 +19,10 @@ namespace myLib
         // const vector<double> &lambdaC = nuModel.radModel.lambdaC;
         const vector<vector<double>> &lambda = nuModel.radModel.lambda;
 
-        nuModel.J[nZones - 1] = nuModel.S[nZones - 1];
+        // nuModel.J[nZones - 1] = nuModel.S[nZones - 1];
 
-        for (int i=0; i < nZones - 1; i++)
+        // for (int i=0; i < nZones - 1; i++)
+        for (int i=0; i < nZones; i++)
         {
             for (int j=0; j < nZones; j++)
             {
