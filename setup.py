@@ -33,7 +33,7 @@ setup(
     description='A simple radiative transfer code.',
     long_description='',
     ext_modules=ext_modules,
-    # extras_require={'test': 'pytest'},
+    extras_require={'test': 'pytest'},
     cmdclass={'build_ext': build_ext},
     zip_safe=False,
     python_requires='>=3.6',
