@@ -20,9 +20,6 @@ namespace myLib
         std::vector<double> tau;
         std::vector<double> T;
 
-        // std::vector<double> lambdaA;
-        // std::vector<double> lambdaB;
-        // std::vector<double> lambdaC;
         std::vector<std::vector<double>> lambda;
 
         // Methods

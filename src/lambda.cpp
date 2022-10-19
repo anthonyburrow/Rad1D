@@ -108,6 +108,9 @@ namespace myLib
             betaP[0][j] = e1[1][j] / Dtau[0][j];
             betaM[nZones - 1][j] = e1[nZones - 1][j] / Dtau[nZones - 2][j];
 
+            // I^+(tau_max) normalized
+            betaP[nZones - 1][j] = 1.0;
+
             gammaM[0][j] = zero;
             gammaP[0][j] = e0[1][j] - e1[1][j] / Dtau[0][j];
         }
@@ -227,7 +230,7 @@ namespace myLib
         {
             deltaIm = max(betaM[nZones - 1][j], zero);
             Im = deltaIm;
-            Ip = 1.0;
+            Ip = betaP[nZones - 1][j];
             quadSum += quadW[j] * (Im + Ip);
         }
         lambda[nZones - 1][nZones - 1] = 0.5 * quadSum;
@@ -237,7 +240,7 @@ namespace myLib
         {
             // Here assume I^+(tau_max) = 1 (normalized)?
             deltaIp = max(gammaP[nZones - 2][j], zero);
-            Ip = 1.0 * expDtau[nZones - 2][j] + deltaIp;
+            Ip = betaP[nZones - 1][j] * expDtau[nZones - 2][j] + deltaIp;
             quadSum += quadW[j] * Ip;
         }
         lambda[nZones - 2][nZones - 1] = 0.5 * quadSum;
@@ -247,7 +250,7 @@ namespace myLib
         {
             // This is the C I^+ calculation
             deltaIp = max(gammaP[nZones - 2][j], zero);
-            IpPrev = 1.0 * expDtau[nZones - 2][j] + deltaIp;
+            IpPrev = betaP[nZones - 1][j] * expDtau[nZones - 2][j] + deltaIp;
             for (int k=nZones - 3; k > -1; k--)
             {
                 Ip = IpPrev * expDtau[k][j];

@@ -28,9 +28,6 @@ namespace myLib
         tau(params.nZones, zero),
         T(params.nZones, zero),
         lambda(params.nZones, vector<double>(params.nZones, zero))
-        // lambdaA(params.nZones, zero),
-        // lambdaB(params.nZones, zero),
-        // lambdaC(params.nZones, zero)
     {
         initialize(*this);
         initLambda();
@@ -42,7 +39,6 @@ namespace myLib
         auto t0 = chrono::high_resolution_clock::now();
         chrono::duration<double> sec;
 
-        // calcLambda(*this, lambdaA, lambdaB, lambdaC);
         calcLambda(*this, lambda);
 
         auto t1 = chrono::high_resolution_clock::now();
@@ -99,18 +95,23 @@ namespace myLib
 
     vector<vector<double>> RadModel::convergenceTest(const double &lam)
     {
-        vector<vector<double>> results(params.maxIter,
+        vector<vector<double>> results(params.maxIter + 1,
                                        vector<double>(params.nZones));
 
         NuModel nuModel = NuModel(lam, *this);
 
-        for (int i=0; i < params.maxIter; i++)
+        for (int j=0; j < params.nZones; j++)
+        {
+            results[0][j] = nuModel.S[j] / nuModel.B[j];
+        }
+
+        for (int i=1; i < params.maxIter; i++)
         {
             nuModel.iterate();
 
             for (int j=0; j < params.nZones; j++)
             {
-                results[i][j] = nuModel.J[j] / nuModel.B[j];
+                results[i][j] = nuModel.S[j] / nuModel.B[j];
             }
         }
 

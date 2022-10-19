@@ -14,20 +14,21 @@ namespace myLib
     void calcJ(NuModel &nuModel)
     {
         const double &nZones = nuModel.params.nZones;
-        // const vector<double> &lambdaA = nuModel.radModel.lambdaA;
-        // const vector<double> &lambdaB = nuModel.radModel.lambdaB;
-        // const vector<double> &lambdaC = nuModel.radModel.lambdaC;
         const vector<vector<double>> &lambda = nuModel.radModel.lambda;
+        double jTerm;
 
         // nuModel.J[nZones - 1] = nuModel.S[nZones - 1];
 
         // for (int i=0; i < nZones - 1; i++)
         for (int i=0; i < nZones; i++)
         {
+            jTerm = 0.0;
             for (int j=0; j < nZones; j++)
             {
-                nuModel.J[i] += lambda[i][j] * nuModel.S[j];
+                jTerm += lambda[i][j] * nuModel.S[j];
             }
+
+            nuModel.J[i] = jTerm;
         }
     }
 
