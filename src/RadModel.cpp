@@ -27,7 +27,7 @@ namespace myLib
         spectrum(params.nWave, vector<double>(2, zero)),
         tau(params.nZones, zero),
         T(params.nZones, zero),
-        lambda(params.nZones, vector<double>(params.nZones, zero))
+        lambda(params.nZones, vector<double>(params.nZones, 0.0))
     {
         initialize(*this);
         initLambda();

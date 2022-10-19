@@ -10,7 +10,7 @@
 namespace myLib
 {
     // Math constants
-    static const double zero = 1e-70;
+    static const double zero = 1e-99;
     static const double &pi = M_PI;
     static const double pi4 = 4.0 * M_PI;
     static const double pi4_sq = pi4 * pi4;
