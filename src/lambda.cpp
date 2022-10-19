@@ -19,7 +19,6 @@ namespace myLib
         const vector<double> &tau = radModel.tau;
         const vector<double> &quadMu = radModel.quadMu;
         const vector<double> &quadW = radModel.quadW;
-        double quadSum;
         double Ip;
         double Im;
         double IPrev;
