@@ -7,7 +7,7 @@ using namespace std;
 
 namespace myLib
 {
-    void getWeights(myLib::RadModel &radModel)
+    void getWeights(RadModel &radModel)
     {
         const int &nQuad = radModel.params.nQuad;
 

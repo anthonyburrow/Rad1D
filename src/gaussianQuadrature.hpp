@@ -4,5 +4,5 @@
 
 namespace myLib
 {
-    void getWeights(myLib::RadModel &radModel);
+    void getWeights(RadModel &radModel);
 }

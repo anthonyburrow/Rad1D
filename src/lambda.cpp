@@ -91,7 +91,8 @@ namespace myLib
             gammaM[0] = zero;
             gammaP[0] = e0[1] - e1[1] / Dtau[0];
 
-            // These correspond to I+- values so they cannot be < 0
+            // Correct for under-correction in interpolation:
+            // (These correspond to I+- values so they cannot be < 0)
             for (int i = 0; i < nZones; i++)
             {
                 alphaP[i] = max(alphaP[i], zero);
