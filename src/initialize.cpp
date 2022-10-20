@@ -30,7 +30,7 @@ namespace myLib
     void initTau(RadModel &radModel)
     {
         const int &nZones = radModel.params.nZones;
-        const double logTauMin = -3.0;
+        const double logTauMin = -7.0;
         const double logTauMax = log10(radModel.params.tauMax);
         const double expSlope = (logTauMax - logTauMin) / (nZones - 2);
 

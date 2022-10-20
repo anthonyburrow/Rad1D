@@ -95,7 +95,7 @@ namespace myLib
 
     vector<vector<double>> RadModel::convergenceTest(const double &lam)
     {
-        vector<vector<double>> results(params.maxIter + 1,
+        vector<vector<double>> results(params.maxIter,
                                        vector<double>(params.nZones));
 
         NuModel nuModel = NuModel(lam, *this);

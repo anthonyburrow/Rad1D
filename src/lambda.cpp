@@ -147,15 +147,18 @@ namespace myLib
                 }
             }
 
-            // Column 1
+            // Column 1 - Use linear interpolation
 
             // i^-(0) = 0 so this is just i^+(0) in integral
             lambda[0][0] += quadW[j] * betaP[0];
 
             // i^-(0) = 0 so i^-_{1 + 1} = alphaM_{1 + 1}
-            lambda[1][0] += quadW[j] * alphaM[1];
+            // Use linear alphaM[1] and alphaP[1] (= 0)
+            Im = e0[1] - e1[1] / Dtau[0];
+            // Im = alphaM[1];
+            lambda[1][0] += quadW[j] * Im;
 
-            IPrev = alphaM[1];   // Same as above (i + 1)
+            IPrev = Im;
             for (int k = 2; k < nZones; k++)
             {
                 Im = IPrev * expDtau[k - 1];
@@ -163,7 +166,7 @@ namespace myLib
                 IPrev = Im;
             }
 
-            // Column N
+            // Column N - Use linear interpolation
 
             Im = betaM[nZones - 1];
             Ip = betaP[nZones - 1];
