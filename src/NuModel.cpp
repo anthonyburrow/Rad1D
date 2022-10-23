@@ -15,7 +15,6 @@ namespace myLib
         radModel(radModel),
         params(radModel.params),
         // Allocate vectors
-        B(params.nZones, zero),
         S(params.nZones, zero),
         J(params.nZones, zero)
     {
@@ -27,12 +26,10 @@ namespace myLib
         const int &nZones = params.nZones;
         double bb;
 
-        // Initialize S(tau) = B(T(tau))
+        // Initialize S(tau) = B(T(tau)) = 1
         for (int i = 0; i < nZones; i++)
         {
-            bb = planck(lam, radModel.T[i]);
-            B[i] = bb;
-            S[i] = bb;
+            S[i] = 1.0;
         }
     }
 

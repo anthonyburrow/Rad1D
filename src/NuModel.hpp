@@ -15,7 +15,6 @@ namespace myLib
         const radParams &params;
 
         // Physical quantites
-        std::vector<double> B;
         std::vector<double> S;
         std::vector<double> J;
 

@@ -95,12 +95,12 @@ namespace myLib
             // (These correspond to I+- values so they cannot be < 0)
             for (int i = 0; i < nZones; i++)
             {
-                alphaP[i] = max(alphaP[i], zero);
-                betaP[i] = max(betaP[i], zero);
-                gammaP[i] = max(gammaP[i], zero);
-                alphaM[i] = max(alphaM[i], zero);
-                betaM[i] = max(betaM[i], zero);
-                gammaM[i] = max(gammaM[i], zero);
+                // alphaP[i] = max(alphaP[i], zero);
+                // betaP[i] = max(betaP[i], zero);
+                // gammaP[i] = max(gammaP[i], zero);
+                // alphaM[i] = max(alphaM[i], zero);
+                // betaM[i] = max(betaM[i], zero);
+                // gammaM[i] = max(gammaM[i], zero);
             }
 
             // Integrate mu first (Quadrature) to fill Lambda
