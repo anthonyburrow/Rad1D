@@ -15,14 +15,15 @@ namespace myLib
         const radParams &params;
 
         // Physical quantites
+        std::vector<double> B;
         std::vector<double> S;
         std::vector<double> J;
 
         // Methods
         NuModel(const double &lam, const RadModel &radModel);
 
-        const double calcFlux();
-        const double calcF0();
+        double calcFlux();
+        double calcF0();
         void iterate();
 
     private:

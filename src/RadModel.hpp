@@ -35,6 +35,5 @@ namespace myLib
 
     private:
         void normalizeFlux();
-        void scaleFlux();
     };
 }

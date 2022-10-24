@@ -61,7 +61,6 @@ namespace myLib
         }
 
         if (normalize) { normalizeFlux(); }
-        else { scaleFlux(); }
 
         auto t1 = chrono::high_resolution_clock::now();
         sec = t1 - t0;
@@ -79,17 +78,6 @@ namespace myLib
         for (int i=0; i < params.nWave; i++)
         {
             spectrum[i][1] /= maxFlux;
-        }
-    }
-
-    void RadModel::scaleFlux()
-    {
-        // Rescale with constants from Planck function
-        const double scale = 2.0 * hc * c * 1e8;
-
-        for (int i=0; i < params.nWave; i++)
-        {
-            spectrum[i][1] *= scale;
         }
     }
 
