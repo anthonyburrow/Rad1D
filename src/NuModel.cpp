@@ -147,7 +147,7 @@ namespace myLib
 
         F0 *= 2.0 * pi;
 
-        cout << F0 << endl;
+        // cout << F0 << endl;
 
         return F0;
     }
