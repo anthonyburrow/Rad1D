@@ -68,8 +68,9 @@ namespace myLib
         const vector<double> &tau = radModel.tau;
         const vector<double> &quadMu = radModel.quadMu;
         const vector<double> &quadW = radModel.quadW;
-        double Ip = zero;
+
         double F0 = zero;
+        double Ip0;
 
         vector<double> Dtau(nZones, zero);
         vector<double> expDtau(nZones, zero);
@@ -78,73 +79,34 @@ namespace myLib
         vector<double> e1(nZones, zero);
         vector<double> e2(nZones, zero);
 
-        vector<double> alphaP(nZones, zero);
-        vector<double> betaP(nZones, zero);
-        vector<double> gammaP(nZones, zero);
+        vector<vector<double>> Ip(nZones, vector<double>(nZones, zero));
 
-        for (int j=0; j < halfQuad; j++)
+        for (int j = 0; j < halfQuad; j++)
         {
-            // Calc delta tau's
-            for (int i = 1; i < nZones; i++)
-            {
-                Dtau[i - 1] = (tau[i] - tau[i - 1]) / quadMu[j];
-                expDtau[i - 1] = exp(-Dtau[i - 1]);
-            }
+            // Setup values needed for both I+ and I-
+            setupFormalSoln(Dtau, expDtau, e0, e1, e2,
+                            quadMu[j], tau, nZones);
 
-            // Calc e's
-            for (int i = 1; i < nZones; i++)
-            {
-                e0[i] = 1.0 - expDtau[i - 1];
-                e1[i] = Dtau[i - 1] - e0[i];
-                e2[i] = pow(Dtau[i - 1], 2.0) - 2.0 * e1[i];
-            }
+            // Solve for I+ matrix (I^-(0) = 0)
+            calcIpMatrix(Ip, Dtau, expDtau, e0, e1, e2, nZones);
 
-            // Calc parabolic coefficients (from zone 2 to N - 1)
-            for (int i = 1; i < nZones - 1; i++)
-            {
-                alphaP[i] = (e2[i + 1] - Dtau[i] * e1[i + 1]) /
-                            (Dtau[i - 1] * (Dtau[i] + Dtau[i - 1]));
-                betaP[i] = ((Dtau[i] + Dtau[i - 1]) * e1[i + 1] - e2[i + 1]) /
-                           ((Dtau[i] * Dtau[i - 1]));
-                gammaP[i] = e0[i + 1] +
-                            (e2[i + 1] - (Dtau[i - 1] + 2 * Dtau[i]) * e1[i + 1]) /
-                            (Dtau[i] * (Dtau[i] + Dtau[i - 1]));
-            }
-
-            // Use linear interpolation values for bounds
-            alphaP[nZones - 1] = zero;
-            betaP[0] = e1[1] / Dtau[0];
-            betaP[nZones - 1] = 1.0;   // I^+(tau_max) normalized
-            gammaP[0] = e0[1] - e1[1] / Dtau[0];
-
-            // Correct for under-correction in interpolation:
-            // (These correspond to I+- values so they cannot be < 0)
+            // Integrate mu (Quadrature sum) to get F
+            // for (int i = 0; i < nZones; i++)
+            // {
+            //     for (int k = 0; k < nZones; k++)
+            //     {
+            //         lambda[i][k] += quadW[j] * (Im[i][k] + Ip[i][k]);
+            //     }
+            // }
+            Ip0 = zero;
             for (int i = 0; i < nZones; i++)
             {
-                // alphaP[i] = max(alphaP[i], zero);
-                // betaP[i] = max(betaP[i], zero);
-                // gammaP[i] = max(gammaP[i], zero);
-                // alphaM[i] = max(alphaM[i], zero);
-                // betaM[i] = max(betaM[i], zero);
-                // gammaM[i] = max(gammaM[i], zero);
+                Ip0 += Ip[0][i] * S[i];
             }
-
-            // Calculate I^+ from inside out
-            Ip = 1.0;
-
-            for (int i=nZones - 2; i > 0; i--)
-            {
-                Ip = Ip * expDtau[i] +
-                     alphaP[i] * S[i - 1] + betaP[i] * S[i] + gammaP[i] * S[i + 1];
-            }
-
-            Ip = Ip * expDtau[0] +
-                 betaP[0] * S[0] + gammaP[0] * S[1];
-
-            // F(0) = 4 pi H(0) = 2 pi mu_j I_0j Wj
-            F0 += quadMu[j] * Ip * quadW[j];
+            F0 += quadW[j] * quadMu[j] * Ip0;
         }
 
+        // F(0) = 4 pi H(0) = 2 pi mu_j I^+_j(0) Wj
         F0 *= 2.0 * pi;
 
         // cout << F0 << endl;
