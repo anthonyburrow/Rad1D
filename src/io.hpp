@@ -12,7 +12,6 @@ namespace myLib
     struct radParams
     {
         std::string dataDir = "./data";
-        std::string outFilename = "./synthetic.dat";
         double waveStart = 4000.0;
         double waveEnd = 7000.0;
         double tauMax = 100.0;

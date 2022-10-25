@@ -5,13 +5,12 @@ from Rad1D import RadModel
 
 params = {
     'data_dir'    : 'C:\dev\Rad1D\data',
-    'out_filename': 'synthetic.dat',
     'wave_start'  : 4000.,
     'wave_end'    : 7000.,
-    'n_wave'      : 1000,
+    'n_wave'      : 500,
     'tau_max'     : 1e2,
-    'eps'         : 1e-3,
-    'T_eff'       : 6000.,
+    'eps'         : 1e-4,
+    'T_eff'       : 7000,
     'n_zones'     : 256,
     'max_iter'    : 100,
     'n_quad'      : 8
@@ -19,7 +18,7 @@ params = {
 
 model = RadModel(params)
 
-synth = model.gen_spectrum(True)
+synth = model.gen_spectrum(normalize=True)
 
 
 # Plot spectrum
@@ -52,19 +51,24 @@ fig.savefig(fn, dpi=125)
 # Plot convergence test
 lam = 5000.
 results = model.convergence_test(lam)
-# print(results)
 
 fig, ax = plt.subplots(dpi=125)
 
-for i in range(len(results)):
-    ax.plot(np.log10(model.tau[1:]), results[i, 1:], c='k', ls='-', lw=1.,
+ax.plot(model.tau[1:], results[0, 1:], c='r', ls='-', lw=1., alpha=0.4)
+
+for i in range(1, len(results)):
+    ax.plot(model.tau[1:], results[i, 1:], c='k', ls='-', lw=1.,
                      alpha=0.4)
 
-ax.set_xlim(-3., np.log10(params['tau_max']))
-ax.set_ylim(0., 1.05)
+ax.set_xscale('log')
+ax.set_yscale('log')
+
+# ax.set_xlim(-3., np.log10(params['tau_max']))
+ax.set_ylim(0.05, 1.2)
 
 ax.set_xlabel(r'$\log \tau$')
 ax.set_ylabel('S / B')
 
+plt.tight_layout()
 fn = './S_B_convergence.pdf'
 fig.savefig(fn, dpi=125)

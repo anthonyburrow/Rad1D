@@ -1,13 +1,8 @@
 #include <iostream>
 #include <string>
-#include <fstream>
-#include <sstream>
-// #include <limits>
-// #include <iomanip>
 #include <pybind11/pybind11.h>
 
 #include "io.hpp"
-#include "constants.hpp"
 
 using namespace std;
 
@@ -19,9 +14,6 @@ namespace myLib
 
         if (dictParams.contains("data_dir")) {
             params.dataDir = dictParams["data_dir"].cast<string>();
-        }
-        if (dictParams.contains("out_filename")) {
-            params.outFilename = dictParams["out_filename"].cast<string>();
         }
         if (dictParams.contains("wave_start")) {
             params.waveStart = dictParams["wave_start"].cast<double>();
@@ -59,7 +51,6 @@ namespace myLib
     void printParams(const radParams &params)
     {
         cout << "  Data directory:          " << params.dataDir
-    <<  endl << "  Output spectrum file:    " << params.outFilename
     <<  endl << "  Wavelength range:        " << params.waveStart << " - " << params.waveEnd
     <<  endl << "  Wavelength points:       " << params.nWave
     <<  endl << "  Thermalization:          " << params.eps
