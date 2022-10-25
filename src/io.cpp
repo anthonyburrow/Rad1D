@@ -12,6 +12,8 @@ namespace myLib
     {
         radParams params;
 
+        cout << "Reading parameters..." << endl;
+
         if (dictParams.contains("data_dir")) {
             params.dataDir = dictParams["data_dir"].cast<string>();
         }
@@ -58,9 +60,9 @@ namespace myLib
     <<  endl << "  Continuum resolution:    " << params.contRes
     <<  endl << "  Line resolution:         " << params.lineRes
     <<  endl << "  Thermalization:          " << params.eps
-    <<  endl << "  T_eff:                   " << params.Teff
+    <<  endl << "  Effective temperature:   " << params.Teff
     <<  endl << "  Max tau:                 " << params.tauMax
-    <<  endl << "  Number of tau zones:     " << params.nZones
+    <<  endl << "  Number of tau points:    " << params.nZones
     <<  endl << "  Maximum iterations:      " << params.maxIter
     <<  endl << "  Order of Gaussian quad.: " << params.nQuad
     <<  endl;
