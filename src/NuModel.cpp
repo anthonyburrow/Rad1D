@@ -26,7 +26,6 @@ namespace myLib
     void NuModel::setBoundary()
     {
         const int &nZones = params.nZones;
-        double bb;
         const double bbScale = 2.0 * hc * c * 1e8;
 
         // Initialize S(tau) = B(T(tau)) = 1

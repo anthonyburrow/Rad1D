@@ -119,7 +119,8 @@ PYBIND11_MODULE(Rad1D, module_handle) {
         .def("gen_spectrum", [](myLib::RadModel &self, bool normalize) {
             py::array out = py::cast(self.genSpectrum(normalize));
             return out;
-        })
+        },
+            py::arg("normalize") = false)
         .def("convergence_test", [](myLib::RadModel &self, double &lam) {
             py::array out = py::cast(self.convergenceTest(lam));
             return out;
