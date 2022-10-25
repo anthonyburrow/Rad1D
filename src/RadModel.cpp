@@ -12,6 +12,7 @@
 #include "io.hpp"
 #include "initialize.hpp"
 #include "constants.hpp"
+#include "util.hpp"
 #include "lambda.hpp"
 
 using namespace std;
@@ -24,7 +25,6 @@ namespace myLib
         // Allocate vectors
         quadMu(params.nQuad, zero),
         quadW(params.nQuad, zero),
-        spectrum(params.nWave, vector<double>(2, zero)),
         tau(params.nZones, zero),
         T(params.nZones, zero),
         lambda(params.nZones, vector<double>(params.nZones, 0.0))
@@ -53,14 +53,20 @@ namespace myLib
         auto t0 = chrono::high_resolution_clock::now();
         chrono::duration<double> sec;
 
+        // Populate wavelengths
+        vector<vector<double>> spectrum = initSpectrum(*this);
+        const int nWave = spectrum.size();
+
+        cout << "  Calculating at " << nWave << " wavelength points" << endl;
+
         // Calc flux at each wavepoint - parallelize this in the future?
-        for (int i=0; i < params.nWave; i++)
+        for (int i=0; i < nWave; i++)
         {
             NuModel nuModel = NuModel(spectrum[i][0], *this);
             spectrum[i][1] = nuModel.calcFlux();
         }
 
-        if (normalize) { normalizeFlux(); }
+        if (normalize) { normalizeSpec(spectrum); }
 
         auto t1 = chrono::high_resolution_clock::now();
         sec = t1 - t0;
@@ -68,17 +74,6 @@ namespace myLib
              << sec.count() << " sec" << endl;
 
         return spectrum;
-    }
-
-    void RadModel::normalizeFlux()
-    {
-        double maxFlux = (*max_element(begin(spectrum), end(spectrum),
-                          [](auto &a, auto &b){ return a[1] < b[1]; }))[1];
-
-        for (int i=0; i < params.nWave; i++)
-        {
-            spectrum[i][1] /= maxFlux;
-        }
     }
 
     vector<vector<double>> RadModel::convergenceTest(const double &lam)

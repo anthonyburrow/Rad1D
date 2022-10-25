@@ -30,8 +30,11 @@ namespace myLib
         if (dictParams.contains("T_eff")) {
             params.Teff = dictParams["T_eff"].cast<double>();
         }
-        if (dictParams.contains("n_wave")) {
-            params.nWave = dictParams["n_wave"].cast<int>();
+        if (dictParams.contains("cont_res")) {
+            params.contRes = dictParams["cont_res"].cast<double>();
+        }
+        if (dictParams.contains("line_res")) {
+            params.lineRes = dictParams["line_res"].cast<double>();
         }
         if (dictParams.contains("n_zones")) {
             params.nZones = dictParams["n_zones"].cast<int>();
@@ -52,7 +55,8 @@ namespace myLib
     {
         cout << "  Data directory:          " << params.dataDir
     <<  endl << "  Wavelength range:        " << params.waveStart << " - " << params.waveEnd
-    <<  endl << "  Wavelength points:       " << params.nWave
+    <<  endl << "  Continuum resolution:    " << params.contRes
+    <<  endl << "  Line resolution:         " << params.lineRes
     <<  endl << "  Thermalization:          " << params.eps
     <<  endl << "  T_eff:                   " << params.Teff
     <<  endl << "  Max tau:                 " << params.tauMax

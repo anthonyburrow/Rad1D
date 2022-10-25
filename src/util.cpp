@@ -1,6 +1,9 @@
 #include <iostream>
 #include <vector>
 
+// Not sure why I need this here...
+#include <pybind11/numpy.h>
+
 #include "util.hpp"
 
 using namespace std;
@@ -19,6 +22,17 @@ namespace myLib
 
         integral *= 0.5;
         return integral;
+    }
+
+    void normalizeSpec(vector<vector<double>> &spectrum)
+    {
+        double maxFlux = (*max_element(begin(spectrum), end(spectrum),
+                          [](auto &a, auto &b){ return a[1] < b[1]; }))[1];
+
+        for (vector<double> &point : spectrum)
+        {
+            point[1] /= maxFlux;
+        }
     }
 
     const int closestIndex(const vector<double> &vec, const double value) {

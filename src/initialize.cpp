@@ -13,19 +13,25 @@ using namespace std;
 
 namespace myLib
 {
-    void initWave(RadModel &radModel)
+    vector<vector<double>> initSpectrum(const RadModel &radModel)
     {
         // Uniform wavelengths (could select around line list later)
         const double &waveStart = radModel.params.waveStart;
         const double &waveEnd = radModel.params.waveEnd;
-        const int &nWave = radModel.params.nWave;
+
+        // Get number of continuum points (+ line points later)
+        const int &nWave = int(radModel.params.contRes * (waveEnd - waveStart));
+
+        vector<vector<double>> spectrum(nWave, vector<double>(2));
 
         const double slope = (waveEnd - waveStart) / (nWave - 1);
 
         for (int i = 0; i < nWave; i++)
         {
-            radModel.spectrum[i][0] = i * slope + waveStart;
+            spectrum[i][0] = i * slope + waveStart;
         }
+
+        return spectrum;
     }
 
     void initTau(RadModel &radModel)
@@ -63,11 +69,8 @@ namespace myLib
 
     void initialize(RadModel &radModel)
     {
-        initWave(radModel);
         initTau(radModel);
-
         initT(radModel);
-
         getWeights(radModel);
     }
 }

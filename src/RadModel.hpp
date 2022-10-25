@@ -16,7 +16,6 @@ namespace myLib
         std::vector<double> quadMu;
         std::vector<double> quadW;
 
-        std::vector<std::vector<double>> spectrum;
         std::vector<double> tau;
         std::vector<double> T;
 
@@ -34,6 +33,6 @@ namespace myLib
         std::vector<double> getT();
 
     private:
-        void normalizeFlux();
+
     };
 }

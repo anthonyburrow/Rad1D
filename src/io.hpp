@@ -17,7 +17,8 @@ namespace myLib
         double tauMax = 100.0;
         double eps = 0.001;
         double Teff = 6000.0;
-        int nWave = 1000;
+        double contRes = 0.05;
+        double lineRes = 0.5;
         int nZones = 256;
         int maxIter = 100;
         int nQuad = 8;
