@@ -5,6 +5,7 @@
 #include "constants.hpp"
 #include "blackbody.hpp"
 #include "lambdaIterate.hpp"
+#include "lambda.hpp"
 
 using namespace std;
 
@@ -90,14 +91,6 @@ namespace myLib
             // Solve for I+ matrix (I^-(0) = 0)
             calcIpMatrix(Ip, Dtau, expDtau, e0, e1, e2, nZones);
 
-            // Integrate mu (Quadrature sum) to get F
-            // for (int i = 0; i < nZones; i++)
-            // {
-            //     for (int k = 0; k < nZones; k++)
-            //     {
-            //         lambda[i][k] += quadW[j] * (Im[i][k] + Ip[i][k]);
-            //     }
-            // }
             Ip0 = zero;
             for (int i = 0; i < nZones; i++)
             {
