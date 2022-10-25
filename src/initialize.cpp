@@ -6,6 +6,7 @@
 #include "constants.hpp"
 #include "blackbody.hpp"
 #include "io.hpp"
+#include "util.hpp"
 #include "gaussianQuadrature.hpp"
 
 using namespace std;
@@ -41,6 +42,10 @@ namespace myLib
             radModel.tau[i] = (i - 1) * expSlope + logTauMin;
             radModel.tau[i] = pow(10, radModel.tau[i]);
         }
+
+        // Replace closest tau value to 1 with 1
+        const int ind = closestIndex(radModel.tau, 1.0);
+        radModel.tau[ind] = 1.0;
     }
 
     void initT(RadModel &radModel)
