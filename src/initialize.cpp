@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <algorithm>
 
 #include "RadModel.hpp"
 #include "constants.hpp"
@@ -8,6 +9,7 @@
 #include "io.hpp"
 #include "util.hpp"
 #include "gaussianQuadrature.hpp"
+#include "lineProfiles.hpp"
 
 using namespace std;
 
@@ -15,20 +17,51 @@ namespace myLib
 {
     vector<vector<double>> initSpectrum(const RadModel &radModel)
     {
-        // Uniform wavelengths (could select around line list later)
+        const double &nZones = radModel.params.nZones;
         const double &waveStart = radModel.params.waveStart;
         const double &waveEnd = radModel.params.waveEnd;
 
-        // Get number of continuum points (+ line points later)
-        const int &nWave = int(radModel.params.contRes * (waveEnd - waveStart));
+        // Add continuum points
+        int nWaveCont = int(radModel.params.contRes * (waveEnd - waveStart));
+        vector<double> wave(nWaveCont);
 
+        const double slope = (waveEnd - waveStart) / (nWaveCont - 1);
+        for (int i = 0; i < nWaveCont; i++)
+        {
+            wave[i] = i * slope + waveStart;
+        }
+
+        // Add line points
+        double sigma, lineStart, lineEnd;
+        int nWaveLine;
+        for (feature line : radModel.lineList)
+        {
+            // Choose highest temperature to ensure it's resolved
+            sigma = gaussianWidth(radModel.T[nZones - 1], line);
+
+            cout << sigma << endl;
+
+            // Go to 3-sigma on each side
+            lineStart = line.resonanceWave - 3.0 * sigma;
+            lineEnd = line.resonanceWave + 3.0 * sigma;
+            nWaveLine = int(radModel.params.lineRes * (waveEnd - waveStart));
+
+            const double slope = (lineEnd - lineStart) / (nWaveLine - 1);
+            for (int i = 0; i < nWaveLine; i++)
+            {
+                wave.push_back(i * slope + lineStart);
+            }
+        }
+
+        // Setup 2D spectrum vector
+        sort(wave.begin(), wave.end());
+
+        const int nWave = wave.size();
         vector<vector<double>> spectrum(nWave, vector<double>(2));
-
-        const double slope = (waveEnd - waveStart) / (nWave - 1);
 
         for (int i = 0; i < nWave; i++)
         {
-            spectrum[i][0] = i * slope + waveStart;
+            spectrum[i][0] = wave[i];
         }
 
         return spectrum;
