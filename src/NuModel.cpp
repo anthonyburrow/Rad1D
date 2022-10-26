@@ -68,14 +68,19 @@ namespace myLib
     double NuModel::calcFlux()
     {
         const int &maxIter = params.maxIter;
+        const double &epsConverge = params.epsConverge;
         double flux;
+
+        double prevJ = 1;
 
         // Converge S & J
         for (int i=0; i < maxIter; i++)
         {
             iterate();
 
-            // Check/break for convergence?
+            // Check/break for convergence at the surface
+            if (abs(J[0] - prevJ) < epsConverge) { break; }
+            prevJ = J[0];
         }
 
         // Calc F based on converged S & J

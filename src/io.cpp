@@ -51,6 +51,9 @@ namespace myLib
         if (dictParams.contains("n_quad")) {
             params.nQuad = dictParams["n_quad"].cast<int>();
         }
+        if (dictParams.contains("eps_converge")) {
+            params.epsConverge = dictParams["eps_converge"].cast<double>();
+        }
 
         printParams(params);
 
@@ -69,6 +72,7 @@ namespace myLib
     <<  endl << "  Number of tau points:    " << params.nZones
     <<  endl << "  Maximum iterations:      " << params.maxIter
     <<  endl << "  Order of Gaussian quad.: " << params.nQuad
+    <<  endl << "  Epsilon for convergence: " << params.epsConverge
     <<  endl;
     }
 

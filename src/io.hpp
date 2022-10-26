@@ -27,6 +27,7 @@ namespace myLib
         double Teff = 6000.0;
         double contRes = 0.05;
         double lineRes = 0.5;
+        double epsConverge = 1e-6;
         int nZones = 256;
         int maxIter = 100;
         int nQuad = 8;

@@ -17,9 +17,6 @@ namespace myLib
         const vector<vector<double>> &lambda = nuModel.lambda;
         double jTerm;
 
-        // nuModel.J[nZones - 1] = nuModel.S[nZones - 1];
-
-        // for (int i=0; i < nZones - 1; i++)
         for (int i=0; i < nZones; i++)
         {
             jTerm = 0.0;

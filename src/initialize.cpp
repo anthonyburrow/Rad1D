@@ -39,12 +39,12 @@ namespace myLib
             // Choose highest temperature to ensure it's resolved
             sigma = gaussianWidth(radModel.T[nZones - 1], line);
 
-            cout << sigma << endl;
-
             // Go to 3-sigma on each side
             lineStart = line.resonanceWave - 3.0 * sigma;
             lineEnd = line.resonanceWave + 3.0 * sigma;
             nWaveLine = int(radModel.params.lineRes * (lineEnd - lineStart));
+
+            wave.push_back(line.resonanceWave);
 
             const double slope = (lineEnd - lineStart) / (nWaveLine - 1);
             for (int i = 0; i < nWaveLine; i++)
