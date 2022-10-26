@@ -25,6 +25,5 @@ namespace myLib
     static const double k = 8.617333262e-5;                // eV K^{-1}
     static const double k_hc = k / hc;                     // K^{-1} A^{-1}
     static const double c = 29979.2458;                    // cm s^{-1}
-    static const double amuEV = 1.073689352228152e-9;      // amu * c^2 to eV
-    static const double constDB = sqrt(2.0 * k / amuEV);   // T^{-1/2}
+    static const double constDB = 4.301415e-7;             // K^{-1/2} amu^{1/2}
 }

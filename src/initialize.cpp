@@ -44,7 +44,7 @@ namespace myLib
             // Go to 3-sigma on each side
             lineStart = line.resonanceWave - 3.0 * sigma;
             lineEnd = line.resonanceWave + 3.0 * sigma;
-            nWaveLine = int(radModel.params.lineRes * (waveEnd - waveStart));
+            nWaveLine = int(radModel.params.lineRes * (lineEnd - lineStart));
 
             const double slope = (lineEnd - lineStart) / (nWaveLine - 1);
             for (int i = 0; i < nWaveLine; i++)
