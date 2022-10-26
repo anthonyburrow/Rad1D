@@ -15,9 +15,12 @@ namespace myLib
         const radParams &params;
 
         // Physical quantites
+        std::vector<double> tau;
+        std::vector<double> T;
         std::vector<double> B;
         std::vector<double> S;
         std::vector<double> J;
+        std::vector<std::vector<double>> lambda;
 
         // Methods
         NuModel(const double &lam, const RadModel &radModel);
@@ -27,7 +30,7 @@ namespace myLib
         void iterate();
 
     private:
-        void setBoundary();
-
+        void calcTau();
+        void setInitialCond();
     };
 }

@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "lambda.hpp"
-#include "RadModel.hpp"
+#include "NuModel.hpp"
 #include "util.hpp"
 #include "constants.hpp"
 
@@ -175,14 +175,14 @@ namespace myLib
         Im[nZones - 1][nZones - 1] = betaM[nZones - 1];
     }
 
-    void calcLambda(const RadModel &radModel, vector<vector<double>> &lambda)
+    void calcLambda(const NuModel &nuModel, vector<vector<double>> &lambda)
     {
-        const int &nZones = radModel.params.nZones;
-        const int &nQuad = radModel.params.nQuad;
+        const int &nZones = nuModel.params.nZones;
+        const int &nQuad = nuModel.params.nQuad;
         const int halfQuad = int(0.5 * nQuad);
-        const vector<double> &tau = radModel.tau;
-        const vector<double> &quadMu = radModel.quadMu;
-        const vector<double> &quadW = radModel.quadW;
+        const vector<double> &tau = nuModel.tau;
+        const vector<double> &quadMu = nuModel.radModel.quadMu;
+        const vector<double> &quadW = nuModel.radModel.quadW;
 
         vector<double> Dtau(nZones, zero);
         vector<double> expDtau(nZones, zero);
@@ -221,14 +221,5 @@ namespace myLib
                 lambda[i][j] *= 0.5;
             }
         }
-
-        // for (int i=0; i < nZones; i++)
-        // {
-        //     for (int j=0; j < nZones; j++)
-        //     {
-        //         cout << lambda[i][j] << "  ";
-        //     }
-        //     cout << endl;
-        // }
     }
 }

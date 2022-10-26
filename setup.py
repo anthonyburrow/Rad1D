@@ -12,6 +12,7 @@ src_files = (
     'io',
     'lambda',
     'lambdaIterate',
+    'lineProfiles',
     'NuModel',
     'RadModel',
     'util',

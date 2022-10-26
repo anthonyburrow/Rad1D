@@ -2,5 +2,8 @@
 
 namespace myLib
 {
-    const double planck(const double &lam, const double &T);
+    const double calcTemperature(const double &tau,
+                                 const double &Teff);
+    const double planck(const double &lam,
+                        const double &T);
 }

@@ -12,19 +12,17 @@ namespace myLib
     {
     public:
         radParams params;
+        std::vector<feature> lineList;
 
         std::vector<double> quadMu;
         std::vector<double> quadW;
 
-        std::vector<double> tau;
+        std::vector<double> tauCont;
         std::vector<double> T;
-
-        std::vector<std::vector<double>> lambda;
 
         // Methods
         RadModel(const pybind11::dict &dictParams);
 
-        void initLambda();
         std::vector<std::vector<double>> genSpectrum(bool normalize = false);
         std::vector<std::vector<double>> convergenceTest(const double &lam);
 

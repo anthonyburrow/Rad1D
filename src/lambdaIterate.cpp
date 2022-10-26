@@ -14,7 +14,7 @@ namespace myLib
     void calcJ(NuModel &nuModel)
     {
         const double &nZones = nuModel.params.nZones;
-        const vector<vector<double>> &lambda = nuModel.radModel.lambda;
+        const vector<vector<double>> &lambda = nuModel.lambda;
         double jTerm;
 
         // nuModel.J[nZones - 1] = nuModel.S[nZones - 1];

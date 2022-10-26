@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "RadModel.hpp"
+#include "NuModel.hpp"
 
 namespace myLib
 {
@@ -31,6 +31,6 @@ namespace myLib
                       const std::vector<double> &e2,
                       const int &nZones);
 
-    void calcLambda(const RadModel &radModel,
+    void calcLambda(const NuModel &nuModel,
                     std::vector<std::vector<double>> &lambda);
 }

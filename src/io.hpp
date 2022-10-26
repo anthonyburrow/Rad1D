@@ -1,13 +1,21 @@
 #pragma once
 
 #include <string>
-#include <vector>
 #include <pybind11/pybind11.h>
+
+// #include "RadModel.hpp"
 
 namespace myLib
 {
     // Prevent compiler error when using RadModel types here
-    // class RadModel;
+    class RadModel;
+
+    struct feature
+    {
+        double tauRatio;
+        double resonanceWave;
+        double mass;
+    };
 
     struct radParams
     {
@@ -26,4 +34,5 @@ namespace myLib
 
     radParams dictToParams(const pybind11::dict &dictParams);
     void printParams(const radParams &params);
+    void readLineList(RadModel &radModel);
 }

@@ -1,7 +1,11 @@
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <sstream>
+#include <vector>
 #include <pybind11/pybind11.h>
 
+#include "RadModel.hpp"
 #include "io.hpp"
 
 using namespace std;
@@ -66,5 +70,34 @@ namespace myLib
     <<  endl << "  Maximum iterations:      " << params.maxIter
     <<  endl << "  Order of Gaussian quad.: " << params.nQuad
     <<  endl;
+    }
+
+    void readLineList(RadModel &radModel)
+    {
+        vector<feature> &lineList = radModel.lineList;
+        string fileName = radModel.params.dataDir + "/lines.dat";
+
+        cout << "Reading from line list: " << fileName << endl;
+
+        ifstream lineListFile(fileName);
+        string line;
+
+        double tauRatio, resonanceWave, mass;
+
+        while (getline(lineListFile, line))
+        {
+            if (line[0] == '#' || line[0] == '\0') { continue; }
+
+            stringstream iss(line);
+            iss >> tauRatio >> resonanceWave >> mass;
+
+            feature newFeature = feature();
+            newFeature.tauRatio = tauRatio;
+            newFeature.resonanceWave = resonanceWave;
+            newFeature.mass = mass;
+
+            lineList.push_back(newFeature);
+        }
+        lineListFile.close();
     }
 }

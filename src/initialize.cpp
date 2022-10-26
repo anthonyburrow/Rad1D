@@ -41,17 +41,17 @@ namespace myLib
         const double logTauMax = log10(radModel.params.tauMax);
         const double expSlope = (logTauMax - logTauMin) / (nZones - 2);
 
-        radModel.tau[0] = zero;
+        radModel.tauCont[0] = zero;
 
         for (int i = 1; i < nZones; i++)
         {
-            radModel.tau[i] = (i - 1) * expSlope + logTauMin;
-            radModel.tau[i] = pow(10, radModel.tau[i]);
+            radModel.tauCont[i] = (i - 1) * expSlope + logTauMin;
+            radModel.tauCont[i] = pow(10, radModel.tauCont[i]);
         }
 
         // Replace closest tau value to 1 with 1
-        const int ind = closestIndex(radModel.tau, 1.0);
-        radModel.tau[ind] = 1.0;
+        const int ind = closestIndex(radModel.tauCont, 1.0);
+        radModel.tauCont[ind] = 1.0;
     }
 
     void initT(RadModel &radModel)
@@ -59,11 +59,9 @@ namespace myLib
         const int &nZones = radModel.params.nZones;
         const double &Teff = radModel.params.Teff;
 
-        // Look into q = q(tau)
-        const double q = 1.0 / sqrt(3.0);
         for (int i = 0; i < nZones; i++)
         {
-            radModel.T[i] = Teff * pow(0.75 * (radModel.tau[i] + q), 0.25);
+            radModel.T[i] = calcTemperature(radModel.tauCont[i], Teff);
         }
     }
 

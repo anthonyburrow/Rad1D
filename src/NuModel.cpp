@@ -6,6 +6,8 @@
 #include "blackbody.hpp"
 #include "lambdaIterate.hpp"
 #include "lambda.hpp"
+#include "lineProfiles.hpp"
+#include "io.hpp"
 
 using namespace std;
 
@@ -16,14 +18,35 @@ namespace myLib
         radModel(radModel),
         params(radModel.params),
         // Allocate vectors
+        tau(params.nZones, zero),
+        T(params.nZones, zero),
         B(params.nZones, zero),
         S(params.nZones, zero),
-        J(params.nZones, zero)
+        J(params.nZones, zero),
+        lambda(params.nZones, vector<double>(params.nZones, 0.0))
     {
-        setBoundary();
+        setInitialCond();
+        calcTau();
+        calcLambda(*this, lambda);
     }
 
-    void NuModel::setBoundary()
+    void NuModel::calcTau()
+    {
+        const int &nZones = params.nZones;
+        double frac;
+
+        for (int i = 0; i < nZones; i++)
+        {
+            frac = zero;
+            for (feature line : radModel.lineList)
+            {
+                frac += line.tauRatio * gaussianProfile(lam, T[i], line);
+            }
+            tau[i] = radModel.tauCont[i] * (1.0 + frac);
+        }
+    }
+
+    void NuModel::setInitialCond()
     {
         const int &nZones = params.nZones;
         const double bbScale = 2.0 * hc * c * 1e8;
@@ -31,7 +54,8 @@ namespace myLib
         // Initialize S(tau) = B(T(tau)) = 1
         for (int i = 0; i < nZones; i++)
         {
-            B[i] = bbScale * planck(lam, radModel.T[i]);
+            T[i] = calcTemperature(tau[i], params.Teff);
+            B[i] = bbScale * planck(lam, T[i]);
             S[i] = 1.0;
         }
     }
@@ -65,7 +89,6 @@ namespace myLib
     {
         const int &nZones = params.maxIter;
         const int halfQuad = int(0.5 * params.nQuad);
-        const vector<double> &tau = radModel.tau;
         const vector<double> &quadMu = radModel.quadMu;
         const vector<double> &quadW = radModel.quadW;
 

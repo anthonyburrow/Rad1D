@@ -18,10 +18,13 @@ namespace myLib
     static const double one_third = 1.0 / 3.0;
     static const double four_thirds = 4.0 / 3.0;
     static const double pi4_3 = pi4 * one_third;
+    static const double inv_sqrt_pi = 1.0 / sqrt(pi);
 
     // Physical constants
-    static const double hc = 12398.4198;      // eV A
-    static const double k = 8.617333262e-5;   // eV K^{-1}
-    static const double k_hc = k / hc;        // K^{-1} A^{-1}
-    static const double c = 29979.2458;       // cm s^{-1}
+    static const double hc = 12398.4198;                   // eV A
+    static const double k = 8.617333262e-5;                // eV K^{-1}
+    static const double k_hc = k / hc;                     // K^{-1} A^{-1}
+    static const double c = 29979.2458;                    // cm s^{-1}
+    static const double amuEV = 1.073689352228152e-9;      // amu * c^2 to eV
+    static const double constDB = sqrt(2.0 * k / amuEV);   // T^{-1/2}
 }

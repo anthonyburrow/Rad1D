@@ -7,9 +7,9 @@
 #include <pybind11/stl.h>
 #include <pybind11/numpy.h>
 
+#include "io.hpp"
 #include "RadModel.hpp"
 #include "NuModel.hpp"
-#include "io.hpp"
 #include "initialize.hpp"
 #include "constants.hpp"
 #include "util.hpp"
@@ -25,26 +25,11 @@ namespace myLib
         // Allocate vectors
         quadMu(params.nQuad, zero),
         quadW(params.nQuad, zero),
-        tau(params.nZones, zero),
-        T(params.nZones, zero),
-        lambda(params.nZones, vector<double>(params.nZones, 0.0))
+        tauCont(params.nZones, zero),
+        T(params.nZones, zero)
     {
+        readLineList(*this);
         initialize(*this);
-        initLambda();
-    }
-
-    void RadModel::initLambda()
-    {
-        cout << "Calculating Lambda matrix..." << endl;
-        auto t0 = chrono::high_resolution_clock::now();
-        chrono::duration<double> sec;
-
-        calcLambda(*this, lambda);
-
-        auto t1 = chrono::high_resolution_clock::now();
-        sec = t1 - t0;
-        cout << "  Finished in "<< fixed << setprecision(3)
-             << sec.count() << " sec" << endl;
     }
 
     vector<vector<double>> RadModel::genSpectrum(bool normalize)
@@ -102,7 +87,7 @@ namespace myLib
     }
 
     // Properties
-    std::vector<double> RadModel::getTau() { return tau; }
+    std::vector<double> RadModel::getTau() { return tauCont; }
     std::vector<double> RadModel::getT() { return T; }
 }
 
