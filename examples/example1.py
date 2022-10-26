@@ -4,16 +4,18 @@ from Rad1D import RadModel
 
 
 params = {
-    'data_dir'    : 'C:\dev\Rad1D\data',
-    'wave_start'  : 4000.,
-    'wave_end'    : 7000.,
-    'n_wave'      : 500,
-    'tau_max'     : 1e2,
-    'eps'         : 1e-4,
-    'T_eff'       : 7000,
-    'n_zones'     : 256,
-    'max_iter'    : 100,
-    'n_quad'      : 8
+    'data_dir'    : 'C:\dev\Rad1D\data',   # Absolute path to line list
+    'wave_start'  : 4000.,                 # Starting wavelength
+    'wave_end'    : 7000.,                 # Ending wavelength
+    'cont_res'    : 0.05,                  # Points per angstrom resolved for continuum
+    'line_res'    : 3.0,                   # Points per angstrom resolved for lines in line list
+    'tau_max'     : 1e4,                   # Maximum tau of atmosphere for continuum
+    'eps'         : 1e-4,                  # Thermalization factor
+    'T_eff'       : 7000.,                 # Characteristic temperature of atmosphere
+    'n_zones'     : 256,                   # Number of tau points
+    'max_iter'    : 100,                   # Maximum number of lambda iterations allowed
+    'eps_converge': 1e-6,                  # Factor to determine J is converged
+    'n_quad'      : 8,                     # Order of Gaussian quadrature integration
 }
 
 model = RadModel(params)

@@ -19,14 +19,14 @@ namespace myLib
 
     struct radParams
     {
-        std::string dataDir = "./data";
+        std::string dataDir = "../data";
         double waveStart = 4000.0;
         double waveEnd = 7000.0;
-        double tauMax = 100.0;
-        double eps = 0.001;
+        double tauMax = 1e4;
+        double eps = 1e-4;
         double Teff = 6000.0;
         double contRes = 0.05;
-        double lineRes = 0.5;
+        double lineRes = 3.0;
         double epsConverge = 1e-6;
         int nZones = 256;
         int maxIter = 100;
