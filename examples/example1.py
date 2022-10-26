@@ -4,7 +4,7 @@ from Rad1D import RadModel
 
 
 params = {
-    'data_dir'    : 'C:\dev\Rad1D\data',   # Absolute path to line list
+    'data_dir'    : '..\data',             # Absolute path to line list
     'wave_start'  : 4000.,                 # Starting wavelength
     'wave_end'    : 7000.,                 # Ending wavelength
     'cont_res'    : 0.05,                  # Points per angstrom resolved for continuum

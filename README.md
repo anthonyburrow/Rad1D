@@ -51,7 +51,7 @@ params = {
     'line_res'    : 3.0,         # Points per angstrom resolved for lines in line list
     'tau_max'     : 1e4,         # Maximum tau of atmosphere for continuum
     'eps'         : 1e-4,        # Thermalization factor
-    'T_eff'       : 6000.,       # Characteristic temperature of atmosphere
+    'T_eff'       : 6000.,       # Characteristic temperature (K) of atmosphere
     'n_zones'     : 256,         # Number of tau points
     'max_iter'    : 100,         # Maximum number of lambda iterations allowed
     'eps_converge': 1e-6,        # Factor to determine J is converged
