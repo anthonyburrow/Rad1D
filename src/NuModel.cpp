@@ -85,7 +85,6 @@ namespace myLib
 
         // Calc F based on converged S & J
         flux = calcF0();
-        flux *= B[0];
 
         return flux;
     }
@@ -121,7 +120,7 @@ namespace myLib
             Ip0 = zero;
             for (int i = 0; i < nZones; i++)
             {
-                Ip0 += Ip[0][i] * S[i];
+                Ip0 += Ip[0][i] * S[i] * B[i];
             }
             F0 += quadW[j] * quadMu[j] * Ip0;
         }
