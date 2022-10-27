@@ -12,4 +12,12 @@ namespace myLib
 
     const int closestIndex(const std::vector<double> &vec,
                            const double value);
+
+    void TridiagonalSoln(std::vector<double> &y,
+                         const std::vector<double> &a,
+                         const std::vector<double> &b,
+                         const std::vector<double> &c,
+                         const std::vector<double> &x,
+                         std::vector<double> &cHelper,
+                         std::vector<double> &dHelper);
 }

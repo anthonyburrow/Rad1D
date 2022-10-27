@@ -41,4 +41,28 @@ namespace myLib
 
         return ind;
     }
+
+    void TridiagonalSoln(vector<double> &y,
+                         const vector<double> &a, const vector<double> &b,
+                         const vector<double> &c, const vector<double> &x,
+                         vector<double> &cHelper, vector<double> &dHelper)
+    {
+        const int N = x.size();
+
+        cHelper[0] = c[0] / b[0];
+        dHelper[0] = x[0] / b[0];
+
+        // Forward sweep
+        double m;
+        for (int i = 1; i < N; i++) {
+            m = 1.0 / (b[i] - a[i] * cHelper[i - 1]);
+            cHelper[i] = c[i] * m;
+            dHelper[i] = (x[i] - a[i] * dHelper[i - 1]) * m;
+        }
+
+        // Reverse sweep
+        for (int i = N - 1; i-- > 0; ) {
+            y[i] = dHelper[i] - cHelper[i] * x[i + 1];
+        }
+    }
 }
