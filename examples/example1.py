@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 from Rad1D import RadModel
 
 
+print('testing git')
+
 params = {
     'data_dir'    : '..\data',   # Absolute path to line list
     'wave_start'  : 4000.,       # Starting wavelength
