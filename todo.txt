@@ -1,6 +1,6 @@
 Tasks:
 - ALI
-- Check S(0) / B(0) ~ 1/sqrt(eps)
+- Check S(0) / B(0) ~ sqrt(eps)
 - Other testing, making plots
 - Write up
 - Ng acceleration?
