@@ -73,13 +73,15 @@ namespace myLib
 
         double prevJ = 1;
 
+        // Do Ng Acceleration here
+
         // Converge S & J
         for (int i=0; i < maxIter; i++)
         {
             iterate();
 
             // Check/break for convergence at the surface
-            if (abs(J[0] - prevJ) < epsConverge) { break; }
+            if (abs(J[0] - prevJ) / (J[0] + prevJ) < epsConverge) { break; }
             prevJ = J[0];
         }
 
