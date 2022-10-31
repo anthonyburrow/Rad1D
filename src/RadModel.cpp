@@ -63,6 +63,10 @@ namespace myLib
 
     vector<vector<double>> RadModel::convergenceTest(const double &lam)
     {
+        cout << "Performing convergence test at " << lam << " A..." << endl;
+        auto t0 = chrono::high_resolution_clock::now();
+        chrono::duration<double> sec;
+
         vector<vector<double>> results(params.maxIter,
                                        vector<double>(params.nZones));
 
@@ -82,6 +86,11 @@ namespace myLib
                 results[i][j] = nuModel.S[j];
             }
         }
+
+        auto t1 = chrono::high_resolution_clock::now();
+        sec = t1 - t0;
+        cout << "  Finished in "<< fixed << setprecision(3)
+             << sec.count() << " sec" << endl;
 
         return results;
     }

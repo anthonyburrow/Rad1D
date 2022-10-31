@@ -62,17 +62,17 @@ namespace myLib
 
     void printParams(const radParams &params)
     {
-        cout << "  Data directory:          " << params.dataDir
-    <<  endl << "  Wavelength range:        " << params.waveStart << " - " << params.waveEnd
-    <<  endl << "  Continuum resolution:    " << params.contRes
-    <<  endl << "  Line resolution:         " << params.lineRes
-    <<  endl << "  Thermalization:          " << params.eps
-    <<  endl << "  Effective temperature:   " << params.Teff
-    <<  endl << "  Max tau:                 " << params.tauMax
-    <<  endl << "  Number of tau points:    " << params.nZones
-    <<  endl << "  Maximum iterations:      " << params.maxIter
-    <<  endl << "  Order of Gaussian quad.: " << params.nQuad
-    <<  endl << "  Epsilon for convergence: " << params.epsConverge
+        cout << "  Data directory:                 " << params.dataDir
+    <<  endl << "  Wavelength range [A]:           " << params.waveStart << " - " << params.waveEnd
+    <<  endl << "  Continuum resolution [pts / A]: " << params.contRes
+    <<  endl << "  Line resolution [pts / A]:      " << params.lineRes
+    <<  endl << "  Thermalization:                 " << params.eps
+    <<  endl << "  Effective temperature [K]:      " << params.Teff
+    <<  endl << "  Max tau:                        " << params.tauMax
+    <<  endl << "  Number of tau points:           " << params.nZones
+    <<  endl << "  Maximum iterations:             " << params.maxIter
+    <<  endl << "  Order of Gaussian quad.:        " << params.nQuad
+    <<  endl << "  Epsilon for convergence:        " << params.epsConverge
     <<  endl;
     }
 

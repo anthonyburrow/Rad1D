@@ -81,7 +81,7 @@ namespace myLib
             iterate();
 
             // Check/break for convergence at the surface
-            if (abs(J[0] - prevJ) / (J[0] + prevJ) < epsConverge) { break; }
+            if (2.0 * abs(J[0] - prevJ) / (J[0] + prevJ) < epsConverge) { break; }
             prevJ = J[0];
         }
 
