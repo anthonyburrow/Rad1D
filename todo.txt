@@ -1,0 +1,25 @@
+Tasks:
+- ALI
+- Check S(0) / B(0) ~ 1/sqrt(eps)
+- Other testing, making plots
+- Write up
+- Ng acceleration?
+- Generalize quad weights/points (or get 32 weights/points somehow)
+
+
+Lines:
+- Specify lorentzian/gaussian/etc in line list
+- Make line list more robust
+- Convert to using log(gf) system -> calc tau from z and alpha
+- Feature struct to lineProfiles
+
+
+Misc:
+- Carry over S for nearby wavelength points for faster convergence
+- Look into q(tau) for temperature calculation
+
+
+Problems to address:
+- Temperature of spectrum/BB is at tau = 0? Should T profile be corrected for it
+  to be at T_eff
+- S/B > 1 near depth
