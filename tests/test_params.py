@@ -4,6 +4,7 @@ import numpy as np
 
 def test_params():
     params = {
+        'data_dir'    : '/home/masamune/.bin/Rad1D/data',
         'n_zones'     : 200,
     }
 
