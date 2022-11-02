@@ -123,6 +123,9 @@ namespace myLib
             Ip0 = zero;
             for (int i = 0; i < nZones; i++)
             {
+                // Check for NaN (not sure why there are NaNs in this matrix...)
+                if (Ip[0][i] != Ip[0][i]) { continue; }
+
                 Ip0 += Ip[0][i] * S[i];
             }
             F0 += quadW[j] * quadMu[j] * Ip0;
