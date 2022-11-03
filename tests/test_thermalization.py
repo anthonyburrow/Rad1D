@@ -4,7 +4,7 @@ import numpy as np
 
 def test_S0_B0():
     min_eps = -4.
-    eps_to_check = np.logspace(-4., 0., 5)
+    eps_to_check = np.logspace(min_eps, 0., int(abs(min_eps)) + 1)
 
     print()
 
