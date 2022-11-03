@@ -16,7 +16,11 @@ namespace myLib
     {
         radParams params;
 
-        cout << "Reading parameters..." << endl;
+        if (dictParams.contains("verbose")) {
+            params.verbose = dictParams["verbose"].cast<bool>();
+        }
+
+        if (params.verbose) { cout << "Reading parameters..." << endl; }
 
         if (dictParams.contains("data_dir")) {
             params.dataDir = dictParams["data_dir"].cast<string>();
@@ -55,7 +59,7 @@ namespace myLib
             params.epsConverge = dictParams["eps_converge"].cast<double>();
         }
 
-        printParams(params);
+        if (params.verbose) { printParams(params); }
 
         return params;
     }
@@ -81,7 +85,9 @@ namespace myLib
         vector<feature> &lineList = radModel.lineList;
         string fileName = radModel.params.dataDir + "/lines.dat";
 
-        cout << "Reading from line list: " << fileName << endl;
+        ostringstream output;
+        output << "Reading from line list: " << fileName;
+        radModel.log(output);
 
         ifstream lineListFile(fileName);
         string line;

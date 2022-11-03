@@ -31,6 +31,7 @@ namespace myLib
         int nZones = 256;
         int maxIter = 100;
         int nQuad = 8;
+        bool verbose = true;
     };
 
     radParams dictToParams(const pybind11::dict &dictParams);

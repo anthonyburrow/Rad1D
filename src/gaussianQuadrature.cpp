@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 
 #include "gaussianQuadrature.hpp"
 #include "RadModel.hpp"
@@ -43,7 +44,9 @@ namespace myLib
                 break;
             }
             default:
-                cout << "nQuad = " << nQuad << " is not valid" << endl;
+                ostringstream output;
+                output << "nQuad = " << nQuad << " is not valid";
+                radModel.log(output);
         }
     }
 }

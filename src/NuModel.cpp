@@ -134,8 +134,6 @@ namespace myLib
         // F(0) = 4 pi H(0) = 2 pi mu_j I^+_j(0) Wj
         F0 *= 2.0 * pi;
 
-        // cout << F0 << endl;
-
         return F0;
     }
 }
