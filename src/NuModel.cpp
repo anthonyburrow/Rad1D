@@ -19,7 +19,6 @@ namespace myLib
         params(radModel.params),
         // Allocate vectors
         tau(params.nZones, zero),
-        T(params.nZones, zero),
         B(params.nZones, zero),
         S(params.nZones, zero),
         J(params.nZones, zero),
@@ -40,7 +39,7 @@ namespace myLib
             frac = zero;
             for (feature line : radModel.lineList)
             {
-                frac += line.tauRatio * gaussianProfile(lam, T[i], line);
+                frac += line.tauRatio * gaussianProfile(lam, radModel.T[i], line);
             }
             tau[i] = radModel.tauCont[i] * (1.0 + frac);
         }
@@ -54,8 +53,7 @@ namespace myLib
         // Initialize S(tau) = B(T(tau)) = 1
         for (int i = 0; i < nZones; i++)
         {
-            T[i] = calcTemperature(tau[i], params.Teff);
-            B[i] = bbScale * planck(lam, T[i]);
+            B[i] = bbScale * planck(lam, radModel.T[i]);
             S[i] = 1.0;
         }
     }
