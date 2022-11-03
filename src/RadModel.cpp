@@ -132,7 +132,8 @@ PYBIND11_MODULE(Rad1D, module_handle) {
         .def("convergence_test", [](myLib::RadModel &self, double &lam) {
             py::array out = py::cast(self.convergenceTest(lam));
             return out;
-        })
+        },
+            py::arg("lam") = 5000.0)
         // Properties
         .def_property_readonly("tau", [](myLib::RadModel &self) {
             py::array out = py::cast(self.getTau()); return out;
