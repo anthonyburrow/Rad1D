@@ -17,10 +17,8 @@ Lines:
 
 Misc:
 - Carry over S for nearby wavelength points for faster convergence
-- Look into q(tau) for temperature calculation
 
 
 Problems to address:
 - Temperature of spectrum/BB is at tau = 0? Should T profile be corrected for it
   to be at T_eff
-- S/B > 1 near depth

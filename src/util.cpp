@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <limits>
+#include <cmath>
 
 // Not sure why I need this here...
 #include <pybind11/numpy.h>
@@ -64,5 +66,70 @@ namespace myLib
         for (int i = N - 1; i-- > 0; ) {
             y[i] = dHelper[i] - cHelper[i] * x[i + 1];
         }
+    }
+
+    const vector<double> expn(const int &n, const double &x)
+    {
+        vector<double> En(n + 1, 0.0);
+
+        // Re-write of specfun.f ENXB subroutine
+        if (x == 0.0)
+        {
+            En[0] = numeric_limits<double>::quiet_NaN();
+            En[1] = numeric_limits<double>::quiet_NaN();
+
+            for (int k = 2; k < n + 1; k++)
+            {
+                En[k] = 1.0 / (k - 1.0);
+            }
+
+            return En;
+        }
+
+        En[0] = exp(-x) / x;
+
+        if (x <= 1.0)
+        {
+            double S0, S, RP, PS, ENS, R;
+
+            S0 = 0.0;
+            for (int l = 1; l < n + 1; l++)
+            {
+                RP = 1.0;
+                for (int j = 1; j < l; j++) { RP = -RP * x / j; }
+                PS = -0.5772156649015328;
+                for (int m = 1; m < l; m++) { PS += 1.0 / m; }
+                ENS = RP * (-log(x) + PS);
+                S = 0.0;
+                for (int m = 0; m < 21; m++)
+                {
+                    if (m == l - 1) { continue; }
+                    R = 1.0;
+                    for (int j = 1; j < m + 1; j++) { R *= -x / j; }
+                    S += R / (m - l + 1.0);
+                    if (abs(S - S0) < abs(S) * 1e-15) { break; }
+                    S0 = S;
+                }
+                En[l] = ENS - S;
+            }
+
+            return En;
+        }
+
+        double M, T0, T;
+
+        M = 15 + int(100.0 / x);
+        for (int l = 1; l < n + 1; l++)
+        {
+            T0 = 0.0;
+            for (int k = M; k > 0; k--)
+            {
+                T0 = (l + k - 1.0) / (1.0 + k / (x + T0));
+            }
+            T = 1.0 / (x + T0);
+            En[l] = exp(-x) * T;
+        }
+
+        return En;
     }
 }
