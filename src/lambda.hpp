@@ -31,6 +31,7 @@ namespace myLib
                       const std::vector<double> &e2,
                       const int &nZones);
 
-    void calcLambda(const NuModel &nuModel,
-                    std::vector<std::vector<double>> &lambda);
+    void calcLambdas(const NuModel &nuModel,
+                    std::vector<std::vector<double>> &lambda,
+                    std::vector<std::vector<double>> &lambdaSTAR);
 }

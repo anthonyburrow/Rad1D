@@ -22,11 +22,12 @@ namespace myLib
         B(params.nZones, zero),
         S(params.nZones, zero),
         J(params.nZones, zero),
-        lambda(params.nZones, vector<double>(params.nZones, 0.0))
+        lambda(params.nZones, vector<double>(params.nZones, 0.0)),
+        lambdaSTAR(params.nZones, vector<double>(params.nZones, 0.0))
     {
         setInitialCond();
         calcTau();
-        calcLambda(*this, lambda);
+        calcLambdas(*this, lambda, lambdaSTAR);
     }
 
     void NuModel::calcTau()

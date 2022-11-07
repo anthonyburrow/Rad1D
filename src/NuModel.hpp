@@ -20,6 +20,7 @@ namespace myLib
         std::vector<double> S;
         std::vector<double> J;
         std::vector<std::vector<double>> lambda;
+        std::vector<std::vector<double>> lambdaSTAR;
 
         // Methods
         NuModel(const double &lam, const RadModel &radModel);
