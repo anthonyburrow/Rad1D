@@ -82,9 +82,11 @@ namespace myLib
             Ip[i + 1][i] = alphaP[i + 1];
 
             // B (i, i)
+            // SMS: again I'm too dense to see why Ip is mixed with beta in this sum
             Ip[i][i] = Ip[i + 1][i] * expDtau[i] + betaP[i];
 
             // C (i - 1, i)
+            // SMS: again I'm too dense to see why Ip is mixed with beta in this sum
             Ip[i - 1][i] = Ip[i][i] * expDtau[i - 1] + gammaP[i - 1];
 
             // I^+ from row (i - 2) to 1
@@ -152,9 +154,11 @@ namespace myLib
             Im[i - 1][i] = gammaM[i - 1];
 
             // B (i, i)
+            // SMS: is the Im[i-1][i] really supposed to be gammaM[i-1] 
             Im[i][i] = Im[i - 1][i] * expDtau[i - 1] + betaM[i];
 
             // A (i + 1, i)
+            // SMS: I'm too dense to see where thise IM term is coming from
             Im[i + 1][i] = Im[i][i] * expDtau[i] + alphaM[i + 1];
 
             // I^- from row (i + 2) to N
@@ -182,7 +186,7 @@ namespace myLib
         Im[nZones - 1][nZones - 1] = betaM[nZones - 1];
     }
 
-    void calcLambda(const NuModel &nuModel, vector<vector<double>> &lambda)
+    void calcLambdas(const NuModel &nuModel, vector<vector<double>> &lambda, vector<vector<double>> &lambdaSTAR)
     {
         const int &nZones = nuModel.params.nZones;
         const int &nQuad = nuModel.params.nQuad;
@@ -217,6 +221,10 @@ namespace myLib
                 for (int k = 0; k < nZones; k++)
                 {
                     lambda[i][k] += quadW[j] * (Im[i][k] + Ip[i][k]);
+                    if(i==k || k==(i+1) || k ==(i-1))
+                    {
+                        lambdaSTAR[i][k] += quadW[j] * (Im[i][k] + Ip[i][k]);
+                    }
                 }
             }
         }
@@ -225,7 +233,16 @@ namespace myLib
         {
             for (int j=0; j < nZones; j++)
             {
+<<<<<<< HEAD
                 lambda[i][j] *= 0.5;  
+=======
+                lambda[i][j] *= 0.5;
+                if(i==j || j==(i+1) || j ==(i-1))
+                {
+                    lambdaSTAR[i][j] *= 0.5;
+                }
+                
+>>>>>>> 2b8cce5 (added lambda*? fixed an int to dbl, added comments)
             }
         }
     }
