@@ -19,7 +19,6 @@ namespace myLib
         params(radModel.params),
         // Allocate vectors
         tau(params.nZones, zero),
-        T(params.nZones, zero),
         B(params.nZones, zero),
         S(params.nZones, zero),
         J(params.nZones, zero),
@@ -40,7 +39,7 @@ namespace myLib
             frac = zero;
             for (feature line : radModel.lineList)
             {
-                frac += line.tauRatio * gaussianProfile(lam, T[i], line);
+                frac += line.tauRatio * gaussianProfile(lam, radModel.T[i], line);
             }
             tau[i] = radModel.tauCont[i] * (1.0 + frac);
         }
@@ -54,8 +53,7 @@ namespace myLib
         // Initialize S(tau) = B(T(tau)) = 1
         for (int i = 0; i < nZones; i++)
         {
-            T[i] = calcTemperature(tau[i], params.Teff);
-            B[i] = bbScale * planck(lam, T[i]);
+            B[i] = bbScale * planck(lam, radModel.T[i]);
             S[i] = 1.0;
         }
     }
@@ -73,18 +71,21 @@ namespace myLib
 
         double prevJ = 1;
 
+        // Do Ng Acceleration here
+
         // Converge S & J
         for (int i=0; i < maxIter; i++)
         {
             iterate();
 
             // Check/break for convergence at the surface
-            if (abs(J[0] - prevJ) < epsConverge) { break; }
+            if (2.0 * abs(J[0] - prevJ) / (J[0] + prevJ) < epsConverge) { break; }
             prevJ = J[0];
         }
 
         // Calc F based on converged S & J
         flux = calcF0();
+        flux *= B[0];
 
         return flux;
     }
@@ -120,15 +121,16 @@ namespace myLib
             Ip0 = zero;
             for (int i = 0; i < nZones; i++)
             {
-                Ip0 += Ip[0][i] * S[i] * B[i];
+                // Check for NaN (not sure why there are NaNs in this matrix...)
+                if (Ip[0][i] != Ip[0][i]) { continue; }
+
+                Ip0 += Ip[0][i] * S[i];
             }
             F0 += quadW[j] * quadMu[j] * Ip0;
         }
 
         // F(0) = 4 pi H(0) = 2 pi mu_j I^+_j(0) Wj
         F0 *= 2.0 * pi;
-
-        // cout << F0 << endl;
 
         return F0;
     }

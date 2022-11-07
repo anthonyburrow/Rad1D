@@ -1,6 +1,7 @@
 Tasks:
 - ALI
-- Check S(0) / B(0) ~ 1/sqrt(eps)
+- Check S(0) / B(0) ~ sqrt(eps)
+- Check for convergence with S(0) / B(0) ~ sqrt(eps)
 - Other testing, making plots
 - Write up
 - Ng acceleration?
@@ -16,10 +17,8 @@ Lines:
 
 Misc:
 - Carry over S for nearby wavelength points for faster convergence
-- Look into q(tau) for temperature calculation
 
 
 Problems to address:
 - Temperature of spectrum/BB is at tau = 0? Should T profile be corrected for it
   to be at T_eff
-- S/B > 1 near depth

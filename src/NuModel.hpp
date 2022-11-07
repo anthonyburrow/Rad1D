@@ -16,7 +16,6 @@ namespace myLib
 
         // Physical quantites
         std::vector<double> tau;
-        std::vector<double> T;
         std::vector<double> B;
         std::vector<double> S;
         std::vector<double> J;

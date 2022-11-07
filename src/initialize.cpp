@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <vector>
 #include <cmath>
 #include <algorithm>
@@ -56,13 +57,17 @@ namespace myLib
         // Setup 2D spectrum vector
         sort(wave.begin(), wave.end());
 
-        const int nWave = wave.size();
+        const int nWave = static_cast<int>(wave.size());
         vector<vector<double>> spectrum(nWave, vector<double>(2));
 
         for (int i = 0; i < nWave; i++)
         {
             spectrum[i][0] = wave[i];
         }
+
+        ostringstream output;
+        output << "  Calculating at " << nWave << " wavelength points";
+        radModel.log(output);
 
         return spectrum;
     }

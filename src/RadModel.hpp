@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <sstream>
 #include <vector>
 #include <pybind11/pybind11.h>
 
@@ -25,6 +26,7 @@ namespace myLib
 
         std::vector<std::vector<double>> genSpectrum(bool normalize = false);
         std::vector<std::vector<double>> convergenceTest(const double &lam);
+        void log(const std::ostringstream &output) const;
 
         // Properties
         std::vector<double> getTau();

@@ -20,4 +20,7 @@ namespace myLib
                          const std::vector<double> &x,
                          std::vector<double> &cHelper,
                          std::vector<double> &dHelper);
+
+    const std::vector<double> expn(const int &n,
+                                   const double &x);
 }

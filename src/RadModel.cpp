@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <chrono>
 #include <iomanip>
 #include <vector>
@@ -34,15 +35,16 @@ namespace myLib
 
     vector<vector<double>> RadModel::genSpectrum(bool normalize)
     {
-        cout << "Generating spectrum..." << endl;
+        ostringstream output1;
+        output1 << "Generating spectrum...";
+        log(output1);
+
         auto t0 = chrono::high_resolution_clock::now();
         chrono::duration<double> sec;
 
         // Populate wavelengths
         vector<vector<double>> spectrum = initSpectrum(*this);
-        const int nWave = spectrum.size();
-
-        cout << "  Calculating at " << nWave << " wavelength points" << endl;
+        const int nWave = static_cast<int>(spectrum.size());
 
         // Calc flux at each wavepoint - parallelize this in the future?
         for (int i=0; i < nWave; i++)
@@ -55,14 +57,24 @@ namespace myLib
 
         auto t1 = chrono::high_resolution_clock::now();
         sec = t1 - t0;
-        cout << "  Finished in "<< fixed << setprecision(3)
-             << sec.count() << " sec" << endl;
+
+        ostringstream output2;
+        output2 << "  Finished in "<< fixed << setprecision(3)
+               << sec.count() << " sec";
+        log(output2);
 
         return spectrum;
     }
 
     vector<vector<double>> RadModel::convergenceTest(const double &lam)
     {
+        ostringstream output1;
+        output1 << "Performing convergence test at " << lam << " A...";
+        log(output1);
+
+        auto t0 = chrono::high_resolution_clock::now();
+        chrono::duration<double> sec;
+
         vector<vector<double>> results(params.maxIter,
                                        vector<double>(params.nZones));
 
@@ -83,7 +95,23 @@ namespace myLib
             }
         }
 
+        auto t1 = chrono::high_resolution_clock::now();
+        sec = t1 - t0;
+
+        ostringstream output2;
+        output2 << "  Finished in "<< fixed << setprecision(3)
+               << sec.count() << " sec";
+        log(output2);
+
         return results;
+    }
+
+    void RadModel::log(const ostringstream &output) const
+    {
+        if (!params.verbose) { return; }
+
+        // Create log file and send to file too?
+        cout << output.str() << endl;
     }
 
     // Properties
@@ -104,7 +132,8 @@ PYBIND11_MODULE(Rad1D, module_handle) {
         .def("convergence_test", [](myLib::RadModel &self, double &lam) {
             py::array out = py::cast(self.convergenceTest(lam));
             return out;
-        })
+        },
+            py::arg("lam") = 5000.0)
         // Properties
         .def_property_readonly("tau", [](myLib::RadModel &self) {
             py::array out = py::cast(self.getTau()); return out;

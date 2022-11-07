@@ -16,7 +16,11 @@ namespace myLib
     {
         radParams params;
 
-        cout << "Reading parameters..." << endl;
+        if (dictParams.contains("verbose")) {
+            params.verbose = dictParams["verbose"].cast<bool>();
+        }
+
+        if (params.verbose) { cout << "Reading parameters..." << endl; }
 
         if (dictParams.contains("data_dir")) {
             params.dataDir = dictParams["data_dir"].cast<string>();
@@ -55,24 +59,24 @@ namespace myLib
             params.epsConverge = dictParams["eps_converge"].cast<double>();
         }
 
-        printParams(params);
+        if (params.verbose) { printParams(params); }
 
         return params;
     }
 
     void printParams(const radParams &params)
     {
-        cout << "  Data directory:          " << params.dataDir
-    <<  endl << "  Wavelength range:        " << params.waveStart << " - " << params.waveEnd
-    <<  endl << "  Continuum resolution:    " << params.contRes
-    <<  endl << "  Line resolution:         " << params.lineRes
-    <<  endl << "  Thermalization:          " << params.eps
-    <<  endl << "  Effective temperature:   " << params.Teff
-    <<  endl << "  Max tau:                 " << params.tauMax
-    <<  endl << "  Number of tau points:    " << params.nZones
-    <<  endl << "  Maximum iterations:      " << params.maxIter
-    <<  endl << "  Order of Gaussian quad.: " << params.nQuad
-    <<  endl << "  Epsilon for convergence: " << params.epsConverge
+        cout << "  Data directory:                 " << params.dataDir
+    <<  endl << "  Wavelength range [A]:           " << params.waveStart << " - " << params.waveEnd
+    <<  endl << "  Continuum resolution [pts / A]: " << params.contRes
+    <<  endl << "  Line resolution [pts / A]:      " << params.lineRes
+    <<  endl << "  Thermalization:                 " << params.eps
+    <<  endl << "  Effective temperature [K]:      " << params.Teff
+    <<  endl << "  Max tau:                        " << params.tauMax
+    <<  endl << "  Number of tau points:           " << params.nZones
+    <<  endl << "  Maximum iterations:             " << params.maxIter
+    <<  endl << "  Order of Gaussian quad.:        " << params.nQuad
+    <<  endl << "  Epsilon for convergence:        " << params.epsConverge
     <<  endl;
     }
 
@@ -81,7 +85,9 @@ namespace myLib
         vector<feature> &lineList = radModel.lineList;
         string fileName = radModel.params.dataDir + "/lines.dat";
 
-        cout << "Reading from line list: " << fileName << endl;
+        ostringstream output;
+        output << "Reading from line list: " << fileName;
+        radModel.log(output);
 
         ifstream lineListFile(fileName);
         string line;
