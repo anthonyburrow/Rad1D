@@ -27,7 +27,7 @@ namespace myLib
     {
         setInitialCond();
         calcTau();
-        calcLambdas(*this, lambda, lambdaSTAR);
+        calcLambda(*this, lambda);
     }
 
     void NuModel::calcTau()
