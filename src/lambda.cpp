@@ -186,7 +186,7 @@ namespace myLib
         Im[nZones - 1][nZones - 1] = betaM[nZones - 1];
     }
 
-    void calcLambdas(const NuModel &nuModel, vector<vector<double>> &lambda, vector<vector<double>> &lambdaSTAR)
+    void calcLambda(const NuModel &nuModel, vector<vector<double>> &lambda)
     {
         const int &nZones = nuModel.params.nZones;
         const int &nQuad = nuModel.params.nQuad;
@@ -221,10 +221,6 @@ namespace myLib
                 for (int k = 0; k < nZones; k++)
                 {
                     lambda[i][k] += quadW[j] * (Im[i][k] + Ip[i][k]);
-                    if(i==k || k==(i+1) || k ==(i-1))
-                    {
-                        lambdaSTAR[i][k] += quadW[j] * (Im[i][k] + Ip[i][k]);
-                    }
                 }
             }
         }
@@ -233,12 +229,7 @@ namespace myLib
         {
             for (int j=0; j < nZones; j++)
             {
-                lambda[i][j] *= 0.5;
-                if(i==j || j==(i+1) || j ==(i-1))
-                {
-                    lambdaSTAR[i][j] *= 0.5;
-                }
-                
+                lambda[i][j] *= 0.5;  
             }
         }
     }
