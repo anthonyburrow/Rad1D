@@ -26,7 +26,7 @@ namespace myLib
         // const double q = 1.0 / sqrt(3.0);
 
         const double q = calcHopfQ(tau);
-        cout << tau << " " << q << endl;
+        // cout << tau << " " << q << " " << tau + q << endl;
         const double T = Teff * pow(0.75 * (tau + q), 0.25);
 
         return T;
