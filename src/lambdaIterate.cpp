@@ -36,7 +36,7 @@ namespace myLib
 
         for (int i=0; i < nZones; i++)
         {
-            nuModel.S[i] = eps + (1.0 - eps) * nuModel.J[i];
+            nuModel.S[i] = eps * nuModel.B[i] + (1.0 - eps) * nuModel.J[i];
         }
     }
 

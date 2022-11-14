@@ -82,7 +82,7 @@ namespace myLib
 
         for (int j=0; j < params.nZones; j++)
         {
-            results[0][j] = nuModel.S[j];
+            results[0][j] = nuModel.S[j] / nuModel.B[j];
         }
 
         for (int i=1; i < params.maxIter; i++)
@@ -91,7 +91,7 @@ namespace myLib
 
             for (int j=0; j < params.nZones; j++)
             {
-                results[i][j] = nuModel.S[j];
+                results[i][j] = nuModel.S[j] / nuModel.B[j];
             }
         }
 
