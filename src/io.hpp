@@ -22,7 +22,7 @@ namespace myLib
         std::string dataDir = "../data";
         double waveStart = 4000.0;
         double waveEnd = 7000.0;
-        double tauMax = 1e4;
+        double tauMax = 1e6;
         double eps = 1e-4;
         double Teff = 6000.0;
         double contRes = 0.05;

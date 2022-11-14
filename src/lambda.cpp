@@ -17,19 +17,26 @@ namespace myLib
                          const double &mu, const vector<double> &tau,
                          const int &nZones)
     {
-        // Calc delta tau's
         for (int i = 1; i < nZones; i++)
         {
             Dtau[i - 1] = (tau[i] - tau[i - 1]) / mu;
-            expDtau[i - 1] = exp(-Dtau[i - 1]);
-        }
 
-        // Calc e's
-        for (int i = 1; i < nZones; i++)
-        {
-            e0[i] = 1.0 - expDtau[i - 1];
-            e1[i] = Dtau[i - 1] - e0[i];
-            e2[i] = pow(Dtau[i - 1], 2.0) - 2.0 * e1[i];
+            if (Dtau[i - 1] < 1e-8)
+            {
+                expDtau[i - 1] = 1.0 - Dtau[i - 1];
+
+                e0[i] = Dtau[i - 1];
+                e1[i] = zero;
+                e2[i] = pow(Dtau[i - 1], 2.0);
+            }
+            else
+            {
+                expDtau[i - 1] = exp(-Dtau[i - 1]);
+
+                e0[i] = 1.0 - expDtau[i - 1];
+                e1[i] = Dtau[i - 1] - e0[i];
+                e2[i] = pow(Dtau[i - 1], 2.0) - 2.0 * e1[i];
+            }
         }
     }
 
