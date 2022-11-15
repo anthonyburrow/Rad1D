@@ -75,11 +75,9 @@ namespace myLib
             Ip[i + 1][i] = alphaP[i + 1];
 
             // B (i, i)
-            // SMS: again I'm too dense to see why Ip is mixed with beta in this sum
             Ip[i][i] = Ip[i + 1][i] * expDtau[i] + betaP[i];
 
             // C (i - 1, i)
-            // SMS: again I'm too dense to see why Ip is mixed with beta in this sum
             Ip[i - 1][i] = Ip[i][i] * expDtau[i - 1] + gammaP[i - 1];
 
             // I^+ from row (i - 2) to 1
@@ -147,11 +145,9 @@ namespace myLib
             Im[i - 1][i] = gammaM[i - 1];
 
             // B (i, i)
-            // SMS: is the Im[i-1][i] really supposed to be gammaM[i-1] 
             Im[i][i] = Im[i - 1][i] * expDtau[i - 1] + betaM[i];
 
             // A (i + 1, i)
-            // SMS: I'm too dense to see where thise IM term is coming from
             Im[i + 1][i] = Im[i][i] * expDtau[i] + alphaM[i + 1];
 
             // I^- from row (i + 2) to N
