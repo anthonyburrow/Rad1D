@@ -62,7 +62,7 @@ namespace myLib
 
     void NuModel::iterate()
     {
-        lambdaIteration(*this);
+        ALI(*this);
     }
 
     double NuModel::calcFlux()

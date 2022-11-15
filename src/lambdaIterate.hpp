@@ -10,4 +10,8 @@ namespace myLib
     void calcS(NuModel &nuModel);
 
     void lambdaIteration(NuModel &nuModel);
+
+    void ALIcalcS(NuModel &nuModel);
+    void ALIcalcJ(NuModel &nuModel);
+    void ALI(NuModel &nuModel);
 }
