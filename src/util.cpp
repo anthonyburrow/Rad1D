@@ -46,10 +46,17 @@ namespace myLib
 
     void TridiagonalSoln(vector<double> &y,
                          const vector<double> &a, const vector<double> &b,
-                         const vector<double> &c, const vector<double> &x,
-                         vector<double> &cHelper, vector<double> &dHelper)
+                         const vector<double> &c, const vector<double> &x
+                         )
     {
+        
+        std::vector<double> cHelper;
+        std::vector<double> dHelper;
+        
         const int N = x.size();
+
+        cHelper.resize(N);
+        dHelper.resize(N);
 
         cHelper[0] = c[0] / b[0];
         dHelper[0] = x[0] / b[0];
@@ -66,6 +73,7 @@ namespace myLib
         for (int i = N - 1; i-- > 0; ) {
             y[i] = dHelper[i] - cHelper[i] * x[i + 1];
         }
+        
     }
 
     const vector<double> expn(const int &n, const double &x)

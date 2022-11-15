@@ -6,6 +6,7 @@
 #include "NuModel.hpp"
 #include "constants.hpp"
 #include "blackbody.hpp"
+#include "util.hpp"
 
 using namespace std;
 
@@ -14,8 +15,18 @@ namespace myLib
     void calcJ(NuModel &nuModel)
     {
         const double &nZones = nuModel.params.nZones;
+        const double &eps = nuModel.params.eps;
         const vector<vector<double>> &lambda = nuModel.lambda;
         double jTerm;
+        
+        //SMS start edits
+        std::vector<double> Jold = nuModel.J;
+        std::vector<double> a(nZones-1,0.0);
+        std::vector<double> b(nZones,0.0);
+        std::vector<double> c(nZones-1,0.0);
+        std::vector<double> x(nZones,0.0);
+        std::vector<double> y(nZones,0.0);
+        std::vector<double> formal_J(nZones,0.0);
 
         for (int i=0; i < nZones; i++)
         {
@@ -23,10 +34,31 @@ namespace myLib
             for (int j=0; j < nZones; j++)
             {
                 jTerm += lambda[i][j] * nuModel.S[j];
+                if(i==j)
+                {
+                    b[i]=1.0-(1.0-eps)*lambda[i][j];
+                }
+                if(i==j+1)
+                {
+                    a[i]=1.0-(1.0-eps)*lambda[i][j];
+                }
+                if(i==j-1)
+                {
+                    c[i]=1.0-(1.0-eps)*lambda[i][j];
+                }
             }
 
-            nuModel.J[i] = jTerm;
+            formal_J[i] = jTerm;
+            x[i] = formal_J[i] - Jold[i];
         }
+        
+        TridiagonalSoln(y, a, b, c, x);
+        
+        for (int i=0; i < nZones; i++)
+        {
+            nuModel.J[i] = 0.0;
+        }        
+        //SMS end edits
     }
 
     void calcS(NuModel &nuModel)
@@ -43,6 +75,7 @@ namespace myLib
     void lambdaIteration(NuModel &nuModel)
     {
         calcJ(nuModel);
+
         calcS(nuModel);
     }
 }
