@@ -45,8 +45,9 @@ namespace myLib
     }
 
     void TridiagonalSoln(vector<double> &y,
-                         const vector<double> &a, const vector<double> &b,
-                         const vector<double> &c, const vector<double> &x
+                         const double &eps, 
+                         const std::vector<std::vector<double>> &lambda, 
+                         const vector<double> &x
                          )
     {
         
@@ -54,6 +55,28 @@ namespace myLib
         std::vector<double> dHelper;
         
         const int N = x.size();
+        std::vector<double> a(N-1,0.0);
+        std::vector<double> b(N,0.0);
+        std::vector<double> c(N-1,0.0);
+
+        for (int i=0; i < N; i++)
+        {
+            for (int j=0; j < N; j++)
+            {
+                if(i==j)
+                {
+                    b[i]=1.0-(1.0-eps)*lambda[i][j];
+                }
+                if(i==j+1)
+                {
+                    a[i]=1.0-(1.0-eps)*lambda[i][j];
+                }
+                if(i==j-1)
+                {
+                    c[i]=1.0-(1.0-eps)*lambda[i][j];
+                }
+            }
+        }
 
         cHelper.resize(N);
         dHelper.resize(N);
