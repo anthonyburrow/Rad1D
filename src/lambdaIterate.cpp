@@ -56,7 +56,7 @@ namespace myLib
         
         for (int i=0; i < nZones; i++)
         {
-            nuModel.J[i] = 0.0;
+            nuModel.J[i] = y[i] - Jold[i];
         }        
         //SMS end edits
     }
