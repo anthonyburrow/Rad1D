@@ -2,6 +2,6 @@ build/
 *.egg-info/
 .vscode
 __pycache__/
-
+examples/
 doc/figs/*
 examples/*.pdf
