@@ -5,6 +5,7 @@ Tasks:
 - Other testing, making plots
 - Write up
 - Ng acceleration?
+### SMS I think this is done
 - Generalize quad weights/points (or get 32 weights/points somehow)
 
 

@@ -51,9 +51,6 @@ namespace myLib
         double jTerm;
         
         std::vector<double> Jold = nuModel.J;
-        std::vector<double> a(nZones-1,0.0);
-        std::vector<double> b(nZones,0.0);
-        std::vector<double> c(nZones-1,0.0);
         std::vector<double> x(nZones,0.0);
         std::vector<double> y(nZones,0.0);
         std::vector<double> formal_J(nZones,0.0);
@@ -64,29 +61,16 @@ namespace myLib
             for (int j=0; j < nZones; j++)
             {
                 jTerm += lambda[i][j] * nuModel.S[j];
-                if(i==j)
-                {
-                    b[i]=1.0-(1.0-eps)*lambda[i][j];
-                }
-                if(i==j+1)
-                {
-                    a[i]=1.0-(1.0-eps)*lambda[i][j];
-                }
-                if(i==j-1)
-                {
-                    c[i]=1.0-(1.0-eps)*lambda[i][j];
-                }
             }
-
             formal_J[i] = jTerm;
             x[i] = formal_J[i] - Jold[i];
         }
         
-        TridiagonalSoln(y, a, b, c, x);
+        TridiagonalSoln(y, eps, lambda, x);
         
         for (int i=0; i < nZones; i++)
         {
-            nuModel.J[i] = y[i] - Jold[i];
+            nuModel.J[i] = y[i] + Jold[i];
         }        
     }
 
@@ -98,38 +82,20 @@ namespace myLib
 
         const vector<vector<double>> &lambda = nuModel.lambda;
         std::vector<double> Sold = nuModel.S;
-        std::vector<double> a(nZones-1,0.0);
-        std::vector<double> b(nZones,0.0);
-        std::vector<double> c(nZones-1,0.0);
-        std::vector<double> x(nZones,0.0);
-        std::vector<double> y(nZones,0.0);
+
+        double sTerm;
 
         for (int i=0; i < nZones; i++)
         {
+            sTerm = 0.0;
             for (int j=0; j < nZones; j++)
             {
-                if(i==j)
-                {
-                    b[i]=1.0-(1.0-eps)*lambda[i][j];
-                }
-                if(i==j+1)
-                {
-                    a[i]=1.0-(1.0-eps)*lambda[i][j];
-                }
-                if(i==j-1)
-                {
-                    c[i]=1.0-(1.0-eps)*lambda[i][j];
-                }
+                sTerm += (1.0 - eps) * lambda[i][j] * Sold[j];
             }
-            x[i] = eps * nuModel.B[i];
+
+            nuModel.S[i] = eps * nuModel.B[i] +  sTerm;
         }
 
-        TridiagonalSoln(y, a, b, c, x);
-
-        for (int i=0; i < nZones; i++)
-        {
-            nuModel.S[i] = y[i] - Sold[i];
-        } 
     }
 
     void lambdaIteration(NuModel &nuModel)
@@ -143,5 +109,6 @@ namespace myLib
     {
         ALIcalcJ(nuModel);
         ALIcalcS(nuModel);
+        //calcS(nuModel);
     }
 }
