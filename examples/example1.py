@@ -35,7 +35,7 @@ ax.set_xlim(params['wave_start'], params['wave_end'])
 ax.set_xlabel('Wavelength [A]')
 ax.set_ylabel('Normalized flux')
 
-fn = './spectrum.pdf'
+fn = './spectrum.png'
 fig.savefig(fn, dpi=125)
 
 
@@ -47,7 +47,7 @@ ax.plot(model.tau, model.T)
 ax.set_xlabel(r'$\tau$')
 ax.set_ylabel('Temperature [K]')
 
-fn = './T_tau.pdf'
+fn = './T_tau.png'
 fig.savefig(fn, dpi=125)
 
 
@@ -73,5 +73,5 @@ ax.set_xlabel(r'$\log \tau$')
 ax.set_ylabel('S / B')
 
 plt.tight_layout()
-fn = './S_B_convergence.pdf'
+fn = './S_B_convergence.png'
 fig.savefig(fn, dpi=125)
