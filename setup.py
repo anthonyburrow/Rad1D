@@ -1,26 +1,31 @@
 from pybind11.setup_helpers import Pybind11Extension, build_ext
 from setuptools import setup
+import glob
+
 
 
 __version__ = '0.0.1'
 
 
-src_files = (
-    'blackbody',
-    'gaussianQuadrature',
-    'initialize',
-    'io',
-    'lambda',
-    'lambdaIterate',
-    'lineProfiles',
-    'NuModel',
-    'RadModel',
-    'util',
-)
+# src_files = (
+#     'blackbody',
+#     'gaussianQuadrature',
+#     'initialize',
+#     'io',
+#     'lambda',
+#     'lambdaIterate',
+#     'lineProfiles',
+#     'NuModel',
+#     'RadModel',
+#     'util',
+# )
+
+src_files = glob.glob('src/*.cpp')
+src_files.extend(glob.glob('tests/test_cpp/*.cpp'))
 
 ext_modules = [
     Pybind11Extension('Rad1D',
-        [f'src/{f}.cpp' for f in src_files],
+        src_files,
         define_macros = [('VERSION_INFO', __version__)],
     ),
 ]
