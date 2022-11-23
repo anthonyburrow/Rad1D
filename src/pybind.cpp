@@ -33,4 +33,5 @@ PYBIND11_MODULE(Rad1D, module_handle) {
         })
     ;
     // Testing
+    module_handle.def("test_all", &myLib::testAll);
 }

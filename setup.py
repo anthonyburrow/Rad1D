@@ -6,20 +6,6 @@ import glob
 
 __version__ = '0.0.1'
 
-
-# src_files = (
-#     'blackbody',
-#     'gaussianQuadrature',
-#     'initialize',
-#     'io',
-#     'lambda',
-#     'lambdaIterate',
-#     'lineProfiles',
-#     'NuModel',
-#     'RadModel',
-#     'util',
-# )
-
 src_files = glob.glob('src/*.cpp')
 src_files.extend(glob.glob('tests/test_cpp/*.cpp'))
 
@@ -27,9 +13,10 @@ ext_modules = [
     Pybind11Extension('Rad1D',
         src_files,
         define_macros = [('VERSION_INFO', __version__)],
+        include_dirs = ['lib/Catch2/src']
     ),
 ]
-
+print(build_ext)
 setup(
     name='Rad1D',
     version=__version__,
