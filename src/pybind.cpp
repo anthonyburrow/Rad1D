@@ -3,7 +3,6 @@
 #include <pybind11/numpy.h>
 
 #include "RadModel.hpp"
-#include "../tests/test_cpp/test_main.hpp"
 
 using namespace std;
 namespace py = pybind11;
@@ -33,5 +32,5 @@ PYBIND11_MODULE(Rad1D, module_handle) {
         })
     ;
     // Testing
-    module_handle.def("test_all", &myLib::testAll);
+    // module_handle.def("test_all", &myLib::testAll);
 }
