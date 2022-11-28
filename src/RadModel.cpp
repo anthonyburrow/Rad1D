@@ -46,7 +46,7 @@ namespace myLib
         const int nWave = static_cast<int>(spectrum.size());
 
         // Calc flux at each wavepoint - parallelize this in the future?
-        for (int i=0; i < nWave; i++)
+        for (int i = 0; i < nWave; i++)
         {
             NuModel nuModel = NuModel(spectrum[i][0], *this);
             spectrum[i][1] = nuModel.calcFlux();
@@ -79,18 +79,18 @@ namespace myLib
 
         NuModel nuModel = NuModel(lam, *this);
 
-        for (int j=0; j < params.nZones; j++)
+        for (int j = 0; j < params.nZones; j++)
         {
             results[0][j] = nuModel.S[j] / nuModel.B[j];
         }
 
         lambdaIteration(nuModel);
-        for (int j=0; j < params.nZones; j++)
+        for (int j = 0; j < params.nZones; j++)
         {
             results[1][j] = nuModel.S[j] / nuModel.B[j];
         }
 
-        for (int i=2; i < params.maxIter; i++)
+        for (int i = 2; i < params.maxIter; i++)
         {
             nuModel.iterate();
 

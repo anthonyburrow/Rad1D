@@ -1,12 +1,10 @@
 Tasks:
-- ALI
 - Check S(0) / B(0) ~ sqrt(eps)
 - Check for convergence with S(0) / B(0) ~ sqrt(eps)
 - Other testing, making plots
 - Write up
 - Ng acceleration?
-### SMS I think this is done
-- Generalize quad weights/points (or get 32 weights/points somehow)
+- Generalize quad weights/points
 
 
 Lines:
@@ -14,10 +12,6 @@ Lines:
 - Make line list more robust
 - Convert to using log(gf) system -> calc tau from z and alpha
 - Feature struct to lineProfiles
-
-
-Misc:
-- Carry over S for nearby wavelength points for faster convergence
 
 
 Problems to address:

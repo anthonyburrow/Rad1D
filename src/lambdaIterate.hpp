@@ -7,11 +7,9 @@
 namespace myLib
 {
     void calcJ(NuModel &nuModel);
+    void ALIcalcJ(NuModel &nuModel);
     void calcS(NuModel &nuModel);
 
     void lambdaIteration(NuModel &nuModel);
-
-    void ALIcalcS(NuModel &nuModel);
-    void ALIcalcJ(NuModel &nuModel);
     void ALI(NuModel &nuModel);
 }

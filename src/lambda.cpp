@@ -67,15 +67,6 @@ namespace myLib
         betaP[nZones - 1] = 1.0;   // I^+(tau_max) = B(T(tau_max))
         gammaP[0] = e0[1] - e1[1] / Dtau[0];
 
-        // Correct for under-correction in interpolation:
-        // (These correspond to I+- values so they cannot be < 0)
-        for (int i = 0; i < nZones; i++)
-        {
-            // alphaP[i] = max(alphaP[i], zero);
-            // betaP[i] = max(betaP[i], zero);
-            // gammaP[i] = max(gammaP[i], zero);
-        }
-
         for (int i = 1; i < nZones - 1; i++)
         {
             // A (i + 1, i)
@@ -135,15 +126,6 @@ namespace myLib
         alphaM[nZones - 1] = e0[nZones - 1] - e1[nZones - 1] / Dtau[nZones - 2];   
         betaM[nZones - 1] = e1[nZones - 1] / Dtau[nZones - 2];
         gammaM[0] = zero;
-
-        // Correct for under-correction in interpolation:
-        // (These correspond to I+- values so they cannot be < 0)
-        for (int i = 0; i < nZones; i++)
-        {
-            // alphaM[i] = max(alphaM[i], zero);
-            // betaM[i] = max(betaM[i], zero);
-            // gammaM[i] = max(gammaM[i], zero);
-        }
 
         // Columns 2 through (N - 1)
         for (int i = 1; i < nZones - 1; i++)

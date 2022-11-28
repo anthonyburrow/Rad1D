@@ -11,7 +11,7 @@ namespace myLib
     void getWeights(RadModel &radModel)
     {
         const int &nQuad = radModel.params.nQuad;
-        cout << " case: " << radModel.params.nQuad <<"\n";
+
         switch(radModel.params.nQuad)
         {
             case 2:
@@ -54,7 +54,6 @@ namespace myLib
                                     0.072345794,0.078193896,0.083311924,0.087652093,0.091173879,0.093844399,0.09563872,0.096540089,
                                     0.096540089,0.09563872,0.093844399,0.091173879,0.087652093,0.083311924,0.078193896,0.072345794,
                                     0.065822223,0.058684093,0.050998059,0.042835898,0.034273863,0.025392065,0.016274395,0.00701861};
-                cout << "we're in 32 and have gotten W,Mu\n";
                 break;
             }
             default:

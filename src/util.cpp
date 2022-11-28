@@ -44,55 +44,48 @@ namespace myLib
         return ind;
     }
 
-    void TridiagonalSoln(vector<double> &y,
-                         const double &eps, 
-                         const std::vector<std::vector<double>> &lambda, 
-                         const vector<double> &x
-                         )
+    void TridiagonalSoln(vector<double> &y, const vector<vector<double>> &lambda,
+                         const vector<double> &x, const double &eps)
     {
-        
-        std::vector<double> cHelper;
-        std::vector<double> dHelper;
-        
         const int N = x.size();
-        std::vector<double> a(N-1,0.0);
-        std::vector<double> b(N,0.0);
-        std::vector<double> c(N-1,0.0);
+
+        vector<double> cHelper(N);
+        vector<double> xHelper(N);
+
+        vector<double> a(N - 1, 0.0);
+        vector<double> b(N, 0.0);
+        vector<double> c(N - 1, 0.0);
 
         // a is lower diagonal, c is upper diagonal
-        for (int i=0; i < N; i++)
+        for (int i = 0; i < N; i++)
         {
-            b[i]=1.0-(1.0-eps)*lambda[i][i];
+            b[i] = 1.0 - (1.0 - eps) * lambda[i][i];
         }
-        // this should be indexing the correct index now
-        for(int i = 0; i < N-1; i++)
+        for(int i = 0; i < N - 1; i++)
         {
-            a[i]= -(1.0-eps)*lambda[i+1][i];
+            a[i] = -(1.0 - eps) * lambda[i + 1][i];
         }
-        for(int i = 0; i < N-1; i++)
+        for(int i = 0; i < N - 1; i++)
         {
-            c[i]= -(1.0-eps)*lambda[i][i+1];
+            c[i] = -(1.0 - eps) * lambda[i][i + 1];
         }
-
-        cHelper.resize(N);
-        dHelper.resize(N);
 
         cHelper[0] = c[0] / b[0];
-        dHelper[0] = x[0] / b[0];
+        xHelper[0] = x[0] / b[0];
 
         // Forward sweep
         double m;
         for (int i = 1; i < N; i++) {
             m = 1.0 / (b[i] - a[i] * cHelper[i - 1]);
             cHelper[i] = c[i] * m;
-            dHelper[i] = (x[i] - a[i] * dHelper[i - 1]) * m;
+            xHelper[i] = (x[i] - a[i] * xHelper[i - 1]) * m;
         }
 
         // Reverse sweep
-        for (int i = N - 1; i-- > 0; ) {
-            y[i] = dHelper[i] - cHelper[i] * x[i + 1];
+        y[N - 1] = xHelper[N - 1];
+        for (int i = N - 2; i-- > 0; ) {
+            y[i] = xHelper[i] - cHelper[i] * y[i + 1];
         }
-        
     }
 
     const vector<double> expn(const int &n, const double &x)
