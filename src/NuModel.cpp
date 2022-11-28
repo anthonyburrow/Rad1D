@@ -22,7 +22,8 @@ namespace myLib
         B(params.nZones, zero),
         S(params.nZones, zero),
         J(params.nZones, zero),
-        lambda(params.nZones, vector<double>(params.nZones, 0.0))
+        lambda(params.nZones, vector<double>(params.nZones, 0.0)),
+        lambdaSTAR(params.nZones, vector<double>(params.nZones, 0.0))
     {
         setInitialCond();
         calcTau();
@@ -61,7 +62,7 @@ namespace myLib
 
     void NuModel::iterate()
     {
-        lambdaIteration(*this);
+        ALI(*this);
     }
 
     double NuModel::calcFlux()

@@ -57,7 +57,7 @@ namespace myLib
             betaP[i] = ((Dtau[i] + Dtau[i - 1]) * e1[i + 1] - e2[i + 1]) /
                         ((Dtau[i] * Dtau[i - 1]));
             gammaP[i] = e0[i + 1] +
-                        (e2[i + 1] - (Dtau[i - 1] + 2 * Dtau[i]) * e1[i + 1]) /
+                        (e2[i + 1] - (Dtau[i - 1] + 2. * Dtau[i]) * e1[i + 1]) /
                         (Dtau[i] * (Dtau[i] + Dtau[i - 1]));
         }
 
@@ -225,7 +225,7 @@ namespace myLib
         {
             for (int j=0; j < nZones; j++)
             {
-                lambda[i][j] *= 0.5;
+                lambda[i][j] *= 0.5;  
             }
         }
     }

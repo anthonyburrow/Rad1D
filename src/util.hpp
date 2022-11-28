@@ -14,12 +14,9 @@ namespace myLib
                            const double value);
 
     void TridiagonalSoln(std::vector<double> &y,
-                         const std::vector<double> &a,
-                         const std::vector<double> &b,
-                         const std::vector<double> &c,
-                         const std::vector<double> &x,
-                         std::vector<double> &cHelper,
-                         std::vector<double> &dHelper);
+                         const double &eps,
+                         const std::vector<std::vector<double>> &lambda,
+                         const std::vector<double> &x);
 
     const std::vector<double> expn(const int &n,
                                    const double &x);

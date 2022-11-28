@@ -45,11 +45,37 @@ namespace myLib
     }
 
     void TridiagonalSoln(vector<double> &y,
-                         const vector<double> &a, const vector<double> &b,
-                         const vector<double> &c, const vector<double> &x,
-                         vector<double> &cHelper, vector<double> &dHelper)
+                         const double &eps, 
+                         const std::vector<std::vector<double>> &lambda, 
+                         const vector<double> &x
+                         )
     {
+        
+        std::vector<double> cHelper;
+        std::vector<double> dHelper;
+        
         const int N = x.size();
+        std::vector<double> a(N-1,0.0);
+        std::vector<double> b(N,0.0);
+        std::vector<double> c(N-1,0.0);
+
+        // a is lower diagonal, c is upper diagonal
+        for (int i=0; i < N; i++)
+        {
+            b[i]=1.0-(1.0-eps)*lambda[i][i];
+        }
+        // this should be indexing the correct index now
+        for(int i = 0; i < N-1; i++)
+        {
+            a[i]= -(1.0-eps)*lambda[i+1][i];
+        }
+        for(int i = 0; i < N-1; i++)
+        {
+            c[i]= -(1.0-eps)*lambda[i][i+1];
+        }
+
+        cHelper.resize(N);
+        dHelper.resize(N);
 
         cHelper[0] = c[0] / b[0];
         dHelper[0] = x[0] / b[0];
@@ -66,6 +92,7 @@ namespace myLib
         for (int i = N - 1; i-- > 0; ) {
             y[i] = dHelper[i] - cHelper[i] * x[i + 1];
         }
+        
     }
 
     const vector<double> expn(const int &n, const double &x)
