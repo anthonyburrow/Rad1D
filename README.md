@@ -54,6 +54,7 @@ params = {
     'T_eff'       : 6000.,       # Characteristic temperature (K) of atmosphere
     'n_zones'     : 256,         # Number of tau points
     'max_iter'    : 100,         # Maximum number of lambda iterations allowed
+    'accelerated' : True,        # Maximum number of lambda iterations allowed
     'eps_converge': 1e-6,        # Factor to determine J is converged
     'n_quad'      : 8,           # Order of Gaussian quadrature integration
     'verbose'     : True,        # Display stdout output

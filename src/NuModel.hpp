@@ -27,7 +27,7 @@ namespace myLib
 
         double calcFlux();
         double calcF0();
-        void iterate();
+        void iterate(const bool accelerate = true);
 
     private:
         void calcTau();

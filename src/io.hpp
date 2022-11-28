@@ -30,6 +30,7 @@ namespace myLib
         double epsConverge = 1e-6;
         int nZones = 256;
         int maxIter = 100;
+        bool accelerated = true;
         int nQuad = 8;
         bool verbose = true;
     };

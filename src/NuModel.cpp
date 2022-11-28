@@ -55,14 +55,14 @@ namespace myLib
         for (int i = 0; i < nZones; i++)
         {
             B[i] = bbScale * planck(lam, radModel.T[i]);
-            // S[i] = 1.0;
             S[i] = B[i];
         }
     }
 
-    void NuModel::iterate()
+    void NuModel::iterate(const bool accelerate)
     {
-        ALI(*this);
+        if (accelerate && params.accelerated) { ALI(*this); }
+        else { lambdaIteration(*this); }
     }
 
     double NuModel::calcFlux()
@@ -76,7 +76,9 @@ namespace myLib
         // Do Ng Acceleration here
 
         // Converge S & J
-        for (int i=0; i < maxIter; i++)
+        iterate(false);
+
+        for (int i = 1; i < maxIter; i++)
         {
             iterate();
 

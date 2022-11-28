@@ -52,6 +52,9 @@ namespace myLib
         if (dictParams.contains("max_iter")) {
             params.maxIter = dictParams["max_iter"].cast<int>();
         }
+        if (dictParams.contains("accelerated")) {
+            params.accelerated = dictParams["accelerated"].cast<bool>();
+        }
         if (dictParams.contains("n_quad")) {
             params.nQuad = dictParams["n_quad"].cast<int>();
         }
@@ -75,6 +78,7 @@ namespace myLib
     <<  endl << "  Max tau:                        " << params.tauMax
     <<  endl << "  Number of tau points:           " << params.nZones
     <<  endl << "  Maximum iterations:             " << params.maxIter
+    <<  endl << "  Use accelerated iteration:      " << params.accelerated
     <<  endl << "  Order of Gaussian quad.:        " << params.nQuad
     <<  endl << "  Epsilon for convergence:        " << params.epsConverge
     <<  endl;
