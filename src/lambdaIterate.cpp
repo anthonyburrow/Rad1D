@@ -35,10 +35,13 @@ namespace myLib
         const double &nZones = nuModel.params.nZones;
         const double &eps = nuModel.params.eps;
         const vector<vector<double>> &lambda = nuModel.lambda;
+        const vector<double> &lambdaA = nuModel.lambdaA;
+        const vector<double> &lambdaB = nuModel.lambdaB;
+        const vector<double> &lambdaC = nuModel.lambdaC;
 
-        std::vector<double> x(nZones, 0.0);
-        std::vector<double> y(nZones, 0.0);
-        std::vector<double> JFormal(nZones, 0.0);
+        vector<double> x(nZones, 0.0);
+        vector<double> y(nZones, 0.0);
+        vector<double> JFormal(nZones, 0.0);
 
         for (int i = 0; i < nZones; i++)
         {
@@ -49,7 +52,7 @@ namespace myLib
             x[i] = JFormal[i] - nuModel.J[i];
         }
 
-        TridiagonalSoln(y, lambda, x, eps);
+        TridiagonalSoln(y, lambdaA, lambdaB, lambdaC, x);
 
         for (int i = 0; i < nZones; i++)
         {

@@ -17,17 +17,20 @@ namespace myLib
       : lam(lam),
         radModel(radModel),
         params(radModel.params),
-        // Allocate vectors
+        // Physical quantites
         tau(params.nZones, zero),
         B(params.nZones, zero),
         S(params.nZones, zero),
         J(params.nZones, zero),
+        // Lambda iteration vectors
         lambda(params.nZones, vector<double>(params.nZones, 0.0)),
-        lambdaSTAR(params.nZones, vector<double>(params.nZones, 0.0))
+        lambdaA(params.nZones - 1, zero),
+        lambdaB(params.nZones, zero),
+        lambdaC(params.nZones - 1, zero)
     {
         setInitialCond();
         calcTau();
-        calcLambda(*this, lambda);
+        initLambda();
     }
 
     void NuModel::calcTau()
@@ -56,6 +59,27 @@ namespace myLib
         {
             B[i] = bbScale * planck(lam, radModel.T[i]);
             S[i] = B[i];
+        }
+    }
+
+    void NuModel::initLambda()
+    {
+        const int &nZones = params.nZones;
+        const double &eps = params.eps;
+
+        calcLambda(*this);
+
+        for (int i = 0; i < nZones; i++)
+        {
+            lambdaB[i] = 1.0 - (1.0 - eps) * lambda[i][i];
+        }
+        for(int i = 0; i < nZones - 1; i++)
+        {
+            lambdaA[i] = -(1.0 - eps) * lambda[i + 1][i];
+        }
+        for(int i = 0; i < nZones - 1; i++)
+        {
+            lambdaC[i] = -(1.0 - eps) * lambda[i][i + 1];
         }
     }
 

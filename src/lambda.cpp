@@ -164,7 +164,7 @@ namespace myLib
         Im[nZones - 1][nZones - 1] = betaM[nZones - 1];
     }
 
-    void calcLambda(const NuModel &nuModel, vector<vector<double>> &lambda)
+    void calcLambda(NuModel &nuModel)
     {
         const int &nZones = nuModel.params.nZones;
         const int &nQuad = nuModel.params.nQuad;
@@ -172,6 +172,7 @@ namespace myLib
         const vector<double> &tau = nuModel.tau;
         const vector<double> &quadMu = nuModel.radModel.quadMu;
         const vector<double> &quadW = nuModel.radModel.quadW;
+        vector<vector<double>> &lambda = nuModel.lambda;
 
         vector<double> Dtau(nZones, zero);
         vector<double> expDtau(nZones, zero);

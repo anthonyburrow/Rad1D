@@ -44,31 +44,14 @@ namespace myLib
         return ind;
     }
 
-    void TridiagonalSoln(vector<double> &y, const vector<vector<double>> &lambda,
-                         const vector<double> &x, const double &eps)
+    void TridiagonalSoln(vector<double> &y, const vector<double> &a,
+                         const vector<double> &b, const vector<double> &c,
+                         const vector<double> &x)
     {
         const int N = x.size();
 
         vector<double> cHelper(N);
         vector<double> xHelper(N);
-
-        vector<double> a(N - 1, 0.0);
-        vector<double> b(N, 0.0);
-        vector<double> c(N - 1, 0.0);
-
-        // a is lower diagonal, c is upper diagonal
-        for (int i = 0; i < N; i++)
-        {
-            b[i] = 1.0 - (1.0 - eps) * lambda[i][i];
-        }
-        for(int i = 0; i < N - 1; i++)
-        {
-            a[i] = -(1.0 - eps) * lambda[i + 1][i];
-        }
-        for(int i = 0; i < N - 1; i++)
-        {
-            c[i] = -(1.0 - eps) * lambda[i][i + 1];
-        }
 
         cHelper[0] = c[0] / b[0];
         xHelper[0] = x[0] / b[0];

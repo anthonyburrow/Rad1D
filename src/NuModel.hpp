@@ -19,8 +19,12 @@ namespace myLib
         std::vector<double> B;
         std::vector<double> S;
         std::vector<double> J;
+
+        // Lambda iteration vectors
         std::vector<std::vector<double>> lambda;
-        std::vector<std::vector<double>> lambdaSTAR;
+        std::vector<double> lambdaA;
+        std::vector<double> lambdaB;
+        std::vector<double> lambdaC;
 
         // Methods
         NuModel(const double &lam, const RadModel &radModel);
@@ -32,5 +36,6 @@ namespace myLib
     private:
         void calcTau();
         void setInitialCond();
+        void initLambda();
     };
 }
