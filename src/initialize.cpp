@@ -77,15 +77,15 @@ namespace myLib
         const int &nZones = radModel.params.nZones;
         const double logTauMin = -8.0;
         const double logTauMax = log10(radModel.params.tauMax);
-        const double expSlope = (logTauMax - logTauMin) / (nZones - 2);
-
-        // radModel.tauCont[0] = zero;
+        const double expSlope = (logTauMax - logTauMin) / (nZones - 1);
 
         for (int i = 0; i < nZones; i++)
         {
             radModel.tauCont[i] = i * expSlope + logTauMin;
             radModel.tauCont[i] = pow(10.0, radModel.tauCont[i]);
         }
+
+        // radModel.tauCont[0] = zero;
 
         // Replace closest tau value to 1 with 1
         // const int ind = closestIndex(radModel.tauCont, 1.0);
