@@ -26,4 +26,7 @@ namespace myLib
     static const double k_hc = k / hc;                     // K^{-1} A^{-1}
     static const double c = 29979.2458;                    // cm s^{-1}
     static const double constDB = 4.301415e-7;             // K^{-1/2} amu^{1/2}
+
+    // Settings
+    static const double expDtauThreshold = 1e-6;
 }

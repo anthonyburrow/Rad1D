@@ -21,7 +21,7 @@ namespace myLib
         {
             Dtau[i - 1] = (tau[i] - tau[i - 1]) / mu;
 
-            if (Dtau[i - 1] < 1e-8)
+            if (Dtau[i - 1] < expDtauThreshold)
             {
                 expDtau[i - 1] = 1.0 - Dtau[i - 1];
 

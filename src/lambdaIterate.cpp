@@ -108,7 +108,7 @@ namespace myLib
     void ALI(NuModel &nuModel)
     {
         ALIcalcJ(nuModel);
-        ALIcalcS(nuModel);
-        //calcS(nuModel);
+        // ALIcalcS(nuModel);
+        calcS(nuModel);
     }
 }

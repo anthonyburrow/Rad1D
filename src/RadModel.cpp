@@ -13,6 +13,7 @@
 #include "constants.hpp"
 #include "util.hpp"
 #include "lambda.hpp"
+#include "lambdaIterate.hpp"
 
 using namespace std;
 namespace py = pybind11;
@@ -83,7 +84,13 @@ namespace myLib
             results[0][j] = nuModel.S[j] / nuModel.B[j];
         }
 
-        for (int i=1; i < params.maxIter; i++)
+        lambdaIteration(nuModel);
+        for (int j=0; j < params.nZones; j++)
+        {
+            results[1][j] = nuModel.S[j] / nuModel.B[j];
+        }
+
+        for (int i=2; i < params.maxIter; i++)
         {
             nuModel.iterate();
 
