@@ -76,9 +76,6 @@ namespace myLib
         for(int i = 0; i < nZones - 1; i++)
         {
             lambdaA[i] = -(1.0 - eps) * lambda[i + 1][i];
-        }
-        for(int i = 0; i < nZones - 1; i++)
-        {
             lambdaC[i] = -(1.0 - eps) * lambda[i][i + 1];
         }
     }
@@ -118,7 +115,7 @@ namespace myLib
 
     double NuModel::calcF0()
     {
-        const int &nZones = params.maxIter;
+        const int &nZones = params.nZones;
         const int halfQuad = int(0.5 * params.nQuad);
         const vector<double> &quadMu = radModel.quadMu;
         const vector<double> &quadW = radModel.quadW;
@@ -147,9 +144,6 @@ namespace myLib
             Ip0 = zero;
             for (int i = 0; i < nZones; i++)
             {
-                // Check for NaN (not sure why there are NaNs in this matrix...)
-                if (Ip[0][i] != Ip[0][i]) { continue; }
-
                 Ip0 += Ip[0][i] * S[i] * B[i];
             }
             F0 += quadW[j] * quadMu[j] * Ip0;
