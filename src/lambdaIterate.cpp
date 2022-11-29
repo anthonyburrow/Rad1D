@@ -18,10 +18,10 @@ namespace myLib
         const vector<vector<double>> &lambda = nuModel.lambda;
         double jTerm;
 
-        for (int i=0; i < nZones; i++)
+        for (int i = 0; i < nZones; i++)
         {
             jTerm = 0.0;
-            for (int j=0; j < nZones; j++)
+            for (int j = 0; j < nZones; j++)
             {
                 jTerm += lambda[i][j] * nuModel.S[j];
             }
