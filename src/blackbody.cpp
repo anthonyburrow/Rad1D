@@ -34,7 +34,9 @@ namespace myLib
 
     const double planck(const double &lam, const double &T)
     {
-        const double bb = 1. / (pow(lam, 5) * (exp(1. / (k_hc * T * lam)) - 1));
+        const double bbScale = 2.0 * hc * c * 1e8;
+        const double expTerm = exp(k_hc * T * lam);
+        const double bb = bbScale / (pow(lam, 5) * (exp(1. / (k_hc * T * lam)) - 1));
         return bb;
     }
 }

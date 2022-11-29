@@ -52,12 +52,11 @@ namespace myLib
     void NuModel::setInitialCond()
     {
         const int &nZones = params.nZones;
-        const double bbScale = 2.0 * hc * c * 1e8;
 
-        // Initialize S(tau) = B(T(tau)) = 1
+        // Initialize S(tau) = B(T(tau))
         for (int i = 0; i < nZones; i++)
         {
-            B[i] = bbScale * planck(lam, radModel.T[i]);
+            B[i] = planck(lam, radModel.T[i]);
             S[i] = B[i];
         }
     }
