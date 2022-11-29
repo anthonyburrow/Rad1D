@@ -27,6 +27,10 @@ namespace myLib
     static const double c = 29979.2458;                    // cm s^{-1}
     static const double constDB = 4.301415e-7;             // K^{-1/2} amu^{1/2}
 
+    static const double hopfA = 0.7104520194746458;
+    static const double hopfB = -0.24241757247081414;
+    static const double hopfC = 0.2215866721657009;
+
     // Settings
     static const double expDtauThreshold = 1e-6;
 }
