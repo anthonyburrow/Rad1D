@@ -94,7 +94,6 @@ namespace myLib
         const int &maxIter = params.maxIter;
         const double &epsConverge = params.epsConverge;
         double flux;
-
         double prevJ = 1;
 
         // Do Ng Acceleration here
@@ -107,7 +106,7 @@ namespace myLib
             iterate();
 
             // Check/break for convergence at the surface
-            // if (2.0 * abs(J[0] - prevJ) / (J[0] + prevJ) < epsConverge) { break; }
+            if (2.0 * abs(J[0] - prevJ) / (J[0] + prevJ) < epsConverge) { break; }
             prevJ = J[0];
         }
 
