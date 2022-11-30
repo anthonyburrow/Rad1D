@@ -40,7 +40,7 @@ namespace myLib
         // Initialize S(tau) = B(T(tau))
         for (int i = 0; i < nZones; i++)
         {
-            B[i] = 1.0;
+            B[i] = planck(lam, radModel.params.Teff);
             // B[i] = planck(lam, radModel.T[i]);
             S[i] = B[i];
         }
