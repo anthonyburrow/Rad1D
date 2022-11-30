@@ -31,6 +31,9 @@ namespace myLib
         if (dictParams.contains("wave_end")) {
             params.waveEnd = dictParams["wave_end"].cast<double>();
         }
+        if (dictParams.contains("tau_min")) {
+            params.tauMin = dictParams["tau_min"].cast<double>();
+        }
         if (dictParams.contains("tau_max")) {
             params.tauMax = dictParams["tau_max"].cast<double>();
         }
@@ -77,6 +80,7 @@ namespace myLib
     <<  endl << "  Line resolution [pts / A]:      " << params.lineRes
     <<  endl << "  Thermalization:                 " << params.eps
     <<  endl << "  Effective temperature [K]:      " << params.Teff
+    <<  endl << "  Min tau:                        " << params.tauMin
     <<  endl << "  Max tau:                        " << params.tauMax
     <<  endl << "  Number of tau points:           " << params.nZones
     <<  endl << "  Maximum iterations:             " << params.maxIter

@@ -32,5 +32,5 @@ namespace myLib
     static const double hopfC = 0.2215866721657009;
 
     // Settings
-    static const double expDtauThreshold = 1e-6;
+    static const double expDtauThreshold = 1e-7;
 }
