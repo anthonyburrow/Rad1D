@@ -23,11 +23,11 @@ namespace myLib
 
             if (Dtau[i - 1] < expDtauThreshold)
             {
-                expDtau[i - 1] = 1.0 - Dtau[i - 1];
+                expDtau[i - 1] = 1.0 - Dtau[i - 1] + 0.5 * pow(Dtau[i - 1], 2.0);
 
-                e0[i] = Dtau[i - 1];
-                e1[i] = zero;
-                e2[i] = pow(Dtau[i - 1], 2.0);
+                e0[i] = Dtau[i - 1] - 0.5 * pow(Dtau[i - 1], 2.0);
+                e1[i] = 0.5 * pow(Dtau[i - 1], 2.0);
+                e2[i] = zero;
             }
             else
             {
