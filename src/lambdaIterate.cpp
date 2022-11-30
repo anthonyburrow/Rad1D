@@ -65,7 +65,7 @@ namespace myLib
         const int &nZones = nuModel.params.nZones;
         const double &eps = nuModel.params.eps;
 
-        for (int i=0; i < nZones; i++)
+        for (int i = 0; i < nZones; i++)
         {
             nuModel.S[i] = eps * nuModel.B[i] + (1.0 - eps) * nuModel.J[i];
         }

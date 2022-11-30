@@ -94,7 +94,7 @@ namespace myLib
         {
             nuModel.iterate();
 
-            for (int j=0; j < params.nZones; j++)
+            for (int j = 0; j < params.nZones; j++)
             {
                 results[i][j] = nuModel.S[j] / nuModel.B[j];
             }

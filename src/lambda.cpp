@@ -55,15 +55,16 @@ namespace myLib
             alphaP[i] = (e2[i + 1] - Dtau[i] * e1[i + 1]) /
                         (Dtau[i - 1] * (Dtau[i] + Dtau[i - 1]));
             betaP[i] = ((Dtau[i] + Dtau[i - 1]) * e1[i + 1] - e2[i + 1]) /
-                        ((Dtau[i] * Dtau[i - 1]));
+                        (Dtau[i] * Dtau[i - 1]);
             gammaP[i] = e0[i + 1] +
-                        (e2[i + 1] - (Dtau[i - 1] + 2. * Dtau[i]) * e1[i + 1]) /
+                        (e2[i + 1] - (Dtau[i - 1] + 2.0 * Dtau[i]) * e1[i + 1]) /
                         (Dtau[i] * (Dtau[i] + Dtau[i - 1]));
         }
 
         // Use linear interpolation for columns 1 and N
         alphaP[nZones - 1] = zero;
         betaP[0] = e1[1] / Dtau[0];
+        betaP[nZones - 2] = e1[nZones - 1] / Dtau[nZones - 2];
         betaP[nZones - 1] = 1.0;   // I^+(tau_max) = B(T(tau_max))
         gammaP[0] = e0[1] - e1[1] / Dtau[0];
 
@@ -94,7 +95,7 @@ namespace myLib
         Ip[nZones - 1][nZones - 1] = betaP[nZones - 1];
 
         Ip[nZones - 2][nZones - 1] = Ip[nZones - 1][nZones - 1] * expDtau[nZones - 2] +
-                                     gammaP[nZones - 2];
+                                     e0[nZones - 1] - e1[nZones - 1] / Dtau[nZones - 2];
 
         for (int k = nZones - 3; k > -1; k--)
         {
@@ -114,7 +115,7 @@ namespace myLib
         for (int i = 1; i < nZones - 1; i++)
         {
             alphaM[i] = e0[i] +
-                        (e2[i] - (Dtau[i] + 2 * Dtau[i - 1]) * e1[i]) /
+                        (e2[i] - (Dtau[i] + 2.0 * Dtau[i - 1]) * e1[i]) /
                         (Dtau[i - 1] * (Dtau[i] + Dtau[i - 1]));
             betaM[i] = ((Dtau[i] + Dtau[i - 1]) * e1[i] - e2[i]) /
                         (Dtau[i] * Dtau[i - 1]);
@@ -124,6 +125,8 @@ namespace myLib
 
         // Use linear interpolation for columns 1 and N
         alphaM[nZones - 1] = e0[nZones - 1] - e1[nZones - 1] / Dtau[nZones - 2];   
+        betaM[0] = zero;
+        betaM[1] = e1[1] / Dtau[0];
         betaM[nZones - 1] = e1[nZones - 1] / Dtau[nZones - 2];
         gammaM[0] = zero;
 
@@ -148,11 +151,9 @@ namespace myLib
 
         // Column 1 - Use linear interpolation
 
-        // i^-(0) = 0
+        Im[0][0] = betaM[0];
 
-        // Use linear alphaM[1] instead of the parabolic one?
         Im[1][0] = e0[1] - e1[1] / Dtau[0];
-        // Im[1][0] = alphaM[1];
 
         for (int k = 2; k < nZones; k++)
         {
@@ -204,9 +205,9 @@ namespace myLib
             }
         }
 
-        for (int i=0; i < nZones; i++)
+        for (int i = 0; i < nZones; i++)
         {
-            for (int j=0; j < nZones; j++)
+            for (int j = 0; j < nZones; j++)
             {
                 lambda[i][j] *= 0.5;  
             }
