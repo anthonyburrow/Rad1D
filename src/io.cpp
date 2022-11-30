@@ -64,6 +64,8 @@ namespace myLib
 
         if (params.verbose) { printParams(params); }
 
+        params.nQuad = int(0.5 * params.nQuad);
+
         return params;
     }
 

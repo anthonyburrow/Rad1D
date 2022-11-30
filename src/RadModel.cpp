@@ -66,6 +66,9 @@ namespace myLib
 
     vector<vector<double>> RadModel::convergenceTest(const double &lam)
     {
+        const int &nZones = params.nZones;
+        const int &maxIter = params.maxIter;
+
         ostringstream output1;
         output1 << "Performing convergence test at " << lam << " A...";
         log(output1);
@@ -73,28 +76,27 @@ namespace myLib
         auto t0 = chrono::high_resolution_clock::now();
         chrono::duration<double> sec;
 
-        vector<vector<double>> results(params.maxIter,
-                                       vector<double>(params.nZones));
+        vector<vector<double>> results(maxIter, vector<double>(nZones));
 
         NuModel nuModel = NuModel(lam, *this);
 
-        for (int j = 0; j < params.nZones; j++)
+        for (int j = 0; j < nZones; j++)
         {
             results[0][j] = nuModel.S[j] / nuModel.B[j];
         }
 
         // Begin with a single normal lambda iteration
         nuModel.iterate(false);
-        for (int j = 0; j < params.nZones; j++)
+        for (int j = 0; j < nZones; j++)
         {
             results[1][j] = nuModel.S[j] / nuModel.B[j];
         }
 
-        for (int i = 2; i < params.maxIter; i++)
+        for (int i = 2; i < maxIter; i++)
         {
             nuModel.iterate();
 
-            for (int j = 0; j < params.nZones; j++)
+            for (int j = 0; j < nZones; j++)
             {
                 results[i][j] = nuModel.S[j] / nuModel.B[j];
             }

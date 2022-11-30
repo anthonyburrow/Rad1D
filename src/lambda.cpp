@@ -89,13 +89,13 @@ namespace myLib
         // Column 1 - Use linear interpolation
 
         Ip[0][0] = betaP[0];
+        Ip[1][0] = zero;
 
         // Column N - Use linear interpolation
 
         Ip[nZones - 1][nZones - 1] = betaP[nZones - 1];
 
-        Ip[nZones - 2][nZones - 1] = Ip[nZones - 1][nZones - 1] * expDtau[nZones - 2] +
-                                     e0[nZones - 1] - e1[nZones - 1] / Dtau[nZones - 2];
+        Ip[nZones - 2][nZones - 1] = zero;  // Due to I^+(tau_max) = B(T(tau_max)) constraint
 
         for (int k = nZones - 3; k > -1; k--)
         {
@@ -162,6 +162,7 @@ namespace myLib
 
         // Column N - Use linear interpolation
 
+        Im[nZones - 2][nZones - 1] = zero;
         Im[nZones - 1][nZones - 1] = betaM[nZones - 1];
     }
 
@@ -169,7 +170,6 @@ namespace myLib
     {
         const int &nZones = nuModel.params.nZones;
         const int &nQuad = nuModel.params.nQuad;
-        const int halfQuad = int(0.5 * nQuad);
         const vector<double> &tau = nuModel.tau;
         const vector<double> &quadMu = nuModel.radModel.quadMu;
         const vector<double> &quadW = nuModel.radModel.quadW;
@@ -185,7 +185,7 @@ namespace myLib
         vector<vector<double>> Ip(nZones, vector<double>(nZones, zero));
         vector<vector<double>> Im(nZones, vector<double>(nZones, zero));
 
-        for (int j = 0; j < halfQuad; j++)
+        for (int j = 0; j < nQuad; j++)
         {
             // Setup values needed for both I+ and I-
             setupFormalSoln(Dtau, expDtau, e0, e1, e2,
@@ -209,7 +209,7 @@ namespace myLib
         {
             for (int j = 0; j < nZones; j++)
             {
-                lambda[i][j] *= 0.5;  
+                lambda[i][j] *= 0.5;
             }
         }
     }

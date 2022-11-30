@@ -14,7 +14,7 @@ namespace myLib
 {
     void calcJ(NuModel &nuModel)
     {
-        const double &nZones = nuModel.params.nZones;
+        const int &nZones = nuModel.params.nZones;
         const vector<vector<double>> &lambda = nuModel.lambda;
         double jTerm;
 
@@ -32,7 +32,7 @@ namespace myLib
 
     void ALIcalcJ(NuModel &nuModel)
     {
-        const double &nZones = nuModel.params.nZones;
+        const int &nZones = nuModel.params.nZones;
         const double &eps = nuModel.params.eps;
         const vector<vector<double>> &lambda = nuModel.lambda;
         const vector<double> &lambdaA = nuModel.lambdaA;
@@ -41,15 +41,16 @@ namespace myLib
 
         vector<double> x(nZones, 0.0);
         vector<double> y(nZones, 0.0);
-        vector<double> JFormal(nZones, 0.0);
+        double JFormal;
 
         for (int i = 0; i < nZones; i++)
         {
+            JFormal = 0.0;
             for (int j = 0; j < nZones; j++)
             {
-                JFormal[i] += lambda[i][j] * nuModel.S[j];
+                JFormal += lambda[i][j] * nuModel.S[j];
             }
-            x[i] = JFormal[i] - nuModel.J[i];
+            x[i] = JFormal - nuModel.J[i];
         }
 
         TridiagonalSoln(y, lambdaA, lambdaB, lambdaC, x);

@@ -26,7 +26,7 @@ namespace myLib
 
         const double phi = inv_sqrt_pi * exp(-pow((lam - lam0) / deltaLam, 2.0))
                            / deltaLam;
-        
+
         return phi;
     }
 }

@@ -33,6 +33,18 @@ namespace myLib
         initLambda();
     }
 
+    void NuModel::setInitialCond()
+    {
+        const int &nZones = params.nZones;
+
+        // Initialize S(tau) = B(T(tau))
+        for (int i = 0; i < nZones; i++)
+        {
+            B[i] = planck(lam, radModel.T[i]);
+            S[i] = B[i];
+        }
+    }
+
     void NuModel::calcTau()
     {
         const int &nZones = params.nZones;
@@ -49,24 +61,14 @@ namespace myLib
         }
     }
 
-    void NuModel::setInitialCond()
-    {
-        const int &nZones = params.nZones;
-
-        // Initialize S(tau) = B(T(tau))
-        for (int i = 0; i < nZones; i++)
-        {
-            B[i] = planck(lam, radModel.T[i]);
-            S[i] = B[i];
-        }
-    }
-
     void NuModel::initLambda()
     {
         const int &nZones = params.nZones;
         const double &eps = params.eps;
 
         calcLambda(*this);
+
+        if (!params.accelerated) { return; }
 
         for (int i = 0; i < nZones; i++)
         {
@@ -115,7 +117,7 @@ namespace myLib
     double NuModel::calcF0()
     {
         const int &nZones = params.nZones;
-        const int halfQuad = int(0.5 * params.nQuad);
+        const int &nQuad = params.nQuad;
         const vector<double> &quadMu = radModel.quadMu;
         const vector<double> &quadW = radModel.quadW;
 
@@ -131,7 +133,7 @@ namespace myLib
 
         vector<vector<double>> Ip(nZones, vector<double>(nZones, zero));
 
-        for (int j = 0; j < halfQuad; j++)
+        for (int j = 0; j < nQuad; j++)
         {
             // Setup values needed for both I+ and I-
             setupFormalSoln(Dtau, expDtau, e0, e1, e2,
