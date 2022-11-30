@@ -11,6 +11,7 @@ def test_S0_B0():
     for eps in eps_to_check:
         params = {
             'data_dir'    : '/home/masamune/.bin/Rad1D/data',
+            'max_iter'    : max(100, int(1. / eps)),
             'eps'         : eps,
             'verbose'     : False,
         }
