@@ -19,7 +19,7 @@ def test_convergence():
     model = RadModel(params)
     li_result = model.convergence_test()[:, 0]
 
-    iterations = np.arange(params['max_iter'])
+    iterations = np.arange(1, params['max_iter'] + 1)
 
     fig, ax = plt.subplots(dpi=125)
 
