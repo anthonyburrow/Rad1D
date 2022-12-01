@@ -156,7 +156,6 @@ namespace myLib
 
     double NuModel::calcFlux()
     {
-        const double &epsConverge = params.epsConverge;
         double flux;
 
         // Converge S & J
