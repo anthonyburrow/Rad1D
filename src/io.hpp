@@ -32,6 +32,7 @@ namespace myLib
         int nZones = 256;
         int maxIter = 100;
         bool accelerated = true;
+        bool NgAccelerated = true;
         int nQuad = 8;
         bool verbose = true;
     };

@@ -95,7 +95,7 @@ namespace myLib
         double flux;
         double prevJ = 1;
 
-        // Do Ng Acceleration here
+        // Ng Acceleration storage
 
         // Converge S & J
         iterate(false);
