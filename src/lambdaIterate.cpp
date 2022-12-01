@@ -83,4 +83,12 @@ namespace myLib
         ALIcalcJ(nuModel);
         calcS(nuModel);
     }
+
+    void NgIteration(NuModel &nuModel, vector<double> &S3, vector<double> &S2,
+                     vector<double> &S1, vector<double> &S0)
+    {
+        vector<double> &Snew = nuModel.S;
+
+        // Get Snew using S3 - S0 here
+    }
 }

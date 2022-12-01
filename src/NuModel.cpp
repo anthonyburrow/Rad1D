@@ -88,16 +88,13 @@ namespace myLib
         else { lambdaIteration(*this); }
     }
 
-    double NuModel::calcFlux()
+    void NuModel::converge()
     {
         const int &maxIter = params.maxIter;
         const double &epsConverge = params.epsConverge;
-        double flux;
+
         double prevJ = 1;
 
-        // Ng Acceleration storage
-
-        // Converge S & J
         iterate(false);
 
         for (int i = 2; i < maxIter; i++)
@@ -108,6 +105,63 @@ namespace myLib
             if (2.0 * abs(J[0] - prevJ) / (J[0] + prevJ) < epsConverge) { break; }
             prevJ = J[0];
         }
+    }
+
+    void NuModel::NgConverge()
+    {
+        const int &nZones = params.nZones;
+        const int &maxIter = params.maxIter;
+        const double &epsConverge = params.epsConverge;
+
+        double prevJ = 1;
+
+        // Setup previous S storage
+        vector<double> S3(nZones, zero);
+        vector<double> S2(nZones, zero);
+        vector<double> S1(nZones, zero);
+        vector<double> S0(nZones, zero);
+
+        iterate(false);
+
+        for (int i = 2; i < maxIter; i++)
+        {
+            switch ((i - 3) % 5)
+            {
+            case 0:
+                S3 = S;
+                break;
+            case 1:
+                S2 = S;
+                break;
+            case 2:
+                S1 = S;
+                break;
+            case 3:
+                S0 = S;
+                break;
+            default:
+                NgIteration(*this, S3, S2, S1, S0);
+                continue;
+            }
+
+            iterate();
+
+            if ((i - 3) % 5 == 0) { continue; }
+
+            // Check/break for convergence at the surface
+            if (2.0 * abs(J[0] - prevJ) / (J[0] + prevJ) < epsConverge) { break; }
+            prevJ = J[0];
+        }
+    }
+
+    double NuModel::calcFlux()
+    {
+        const double &epsConverge = params.epsConverge;
+        double flux;
+
+        // Converge S & J
+        if (params.NgAccelerated) { NgConverge(); }
+        else { converge(); }
 
         // Calc F based on converged S & J
         flux = calcF0();

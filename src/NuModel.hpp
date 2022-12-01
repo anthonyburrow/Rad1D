@@ -37,5 +37,7 @@ namespace myLib
         void calcTau();
         void setInitialCond();
         void initLambda();
+        void converge();
+        void NgConverge();
     };
 }
