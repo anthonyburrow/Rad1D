@@ -48,13 +48,13 @@ def test_Teff():
 
     ax.plot(spectrum[:,0],spectrum[:,1],label='input')
     ax.plot(BBspectrum[:,0],BBspectrum[:,1],label='Wien')
-    ax.plot(expectspectrum[:,0],expectspectrum[:,1],label='tau=2/3')
+#    ax.plot(expectspectrum[:,0],expectspectrum[:,1],label='tau=2/3')
 
     ax.set_xlim(params['wave_start'], params['wave_end'])
 #    ax.set_ylim(0., 1.05)
 
     ax.set_xlabel('Wavelength [A]')
-    ax.set_ylabel('flux')
+    ax.set_ylabel('Flux')
     ax.legend(loc='best')
 
     fn = './testspectrum.pdf'
