@@ -33,5 +33,5 @@ namespace myLib
 
     // Settings
     static const double expDtauThreshold = 1e-7;      // Dtau where exponentials are expanded
-    static const double interpDtauThreshold = 1e0;    // Dtau where linear S interpolation is used
+    static const double interpDtauThreshold = 1e-2;    // Dtau where linear S interpolation is used
 }
