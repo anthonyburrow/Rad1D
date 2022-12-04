@@ -1,12 +1,16 @@
 # Rad1D
 
-A simple 1D radiative transfer code.
+A simple 1D, plane-parallel radiative transfer code that implements accelerated
+lambda iteration (ALI).
+
+This project was made in a collaboration including Manuel Barrientos, Anthony
+Burrow, Adam Moss, and Sarah Stangl.
 
 ## Requirements
 
-Currently this may be compiled and run on either Windows or Linux platforms
-with an available C++ compiler. To use Rad1D as a Python-wrapped module, the
-following are needed:
+This may be compiled and run on either Windows or Linux platforms with an
+available C++ compiler. To use Rad1D as a Python-wrapped module, the following
+are required:
 
 * Python 3.6+
 * `pybind11` package
