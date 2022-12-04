@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from Rad1D import RadModel
 
+from .conftest import test_plot_dir
+
 
 def test_convergence():
     params = {
@@ -38,5 +40,5 @@ def test_convergence():
 
     plt.tight_layout()
 
-    fn = './iterations.pdf'
+    fn = f'{test_plot_dir}/iterations.pdf'
     fig.savefig(fn, dpi=125)

@@ -2,6 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from Rad1D import RadModel
 
+from .conftest import test_plot_dir
+
+
 def test_quad():
     params = {
         'data_dir'    : '/Users/adammoss/Desktop/Atmospheres/Rad1Dtest/data',   # Absolute path to line list
@@ -71,7 +74,7 @@ def test_quad():
     ax.set_ylabel('S / B')
     ax.legend(loc='best')
     plt.tight_layout()
-    fn = './quad.png'
+    fn = f'{test_plot_dir}/quad.png'
     fig.savefig(fn, dpi=125)
     
     fig, ax = plt.subplots(dpi=125)
@@ -83,7 +86,7 @@ def test_quad():
     ax.set_ylabel('Residual')
     ax.legend(loc='best')
     plt.tight_layout()
-    fn = './resid.png'
+    fn = f'{test_plot_dir}/resid.png'
     fig.savefig(fn, dpi=125)
     
     fig, ax = plt.subplots(dpi=125)
@@ -96,5 +99,5 @@ def test_quad():
     ax.legend(loc='best')
     ax.axhline(0, ls='--', color='r')
     plt.tight_layout()
-    fn = './percdiff.png'
+    fn = f'{test_plot_dir}/perc_diff.png'
     fig.savefig(fn, dpi=125)

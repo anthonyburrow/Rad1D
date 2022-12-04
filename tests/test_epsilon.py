@@ -2,23 +2,26 @@ import numpy as np
 import matplotlib.pyplot as plt
 from Rad1D import RadModel
 
+from .conftest import test_plot_dir
+
+
 def test_epsilon():
     params = {
-        'data_dir'    : '/Users/adammoss/Desktop/Atmospheres/Rad1Dtest/data',   # Absolute path to line list
-        'wave_start'  : 4000.,       # Starting wavelength
-        'wave_end'    : 7000.,       # Ending wavelength
-        'cont_res'    : 0.05,        # Points per angstrom resolved for continuum
-        'line_res'    : 3.0,         # Points per angstrom resolved for lines in line list
-        'tau_min'     : 1e-8,        # Minimum tau of atmosphere for continuum
-        'tau_max'     : 1e6,         # Maximum tau of atmosphere for continuum
-        'eps'         : 1e-4,        # Thermalization factor
-        'T_eff'       : 6000.,       # Characteristic temperature of atmosphere
-        'n_zones'     : 256,         # Number of tau points
-        'max_iter'    : 1000,         # Maximum number of lambda iterations allowed
-        'accelerated' : True,        # Use ALI algorithm for faster convergence
-        'eps_converge': 1e-7,        # Factor to determine J is converged
-        'n_quad'      : 32,          # Order of Gaussian quadrature integration
-        'verbose'     : True,        # Display stdout output
+        'data_dir'    : '/Users/adammoss/Desktop/Atmospheres/Rad1Dtest/data',
+        'wave_start'  : 4000.,
+        'wave_end'    : 7000.,
+        'cont_res'    : 0.05,
+        'line_res'    : 3.0,
+        'tau_min'     : 1e-8,
+        'tau_max'     : 1e6,
+        'eps'         : 1e-4,
+        'T_eff'       : 6000.,
+        'n_zones'     : 256,
+        'max_iter'    : 1000,
+        'accelerated' : True,
+        'eps_converge': 1e-7,
+        'n_quad'      : 32,
+        'verbose'     : True,
     }
 
     n_iter=params['max_iter']
@@ -97,7 +100,7 @@ def test_epsilon():
     ax.legend(loc='best')
     ax.axhline(eps_con_two, ls='--', color='r')
     plt.tight_layout()
-    fn = './eps2.png'
+    fn = f'{test_plot_dir}/eps2.png'
     fig.savefig(fn, dpi=125)
   
     fig, ax = plt.subplots(dpi=125)
@@ -112,7 +115,7 @@ def test_epsilon():
     ax.legend(loc='best')
     ax.axhline(eps_con_four, ls='--', color='r')
     plt.tight_layout()
-    fn = './eps4.png'
+    fn = f'{test_plot_dir}/eps4.png'
     fig.savefig(fn, dpi=125)
   
     fig, ax = plt.subplots(dpi=125)
@@ -127,6 +130,6 @@ def test_epsilon():
     ax.legend(loc='best')
     ax.axhline(eps_con_six, ls='--', color='r')
     plt.tight_layout()
-    fn = './eps6.png'
+    fn = f'{test_plot_dir}/eps6.png'
     fig.savefig(fn, dpi=125)
                               	

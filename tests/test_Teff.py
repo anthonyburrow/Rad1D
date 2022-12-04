@@ -2,6 +2,9 @@ from Rad1D import RadModel
 import numpy as np
 import matplotlib.pyplot as plt
 
+from .conftest import test_plot_dir
+
+
 def get_T_wien(lam):
     return 2.8977719e7 / lam
 
@@ -57,5 +60,5 @@ def test_Teff():
     ax.set_ylabel('Flux')
     ax.legend(loc='best')
 
-    fn = './testspectrum.pdf'
+    fn = f'{test_plot_dir}/test_spectrum.pdf'
     fig.savefig(fn, dpi=125)
