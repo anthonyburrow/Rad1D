@@ -5,3 +5,5 @@ __pycache__/
 
 doc/figs/*
 examples/*.pdf
+
+Rad1D_test_plots/
