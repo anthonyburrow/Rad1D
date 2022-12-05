@@ -24,7 +24,9 @@ def plot_eps(ax, eps):
     results = model.convergence_test()
 
     if eps == 1.:
-        ax.plot(model.tau, results[0], c='k', ls='-', lw=1.)
+        ax.plot(model.tau, results[0], c='r', ls='-', lw=1., alpha=0.4)
+        for i in range(1, params['max_iter']):
+            ax.plot(model.tau, results[i], c='k', ls='-', lw=1., alpha=0.4)
         ax.set_title(r'$\epsilon = 1.0$')
         return
 
