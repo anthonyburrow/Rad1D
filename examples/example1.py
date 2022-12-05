@@ -11,12 +11,12 @@ params = {
     'line_res'    : 3.0,         # Points per angstrom resolved for lines in line list
     'tau_min'     : 1e-8,        # Minimum tau of atmosphere for continuum
     'tau_max'     : 1e6,         # Maximum tau of atmosphere for continuum
-    'eps'         : 1e-2,        # Thermalization factor
+    'eps'         : 1e-4,        # Thermalization factor
     'T_eff'       : 6000.,       # Characteristic temperature of atmosphere
     'n_zones'     : 256,         # Number of tau points
     'max_iter'    : 200,         # Maximum number of lambda iterations allowed
     'accelerated' : True,        # Use ALI algorithm for faster convergence
-    'eps_converge': 1e-7,        # Factor to determine J is converged
+    'eps_converge': 1e-8,        # Factor to determine J is converged
     'n_quad'      : 32,          # Order of Gaussian quadrature integration
     'verbose'     : True,        # Display stdout output
 }
@@ -36,7 +36,7 @@ ax.set_xlim(params['wave_start'], params['wave_end'])
 ax.set_xlabel('Wavelength [A]')
 ax.set_ylabel('Normalized flux')
 
-fn = './spectrum.png'
+fn = './spectrum.pdf'
 fig.savefig(fn, dpi=125)
 
 
@@ -45,10 +45,13 @@ fig, ax = plt.subplots(dpi=125)
 
 ax.plot(model.tau, model.T)
 
+ax.set_xscale('log')
+ax.set_yscale('log')
+
 ax.set_xlabel(r'$\tau$')
 ax.set_ylabel('Temperature [K]')
 
-fn = './T_tau.png'
+fn = './T_tau.pdf'
 fig.savefig(fn, dpi=125)
 
 
@@ -65,12 +68,12 @@ for i in range(1, len(results)):
 ax.set_xscale('log')
 ax.set_yscale('log')
 
-# ax.set_xlim(-3., np.log10(params['tau_max']))
+ax.set_xlim(params['tau_min'], params['tau_max'])
 # ax.set_ylim(0.9, 1.2)
 
 ax.set_xlabel(r'$\log \tau$')
 ax.set_ylabel('S / B')
 
 plt.tight_layout()
-fn = './S_B_convergence.png'
+fn = './S_B_convergence.pdf'
 fig.savefig(fn, dpi=125)

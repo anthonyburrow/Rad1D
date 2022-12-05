@@ -4,6 +4,7 @@ build/
 __pycache__/
 
 doc/figs/*
-examples/*.pdf
+*.pdf
+!doc/*.pdf
 
 Rad1D_test_plots/

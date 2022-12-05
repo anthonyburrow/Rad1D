@@ -10,7 +10,6 @@ def test_quad():
         'data_dir'    : '/home/masamune/.bin/Rad1D/data',
         'tau_min'     : 1e-8,
         'tau_max'     : 1e6,
-        'eps'         : 1e-4,
         'verbose'     : False,
     }
 

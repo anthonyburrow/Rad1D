@@ -55,13 +55,21 @@ params = {
     'line_res'    : 3.0,         # Points per angstrom resolved for lines in line list
     'tau_min'     : 1e-8,        # Minimum tau of atmosphere for continuum
     'tau_max'     : 1e6,         # Maximum tau of atmosphere for continuum
-    'eps'         : 1e-2,        # Thermalization factor
+    'eps'         : 1e-4,        # Thermalization factor
     'T_eff'       : 6000.,       # Characteristic temperature (K) of atmosphere
     'n_zones'     : 256,         # Number of tau points
     'max_iter'    : 200,         # Maximum number of lambda iterations allowed
     'accelerated' : True,        # Maximum number of lambda iterations allowed
-    'eps_converge': 1e-7,        # Factor to determine J is converged
+    'eps_converge': 1e-8,        # Factor to determine J is converged
     'n_quad'      : 32,          # Order of Gaussian quadrature integration
     'verbose'     : True,        # Display stdout output
 }
 ```
+
+# Running the Tests
+
+One may run the suite of tests that generates plots in the documentation with
+```
+pytest -vs ./Rad1D/tests
+```
+(Point to the tests directory accordingly.)

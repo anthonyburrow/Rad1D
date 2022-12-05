@@ -33,6 +33,7 @@ def test_convergence():
 
     ax.set_xlabel('Iteration')
     ax.set_ylabel(r'$(S / B)[0]$')
+
     ax.set_xscale('log')
     ax.set_yscale('log')
 

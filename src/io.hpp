@@ -24,11 +24,11 @@ namespace myLib
         double waveEnd = 7000.0;
         double tauMin = 1e-8;
         double tauMax = 1e6;
-        double eps = 1e-2;
+        double eps = 1e-4;
         double Teff = 6000.0;
         double contRes = 0.05;
         double lineRes = 3.0;
-        double epsConverge = 1e-7;
+        double epsConverge = 1e-8;
         int nZones = 256;
         int maxIter = 200;
         bool accelerated = true;

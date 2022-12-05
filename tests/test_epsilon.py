@@ -10,11 +10,11 @@ params = {
     'tau_min'     : 1e-8,
     'tau_max'     : 1e6,
     'max_iter'    : 1000,
-    'eps_converge': 1e-7,
+    'eps_converge': 1e-8,
     'verbose'     : False,
 }
 
-eps_to_check = (1e-2, 1e-4, 1e-6)
+eps_to_check = (1e0, 1e-1, 1e-4)
 
 
 def plot_eps(ax, eps):
@@ -22,6 +22,11 @@ def plot_eps(ax, eps):
 
     model = RadModel(params)
     results = model.convergence_test()
+
+    if eps == 1.:
+        ax.plot(model.tau, results[0], c='k', ls='-', lw=1.)
+        ax.set_title(r'$\epsilon = 1.0$')
+        return
 
     J = (results - eps) / (1 - eps)
     diffs = np.abs(J[1:] - J[:-1]) / J[:-1]
@@ -46,18 +51,18 @@ def plot_eps(ax, eps):
     ax.axhline(np.sqrt(eps), ls='--', color='k')
 
     ax.text(0.65, 0.1, f'{ind_needed + 1} iterations', transform=ax.transAxes)
+    ax.set_title(r'$\epsilon = $' + f'{eps}')
 
 
 def test_epsilon():
     fig, ax = plt.subplots(1, 3, figsize=(12, 4), sharey=True)
 
-    plot_eps(ax[0], 1e-2)
-    plot_eps(ax[1], 1e-4)
-    plot_eps(ax[2], 1e-6)
+    for i, eps in enumerate(eps_to_check):
+        plot_eps(ax[i], eps)
 
     [_ax.set_xlim(params['tau_min'], params['tau_max']) for _ax in ax]
     bottom_convergence = np.sqrt(np.array(eps_to_check).min())
-    ax[0].set_ylim(0.8 * bottom_convergence, 1.1)
+    ax[0].set_ylim(0.8 * bottom_convergence, 1.2)
 
     [_ax.set_xscale('log') for _ax in ax]
     ax[0].set_yscale('log')

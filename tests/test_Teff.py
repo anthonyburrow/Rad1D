@@ -15,7 +15,6 @@ def test_Teff():
     params = {
         'data_dir'    : '/home/masamune/.bin/Rad1D/data',
         'T_eff'       : 6000.,
-        'eps'         : 1e-2,
         'verbose'     : False,
         'wave_start'  : 3000.,
         'wave_end'    : 7000.,
