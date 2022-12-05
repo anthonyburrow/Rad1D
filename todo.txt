@@ -1,9 +1,6 @@
 Tasks:
-- Check S(0) / B(0) ~ sqrt(eps)
-- Check for convergence with S(0) / B(0) ~ sqrt(eps)
-- Other testing, making plots
 - Write up
-- Ng acceleration?
+- Ng acceleration
 - Generalize quad weights/points
 
 
@@ -15,7 +12,5 @@ Lines:
 
 
 Problems to address:
-- Temperature of spectrum/BB is at tau = 0? Should T profile be corrected for it
-  to be at T_eff
-- S(0) / B(0) != sqrt(eps)
-- Small tau_min does not like when Dtau is not strictly increasing?
+- Formal solution issue with depth-dependent B(tau)
+- Small tau_min does not seem to like when Dtau is not strictly increasing
