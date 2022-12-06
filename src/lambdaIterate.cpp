@@ -87,10 +87,11 @@ namespace myLib
     void NgIteration(NuModel &nuModel, vector<double> &S3, vector<double> &S2,
                      vector<double> &S1, vector<double> &S0)
     {
+        const int &nZones = nuModel.params.nZones;
         vector<double> &Snew = nuModel.S;
 
         // Get Snew using S3 - S0 here
-        for( int i = 0; i < S1.size(); i++)
+        for( int i = 0; i < nZones; i++)
         {
 
             double Q1 = S0[i] - 2.*S1[i] + S2[i];
@@ -109,7 +110,7 @@ namespace myLib
             double a = (C1*B2 - C2*B2)/(A1*B2 - A2*B1);
             double b = (C2*A1 - C1*A2)/(A1*B2 - A2*B1);
 
-            Snew[i] = (1. - a - b)*S0[i]+a*S1[i]+b*S2[i]
+            Snew[i] = (1. - a - b)*S0[i]+a*S1[i]+b*S2[i];
 
         }
 
