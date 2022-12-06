@@ -3,8 +3,7 @@ build/
 .vscode
 __pycache__/
 
-doc/figs/*
 *.pdf
-!doc/*.pdf
+!doc/figs/*.pdf
 
 Rad1D_test_plots/
