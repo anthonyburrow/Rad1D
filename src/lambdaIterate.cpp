@@ -103,7 +103,7 @@ namespace myLib
         // Get Snew using S3 - S0 here
         for (int i = 0; i < nZones; i++)
         {
-            Q1 = S0[i] - 2.*S1[i] + S2[i];
+            Q1 = S0[i] - 2.0 * S1[i] + S2[i];
             Q2 = S0[i] - S1[i] - S2[i] + S3[i];
             Q3 = S0[i] - S1[i];
 
@@ -117,9 +117,7 @@ namespace myLib
 
         for (int i = 0; i < nZones; i++)
         {
-            Snew[i] = (1.0 - a - b)  *S0[i] + a * S1[i] + b * S2[i];
+            Snew[i] = (1.0 - a - b) * S0[i] + a * S1[i] + b * S2[i];
         }
-
-        nuModel.S = Snew;
     }
 }

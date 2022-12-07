@@ -25,7 +25,8 @@ namespace myLib
         RadModel(const pybind11::dict &dictParams);
 
         std::vector<std::vector<double>> genSpectrum(bool normalize = false);
-        std::vector<std::vector<double>> convergenceTest(const double &lam);
+        std::vector<std::vector<double>> convergenceTest(const double &lam,
+                                                         const bool checkConverged);
         void log(const std::ostringstream &output) const;
 
         // Properties

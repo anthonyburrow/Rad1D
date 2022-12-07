@@ -88,32 +88,53 @@ namespace myLib
         else { lambdaIteration(*this); }
     }
 
-    void NuModel::converge()
+    vector<vector<double>> NuModel::converge(const bool checkConverged,
+                                             const bool returnResults)
     {
         const int &maxIter = params.maxIter;
         const double &epsConverge = params.epsConverge;
 
         double prevJ = 1;
 
-        iterate(false);
+        vector<vector<double>> results;
+        if (returnResults) { results.push_back(SoverB()); }
 
+        // Begin with single regular lambda iteration to establish prior J
+        iterate(false);
+        if (returnResults) { results.push_back(SoverB()); }
+
+        // Iterate
         for (int i = 2; i < maxIter; i++)
         {
             iterate();
+            if (returnResults) { results.push_back(SoverB()); }
+
+            if (!checkConverged)
+            {
+                prevJ = J[0];
+                continue;
+            }
 
             // Check/break for convergence at the surface
             if (2.0 * abs(J[0] - prevJ) / (J[0] + prevJ) < epsConverge) { break; }
             prevJ = J[0];
         }
+
+        return results;
     }
 
-    void NuModel::NgConverge()
+    vector<vector<double>> NuModel::NgConverge(const bool checkConverged,
+                                               const bool returnResults)
     {
         const int &nZones = params.nZones;
         const int &maxIter = params.maxIter;
         const double &epsConverge = params.epsConverge;
 
         double prevJ = 1;
+        int phaseInd;
+
+        vector<vector<double>> results;
+        if (returnResults) { results.push_back(SoverB()); }
 
         // Setup previous S storage
         vector<double> S3(nZones, zero);
@@ -121,37 +142,43 @@ namespace myLib
         vector<double> S1(nZones, zero);
         vector<double> S0(nZones, zero);
 
+        // Begin with single regular lambda iteration to establish prior J
         iterate(false);
+        if (returnResults) { results.push_back(SoverB()); }
 
+        // Iterate
         for (int i = 2; i < maxIter; i++)
         {
-            switch ((i - 3) % 5)
+            phaseInd = (i - 2) % 5;
+
+            if (phaseInd == 4)
             {
-            case 0:
-                S3 = S;
-                break;
-            case 1:
-                S2 = S;
-                break;
-            case 2:
-                S1 = S;
-                break;
-            case 3:
-                S0 = S;
-                break;
-            default:
                 NgIteration(*this, S3, S2, S1, S0);
+                if (returnResults) { results.push_back(SoverB()); }
                 continue;
             }
 
-            iterate();
+            S3 = S2;
+            S2 = S1;
+            S1 = S0;
+            S0 = S;
 
-            if ((i - 3) % 5 == 0) { continue; }
+            iterate();
+            if (returnResults) { results.push_back(SoverB()); }
+
+            // Don't check convergence criteria right after Ng iteration
+            if (phaseInd == 0 || !checkConverged)
+            {
+                prevJ = J[0];
+                continue;
+            }
 
             // Check/break for convergence at the surface
             if (2.0 * abs(J[0] - prevJ) / (J[0] + prevJ) < epsConverge) { break; }
             prevJ = J[0];
         }
+
+        return results;
     }
 
     double NuModel::calcFlux()
@@ -208,5 +235,18 @@ namespace myLib
         F0 *= 2.0 * pi;
 
         return F0;
+    }
+
+    vector<double> NuModel::SoverB()
+    {
+        const int &nZones = params.nZones;
+        vector<double> ratio(nZones);
+
+        for (int i = 0; i < nZones; i++)
+        {
+            ratio[i] = S[i] / B[i];
+        }
+
+        return ratio;
     }
 }

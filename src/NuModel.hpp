@@ -32,12 +32,15 @@ namespace myLib
         double calcFlux();
         double calcF0();
         void iterate(const bool accelerate = true);
+        std::vector<std::vector<double>> converge(const bool checkConverged = true,
+                                                  const bool returnResults = false);
+        std::vector<std::vector<double>> NgConverge(const bool checkConverged = true,
+                                                    const bool returnResults = false);
 
     private:
         void calcTau();
         void setInitialCond();
         void initLambda();
-        void converge();
-        void NgConverge();
+        std::vector<double> SoverB();
     };
 }

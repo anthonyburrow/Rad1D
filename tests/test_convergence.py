@@ -13,7 +13,11 @@ def test_convergence():
         'verbose'     : False,
     }
 
-    params['accelerated'] = True
+    params['Ng_accelerated'] = True
+    model = RadModel(params)
+    Ng_result = model.convergence_test()[:, 0]
+
+    params['Ng_accelerated'] = False
     model = RadModel(params)
     ali_result = model.convergence_test()[:, 0]
 
@@ -25,7 +29,8 @@ def test_convergence():
 
     fig, ax = plt.subplots(dpi=125)
 
-    ax.plot(iterations, ali_result, color='r', label='ALI')
+    ax.plot(iterations, Ng_result, color='tab:orange', label='Ng')
+    ax.plot(iterations, ali_result, color='tab:blue', label='ALI')
     ax.plot(iterations, li_result, color='k', label='LI')
 
     eps = np.sqrt(params['eps'])
