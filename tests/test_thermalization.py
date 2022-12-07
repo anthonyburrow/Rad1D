@@ -22,4 +22,3 @@ def test_S0_B0():
         S_B = results[-1][0]
         justify = int(abs(min_eps)) + 2
         print(f'  eps = {eps:<{justify}} : [S(0)/B(0)] / sqrt(eps) = {S_B / np.sqrt(eps):.3f}')
-

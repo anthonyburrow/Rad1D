@@ -23,10 +23,13 @@
 \end{LARGE}\end{center}
 
 \begin{center}
-\textbf{Authors}
+\textbf{Manuel Barrientos, Anthony Burrow, Adam Moss, Sarah Stangl}
 \end{center}
 
 \section{Introduction}
+
+Trying to solve the radiative transfer equation in the non-local thermal equilibrium (NLTE) scattering problem is a hard task. In fact, if we want to use a direct approach to solve this, the amount of computer time necessary to find a solution goes over the roof. On the other hand, the 
+
 
 
 
@@ -115,6 +118,68 @@ e_{0, i}
 [\alpha_{i + 1}^+ e^{-\Delta\tau_{i}} + \beta_{i}^+] e^{-\Delta\tau_{i - 1}} +
     \gamma_{i - 1}^+.
 \end{align*}
+
+\subsection{Ng Acceleration}
+Once three iterations have been computed, we can use Ng Acceleration \citep{ng_1974} to compute the next S value and accelerate convergence. Ng Acceleration uses the last 4 S values to compute the next. 
+
+The vectors $\mathbf{S^{n-1}},  \mathbf{S^{n-2}}, \mathbf{S^{n-3}}$ occupy a $\mathbf{2D}$ surface in the linear source function, $\mathbf{S}^{*}$ defined by,
+
+\begin{equation}
+    \mathbf{S^{*}} = (1-a-b)\mathbf{S^{n-1}} + a\mathbf{S^{n-2}} + b\mathbf{S^{n-3}}
+\end{equation}
+
+for constants $a,b$ such that the next iteration $\mathbf{S^{**}}$,
+
+\begin{equation}
+\begin{split}
+    \mathbf{S^{**}} &= \epsilon \mathbf{B} +(1-\epsilon)\Lambda \mathbf{S^{*}}\\
+    & = (1-a-b)\mathbf{S^{n}} + a\mathbf{S^{n-1}} + b\mathbf{S^{n-2}}
+\end{split}
+\end{equation}. 
+
+and the magnitude-squared of the difference between the iterations,
+
+\begin{equation}\label{eq:mini}
+    | \mathbf{S^{**}} - \mathbf{S^{*}}|^{2} 
+\end{equation}
+
+is minimized. The $a,b$ values minimizing Equation \ref{eq:mini} is given by,
+
+\begin{equation}
+    a = \frac{C_{1}B_{2}-C_{2}B_{1}}{A_{1}B_{2}-A_{2}B_{1}}
+\end{equation}
+
+\begin{equation}
+    b = \frac{C_{2}A_{1} - C_{1}A_{2}}{A_{1}B_{2}-A_{2}B_{1}}
+\end{equation}
+
+where,
+
+\begin{equation}
+\begin{split}
+    A_{1} = Q_{1}Q_{1},\quad B_{1}=Q_{1}Q_{2},\quad C_{1}=Q_{1}Q_{3}\\
+    A_{2} = Q_{2}Q_{1},\quad B_{2}=Q_{2}Q_{2},\quad C_{2}=Q_{2}Q_{3}
+\end{split}
+\end{equation}
+
+and 
+
+\begin{equation}
+    \begin{split}
+        & Q_{1} = \mathbf{S^{n}}-2\mathbf{S^{n-1}}+\mathbf{S^{n-2}}\\
+        & Q_{2} = \mathbf{S^{n}}-\mathbf{S^{n-1}}-\mathbf{S^{n-2}}+\mathbf{S^{n-3}}\\
+        & Q_{3} = \mathbf{S^{n}}-\mathbf{S^{n-1}}.
+    \end{split}
+\end{equation}
+
+The new $\mathbf{S^{n+1}}$ is given by,
+
+\begin{equation}
+    \mathbf{S^{n+1}} = (1-a-b)\mathbf{S^{n}} + a\mathbf{S^{n-1}} + b\mathbf{S^{n-2}}.
+\end{equation}
+
+Before Ng Acceleration can be used again, 3 iterations must pass.
+
 
 \section{Results}
 

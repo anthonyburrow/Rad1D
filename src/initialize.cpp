@@ -85,11 +85,11 @@ namespace myLib
             radModel.tauCont[i] = pow(10.0, radModel.tauCont[i]);
         }
 
-        // radModel.tauCont[0] = zero;
+        radModel.tauCont[0] = zero;
 
         // Replace closest tau value to 1 with 1
-        // const int ind = closestIndex(radModel.tauCont, 1.0);
-        // radModel.tauCont[ind] = 1.0;
+        const int ind = closestIndex(radModel.tauCont, 1.0);
+        radModel.tauCont[ind] = 1.0;
     }
 
     void initT(RadModel &radModel)

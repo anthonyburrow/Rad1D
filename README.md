@@ -1,12 +1,16 @@
 # Rad1D
 
-A simple 1D radiative transfer code.
+A simple 1D, plane-parallel radiative transfer code that implements accelerated
+lambda iteration (ALI).
+
+This project was made in a collaboration including Manuel Barrientos, Anthony
+Burrow, Adam Moss, and Sarah Stangl.
 
 ## Requirements
 
-Currently this may be compiled and run on either Windows or Linux platforms
-with an available C++ compiler. To use Rad1D as a Python-wrapped module, the
-following are needed:
+This may be compiled and run on either Windows or Linux platforms with an
+available C++ compiler. To use Rad1D as a Python-wrapped module, the following
+are required:
 
 * Python 3.6+
 * `pybind11` package
@@ -49,16 +53,24 @@ params = {
     'wave_end'       : 7000.,       # Ending wavelength
     'cont_res'       : 0.05,        # Points per angstrom resolved for continuum
     'line_res'       : 3.0,         # Points per angstrom resolved for lines in line list
-    'tau_min'        : 1e-6,        # Minimum tau of atmosphere for continuum
+    'tau_min'        : 1e-8,        # Minimum tau of atmosphere for continuum
     'tau_max'        : 1e6,         # Maximum tau of atmosphere for continuum
     'eps'            : 1e-4,        # Thermalization factor
     'T_eff'          : 6000.,       # Characteristic temperature (K) of atmosphere
     'n_zones'        : 256,         # Number of tau points
-    'max_iter'       : 100,         # Maximum number of lambda iterations allowed
+    'max_iter'       : 200,         # Maximum number of lambda iterations allowed
     'accelerated'    : True,        # Use accelerated lambda iteration
     'Ng_accelerated' : True,        # Implement Ng acceleration
-    'eps_converge'   : 1e-6,        # Factor to determine J is converged
-    'n_quad'         : 8,           # Order of Gaussian quadrature integration
+    'eps_converge'   : 1e-8,        # Factor to determine J is converged
+    'n_quad'         : 32,          # Order of Gaussian quadrature integration
     'verbose'        : True,        # Display stdout output
 }
 ```
+
+# Running the Tests
+
+One may run the suite of tests that generates plots in the documentation with
+```
+pytest -vs ./Rad1D/tests
+```
+(Point to the tests directory accordingly.)

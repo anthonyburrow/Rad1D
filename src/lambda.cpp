@@ -52,13 +52,22 @@ namespace myLib
         // Calc parabolic coefficients (from zone 2 to N - 1)
         for (int i = 1; i < nZones - 1; i++)
         {
-            alphaP[i] = (e2[i + 1] - Dtau[i] * e1[i + 1]) /
-                        (Dtau[i - 1] * (Dtau[i] + Dtau[i - 1]));
-            betaP[i] = ((Dtau[i] + Dtau[i - 1]) * e1[i + 1] - e2[i + 1]) /
-                        (Dtau[i] * Dtau[i - 1]);
-            gammaP[i] = e0[i + 1] +
-                        (e2[i + 1] - (Dtau[i - 1] + 2.0 * Dtau[i]) * e1[i + 1]) /
-                        (Dtau[i] * (Dtau[i] + Dtau[i - 1]));
+            if (Dtau[i] < interpDtauThreshold)
+            {
+                alphaP[i] = zero;
+                betaP[i] = e1[i + 1] / Dtau[i];
+                gammaP[i] = e0[i + 1] - e1[i + 1] / Dtau[i];
+            }
+            else
+            {
+                alphaP[i] = (e2[i + 1] - Dtau[i] * e1[i + 1]) /
+                            (Dtau[i - 1] * (Dtau[i] + Dtau[i - 1]));
+                betaP[i] = ((Dtau[i] + Dtau[i - 1]) * e1[i + 1] - e2[i + 1]) /
+                            (Dtau[i] * Dtau[i - 1]);
+                gammaP[i] = e0[i + 1] +
+                            (e2[i + 1] - (Dtau[i - 1] + 2.0 * Dtau[i]) * e1[i + 1]) /
+                            (Dtau[i] * (Dtau[i] + Dtau[i - 1]));
+            }
         }
 
         // Use linear interpolation for columns 1 and N
@@ -114,13 +123,22 @@ namespace myLib
 
         for (int i = 1; i < nZones - 1; i++)
         {
-            alphaM[i] = e0[i] +
-                        (e2[i] - (Dtau[i] + 2.0 * Dtau[i - 1]) * e1[i]) /
-                        (Dtau[i - 1] * (Dtau[i] + Dtau[i - 1]));
-            betaM[i] = ((Dtau[i] + Dtau[i - 1]) * e1[i] - e2[i]) /
-                        (Dtau[i] * Dtau[i - 1]);
-            gammaM[i] = (e2[i] - Dtau[i - 1] * e1[i]) /
-                        (Dtau[i] * (Dtau[i] + Dtau[i - 1]));
+            if (Dtau[i] < interpDtauThreshold)
+            {
+                alphaM[i] = e0[i] - e1[i] / Dtau[i - 1];
+                betaM[i] = e1[i] / Dtau[i - 1];
+                gammaM[i] = zero;
+            }
+            else
+            {
+                alphaM[i] = e0[i] +
+                            (e2[i] - (Dtau[i] + 2.0 * Dtau[i - 1]) * e1[i]) /
+                            (Dtau[i - 1] * (Dtau[i] + Dtau[i - 1]));
+                betaM[i] = ((Dtau[i] + Dtau[i - 1]) * e1[i] - e2[i]) /
+                            (Dtau[i] * Dtau[i - 1]);
+                gammaM[i] = (e2[i] - Dtau[i - 1] * e1[i]) /
+                            (Dtau[i] * (Dtau[i] + Dtau[i - 1]));
+            }
         }
 
         // Use linear interpolation for columns 1 and N
