@@ -58,12 +58,17 @@ namespace myLib
         if (dictParams.contains("accelerated")) {
             params.accelerated = dictParams["accelerated"].cast<bool>();
         }
+        if (dictParams.contains("Ng_accelerated")) {
+            params.NgAccelerated = dictParams["Ng_accelerated"].cast<bool>();
+        }
         if (dictParams.contains("n_quad")) {
             params.nQuad = dictParams["n_quad"].cast<int>();
         }
         if (dictParams.contains("eps_converge")) {
             params.epsConverge = dictParams["eps_converge"].cast<double>();
         }
+
+        if (!params.accelerated) { params.NgAccelerated = false; }
 
         if (params.verbose) { printParams(params); }
 
@@ -85,6 +90,7 @@ namespace myLib
     <<  endl << "  Number of tau points:           " << params.nZones
     <<  endl << "  Maximum iterations:             " << params.maxIter
     <<  endl << "  Use accelerated iteration:      " << params.accelerated
+    <<  endl << "  Use Ng accelerated iteration:   " << params.NgAccelerated
     <<  endl << "  Order of Gaussian quad.:        " << params.nQuad
     <<  endl << "  Epsilon for convergence:        " << params.epsConverge
     <<  endl;
