@@ -146,10 +146,13 @@ namespace myLib
         iterate(false);
         if (returnResults) { results.push_back(SoverB()); }
 
+        iterate();
+        if (returnResults) { results.push_back(SoverB()); }
+
         // Iterate
-        for (int i = 2; i < maxIter; i++)
+        for (int i = 3; i < maxIter; i++)
         {
-            phaseInd = (i - 2) % 5;
+            phaseInd = (i - 3) % 5;
 
             if (phaseInd == 4)
             {

@@ -82,8 +82,8 @@ namespace myLib
         // Converge S & J
         NuModel nuModel = NuModel(lam, *this);
 
-        if (params.NgAccelerated) { results = nuModel.NgConverge(false, true); }
-        else { results = nuModel.converge(false, true); }
+        if (params.NgAccelerated) { results = nuModel.NgConverge(checkConverged, true); }
+        else { results = nuModel.converge(checkConverged, true); }
 
         auto t1 = chrono::high_resolution_clock::now();
         sec = t1 - t0;

@@ -88,7 +88,9 @@ namespace myLib
                      vector<double> &S1, vector<double> &S0)
     {
         const int &nZones = nuModel.params.nZones;
+        const double &eps = nuModel.params.eps;
         vector<double> &Snew = nuModel.S;
+        vector<double> &Jnew = nuModel.J;
 
         double Q1, Q2, Q3;
 
@@ -118,6 +120,7 @@ namespace myLib
         for (int i = 0; i < nZones; i++)
         {
             Snew[i] = (1.0 - a - b) * S0[i] + a * S1[i] + b * S2[i];
+            Jnew[i] = (Snew[i] - eps * nuModel.B[i]) / (1.0 - eps);
         }
     }
 }
