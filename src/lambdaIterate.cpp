@@ -89,31 +89,35 @@ namespace myLib
     {
         const int &nZones = nuModel.params.nZones;
         vector<double> &Snew = nuModel.S;
+        double Q1 = 0., Q2=0., Q3=0.;
+        double A1=0.,A2=0.,B1=0.,B2=0.,C1=0.,C2=0.;
 
         // Get Snew using S3 - S0 here
         for( int i = 0; i < nZones; i++)
         {
 
-            double Q1 = S0[i] - 2.*S1[i] + S2[i];
-            double Q2 = S0[i] - S1[i] - S2[i] + S3[i];
-            double Q3 = S0[i] - S1[i];
+            Q1 = S0[i] - 2.*S1[i] + S2[i];
+            Q2 = S0[i] - S1[i] - S2[i] + S3[i];
+            Q3 = S0[i] - S1[i];
+        
+            A1 += Q1 * Q1;
+            A2 += Q2 * Q1;
 
-            double A1 = Q1 * Q1;
-            double A2 = Q2 * Q1;
+            B1 += Q1 * Q2;
+            B2 += Q2 * Q2;
 
-            double B1 = Q1 * Q2;
-            double B2 = Q2 * Q2;
-
-            double C1 = Q1 * Q3;
-            double C2 = Q2 * Q3;
-
-            double a = (C1*B2 - C2*B2)/(A1*B2 - A2*B1);
-            double b = (C2*A1 - C1*A2)/(A1*B2 - A2*B1);
-
-            Snew[i] = (1. - a - b)*S0[i]+a*S1[i]+b*S2[i];
-
+            C1 += Q1 * Q3;
+            C2 += Q2 * Q3;
         }
 
+        double a = (C1*B2 - C2*B2)/(A1*B2 - A2*B1);
+        double b = (C2*A1 - C1*A2)/(A1*B2 - A2*B1);
+
+        for( int i = 0; i < nZones; i++)
+        {
+            Snew[i] = (1. - a - b)*S0[i]+a*S1[i]+b*S2[i];
+        }
+        
         nuModel.S = Snew;
     }
 }
