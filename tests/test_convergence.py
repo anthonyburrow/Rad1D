@@ -8,12 +8,10 @@ from .conftest import test_plot_dir
 def test_convergence():
     params = {
         'data_dir'    : '/home/masamune/.bin/Rad1D/data',
-        'eps'         : 1e-6,
+        'eps'         : 1e-4,
         'max_iter'    : 1000,
         'verbose'     : False,
     }
-
-    params['Ng_accelerated'] = True
     model = RadModel(params)
     Ng_result = model.convergence_test()[:, 0]
 
@@ -29,7 +27,7 @@ def test_convergence():
 
     fig, ax = plt.subplots(dpi=125)
 
-    ax.plot(iterations, Ng_result, color='tab:orange', label='Ng')
+    ax.plot(iterations[:len(Ng_result)], Ng_result, color='tab:orange', label='Ng')
     ax.plot(iterations, ali_result, color='tab:blue', label='ALI')
     ax.plot(iterations, li_result, color='k', label='LI')
 
