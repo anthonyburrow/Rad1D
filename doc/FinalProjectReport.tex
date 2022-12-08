@@ -192,9 +192,41 @@ Before Ng Acceleration can be used again, 3 iterations must pass.
 
 \begin{figure}[ht]
  \centering
- \includegraphics[width=0.75\textwidth]{conv.png}
- \caption{}
+ \includegraphics[width=0.75\textwidth]{S_B_convergence.pdf}
+ \caption{An example convergence plot with our default parameters using ALI. Each gray line represents a new iteration. At the surface, S/B approaches $\sqrt\epsilon$ while at depth, S/B approaches 1.}
 \end{figure}
+
+\begin{figure}[ht]
+ \centering
+ \includegraphics[width=0.75\textwidth]{test_spectrum.pdf}
+ \caption{Output spectrum using the default parameters. The line feature at 6564 $\AA$ appears, however the shape is incorrect.}
+\end{figure}
+
+\begin{figure}[ht]
+ \centering
+ \includegraphics[width=0.99\textwidth]{eps_convergence.pdf}
+ \caption{Convergence plots for different values of $\epsilon$. As $\epsilon$ approaches 0, more iterations are needed to achieve convergence at the surface.}
+\end{figure}
+
+\begin{figure}[ht]
+ \centering
+ \includegraphics[width=0.75\textwidth]{J_comparison.pdf}
+ \caption{Compare Eddie's J and ours (needs work)}
+\end{figure}
+
+\begin{figure}[ht]
+ \centering
+ \includegraphics[width=0.75\textwidth]{quadrature.pdf}
+ \caption{Deviations from 32-point Gaussian quadrature as a function of $\tau$. The greatest differences occur from 0.1 $< \tau <$ 1, where we would expect the greatest impact in the emergent flux from the atmosphere.}
+\end{figure}
+
+\begin{figure}[ht]
+ \centering
+ \includegraphics[width=0.75\textwidth]{iterations.pdf}
+ \caption{The amount of iterations required for S/B to converge at the surface for each method used in our code. Lambda iteration takes significantly longer than ALI as expected. Ng acceleration should be even faster than ALI, but our current version does not produce that result.}
+\end{figure}
+
+
 
 -different plots
 -quadrature
