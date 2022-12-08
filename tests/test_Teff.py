@@ -13,16 +13,17 @@ def test_Teff():
     print()
 
     params = {
-        'data_dir'    : '/home/masamune/.bin/Rad1D/data',
+        'data_dir'    : '/Users/adammoss/Desktop/Atmospheres/Rad1Dtest/data',
         'T_eff'       : 6000.,
         'verbose'     : False,
         'wave_start'  : 3000.,
         'wave_end'    : 7000.,
+        'Ng_accelerated' : False,
     }
    
     model = RadModel(params)
 
-    spectrum = model.gen_spectrum(normalize=False)
+    spectrum = model.gen_spectrum(normalize=True)
   
     print(f'  Input temperature: {params["T_eff"]:.3f} K')
 
@@ -34,7 +35,7 @@ def test_Teff():
     
     params['T_eff']=model_Teff
     BBmodel = RadModel(params)
-    BBspectrum = BBmodel.gen_spectrum(normalize=False)
+    BBspectrum = BBmodel.gen_spectrum(normalize=True)
 
     tau_eff = 0.64
     expected_ind = np.abs(model.tau - tau_eff).argmin()
@@ -43,21 +44,22 @@ def test_Teff():
 
     params['T_eff']=expected_Teff
     expectmodel = RadModel(params)
-    expectspectrum = expectmodel.gen_spectrum(normalize=False)
+    expectspectrum = expectmodel.gen_spectrum(normalize=True)
 
     # Plot spectra
     fig, ax = plt.subplots(dpi=125)
 
     ax.plot(spectrum[:,0],spectrum[:,1],label='input')
-    ax.plot(BBspectrum[:,0],BBspectrum[:,1],label='Wien')
+#    ax.plot(BBspectrum[:,0],BBspectrum[:,1],label='Wien')
 #    ax.plot(expectspectrum[:,0],expectspectrum[:,1],label='tau=2/3')
 
     ax.set_xlim(params['wave_start'], params['wave_end'])
 #    ax.set_ylim(0., 1.05)
 
-    ax.set_xlabel('Wavelength [A]')
-    ax.set_ylabel('Flux')
-    ax.legend(loc='best')
-
+    ax.set_xlabel('Wavelength [$\AA$]')
+    ax.set_ylabel('Normalized Flux')
+#    ax.legend(loc='best')
+    
     fn = f'{test_plot_dir}/test_spectrum.pdf'
     fig.savefig(fn, dpi=125)
+#    plt.show()

@@ -19,6 +19,7 @@ params = {
     'eps_converge': 1e-8,        # Factor to determine J is converged
     'n_quad'      : 32,          # Order of Gaussian quadrature integration
     'verbose'     : True,        # Display stdout output
+    'Ng_accelerated' : False,   # Use Ng acceleration
 }
 
 model = RadModel(params)

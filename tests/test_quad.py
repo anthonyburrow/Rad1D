@@ -7,10 +7,11 @@ from .conftest import test_plot_dir
 
 def test_quad():
     params = {
-        'data_dir'    : '/home/masamune/.bin/Rad1D/data',
+        'data_dir'    : '/Users/adammoss/Desktop/Atmospheres/Rad1Dtest/data',
         'tau_min'     : 1e-8,
         'tau_max'     : 1e6,
         'verbose'     : False,
+        'Ng_accelerated' : False,
     }
 
     params['n_quad'] = 2
@@ -44,10 +45,11 @@ def test_quad():
     ax.set_xscale('log')
 
     ax.set_xlabel(r'$\tau$')
-    ax.set_ylabel('Percent difference')
+    ax.set_ylabel('% Difference in 32-point Quadrature')
 
     ax.legend()
 
     plt.tight_layout()
     fn = f'{test_plot_dir}/quadrature.pdf'
     fig.savefig(fn, dpi=125)
+#    plt.show()

@@ -12,7 +12,7 @@ params = {
     'T_eff'        : 6000.,
     'max_iter'     : 1000,
     'eps_converge' : 1e-8,
-    'Ng_acceleration' : False,
+    'Ng_accelerated' : False,
     'verbose'      : False,
 }
 
