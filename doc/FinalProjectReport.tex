@@ -19,7 +19,7 @@
 \begin{document}
 
 \begin{center}\begin{LARGE}
-\textbf{ASTR 5463 Final Project: Title}
+\textbf{ASTR 5463 Final Project: ALI Method}
 \end{LARGE}\end{center}
 
 \begin{center}
@@ -28,12 +28,19 @@
 
 \section{Introduction}
 
-Trying to solve the radiative transfer equation in the non-local thermal equilibrium (NLTE) scattering problem is a hard task. In fact, if we want to use a direct approach to solve this, the amount of computer time necessary to find a solution goes over the roof. On the other hand, the 
+Trying to solve the radiative transfer equation in the non-local thermal equilibrium (NLTE) scattering problem is a hard task. In fact, if we want to use a direct approach to solve it, the amount of computer time necessary to find a solution goes over the roof. On the other hand, with the application of an iterative solution technique that uses perturbation operators implicitly in the NLTE solution, we can attack this problem in a more time-efficient way. In particular, in this project, we will use the approach by \citep{OandK1987} which requires the perturbation operator to be an accurate approximation to the diagonal of the lambda matrix.
 
 
+Explaining lambda iterations,
 
+explaining accelerated lambda interations
+
+parts in the paper
 
 \section{Methods}
+
+subsection
+Initial Conditions:
 
 For $i = 2, ..., N - 1$,
 \begin{align*}
@@ -157,8 +164,8 @@ where,
 
 \begin{equation}
 \begin{split}
-    A_{1} = Q_{1}Q_{1},\quad B_{1}=Q_{1}Q_{2},\quad C_{1}=Q_{1}Q_{3}\\
-    A_{2} = Q_{2}Q_{1},\quad B_{2}=Q_{2}Q_{2},\quad C_{2}=Q_{2}Q_{3}
+    A_{1} = Q_{1}\cdot Q_{1},\quad B_{1}=Q_{1}\cdot Q_{2},\quad C_{1}=Q_{1}\cdot Q_{3}\\
+    A_{2} = Q_{2}\cdot Q_{1},\quad B_{2}=Q_{2}\cdot Q_{2},\quad C_{2}=Q_{2}\cdot Q_{3}
 \end{split}
 \end{equation}
 
@@ -181,9 +188,16 @@ The new $\mathbf{S^{n+1}}$ is given by,
 Before Ng Acceleration can be used again, 3 iterations must pass.
 
 
-\section{Results}
+\section{Results and Discussion}
 
+\begin{figure}[ht]
+ \centering
+ \includegraphics[width=0.75\textwidth]{conv.png}
+ \caption{}
+\end{figure}
 
+-different plots
+-quadrature
 
 \section{Conclusion}
 
