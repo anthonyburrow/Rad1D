@@ -13,11 +13,11 @@ def test_Teff():
     print()
 
     params = {
-        'data_dir'    : '/Users/adammoss/Desktop/Atmospheres/Rad1Dtest/data',
-        'T_eff'       : 6000.,
-        'verbose'     : False,
-        'wave_start'  : 3000.,
-        'wave_end'    : 7000.,
+        'data_dir'       : '/Users/adammoss/Desktop/Atmospheres/Rad1Dtest/data',
+        'T_eff'          : 6000.,
+        'verbose'        : False,
+        'wave_start'     : 3000.,
+        'wave_end'       : 7000.,
         'Ng_accelerated' : False,
     }
    
