@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 from Rad1D import RadModel
 
 from .conftest import test_plot_dir
+from .plot_setup import paper_plot
+paper_plot()
 
 
 params = {
@@ -66,7 +68,7 @@ def test_epsilon():
     # Fig 1 properties
     [_ax.set_xlim(params['tau_min'], params['tau_max']) for _ax in ax]
     bottom_convergence = np.sqrt(np.array(eps_to_check).min())
-    ax[0].set_ylim(0.8 * bottom_convergence, 1.2)
+    ax[0].set_ylim(0.75 * bottom_convergence, 1.25)
 
     [_ax.set_xscale('log') for _ax in ax]
     ax[0].set_yscale('log')

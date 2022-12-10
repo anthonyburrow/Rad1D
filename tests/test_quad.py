@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 from Rad1D import RadModel
 
 from .conftest import test_plot_dir
+from .plot_setup import paper_plot
+paper_plot()
 
 
 def test_quad():

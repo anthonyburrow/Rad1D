@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from .conftest import test_plot_dir
+from .plot_setup import paper_plot
+paper_plot()
 
 
 def get_T_wien(lam):
@@ -56,7 +58,7 @@ def test_Teff():
     ax.set_xlim(params['wave_start'], params['wave_end'])
 #    ax.set_ylim(0., 1.05)
 
-    ax.set_xlabel('Wavelength [$\AA$]')
+    ax.set_xlabel(r'Wavelength [$\AA$]')
     ax.set_ylabel('Normalized Flux')
 #    ax.legend(loc='best')
     
