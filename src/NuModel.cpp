@@ -133,8 +133,7 @@ namespace myLib
         double prevJ = 1;
         int phaseInd;
 
-        vector<vector<double>> results;
-        if (returnResults) { results.push_back(SoverB()); }
+        int nWait = 1;
 
         // Setup previous S storage
         vector<double> S3(nZones, zero);
@@ -142,17 +141,27 @@ namespace myLib
         vector<double> S1(nZones, zero);
         vector<double> S0(nZones, zero);
 
+        // Push initial condition on S
+        vector<vector<double>> results;
+        if (returnResults) { results.push_back(SoverB()); }
+
         // Begin with single regular lambda iteration to establish prior J
         iterate(false);
         if (returnResults) { results.push_back(SoverB()); }
 
-        iterate();
-        if (returnResults) { results.push_back(SoverB()); }
+        nWait += 2;
 
-        // Iterate
-        for (int i = 3; i < maxIter; i++)
+        // Next do nWait iterations of ALI
+        for (int i = 2; i < nWait; i++)
         {
-            phaseInd = (i - 3) % 5;
+            iterate();
+            if (returnResults) { results.push_back(SoverB()); }
+        }
+
+        // General iteration
+        for (int i = nWait; i < maxIter; i++)
+        {
+            phaseInd = (i - nWait) % 5;
 
             if (phaseInd == 4)
             {

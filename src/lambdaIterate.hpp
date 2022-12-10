@@ -13,8 +13,8 @@ namespace myLib
     void lambdaIteration(NuModel &nuModel);
     void ALI(NuModel &nuModel);
     void NgIteration(NuModel &nuModel,
-                     std::vector<double> &S3,
-                     std::vector<double> &S2,
-                     std::vector<double> &S1,
-                     std::vector<double> &S0);
+                     const std::vector<double> &S3,
+                     const std::vector<double> &S2,
+                     const std::vector<double> &S1,
+                     const std::vector<double> &S0);
 }

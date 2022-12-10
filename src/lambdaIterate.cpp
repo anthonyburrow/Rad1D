@@ -84,8 +84,9 @@ namespace myLib
         calcS(nuModel);
     }
 
-    void NgIteration(NuModel &nuModel, vector<double> &S3, vector<double> &S2,
-                     vector<double> &S1, vector<double> &S0)
+    void NgIteration(NuModel &nuModel, const vector<double> &S3,
+                     const vector<double> &S2, const vector<double> &S1,
+                     const vector<double> &S0)
     {
         const int &nZones = nuModel.params.nZones;
         const double &eps = nuModel.params.eps;
@@ -94,10 +95,9 @@ namespace myLib
 
         double Q1, Q2, Q3;
 
-        const double A1 = 1.0;
-        double A2 = 0.0;
+        double A1 = 0.0, A2 = 0.0;
         double &B1 = A2;
-        const double B2 = 1.0;
+        double B2 = 0.0;
         double C1 = 0.0, C2 = 0.0;
 
         double a, b;
@@ -109,7 +109,9 @@ namespace myLib
             Q2 = S0[i] - S1[i] - S2[i] + S3[i];
             Q3 = S0[i] - S1[i];
 
+            A1 += Q1 * Q1;
             A2 += Q2 * Q1;
+            B2 += Q2 * Q2;
             C1 += Q1 * Q3;
             C2 += Q2 * Q3;
         }
