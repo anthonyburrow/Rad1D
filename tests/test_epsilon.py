@@ -6,7 +6,7 @@ from .conftest import test_plot_dir
 
 
 params = {
-    'data_dir'     : '/home/masamune/.bin/Rad1D/data',
+    'data_dir'     : '/Users/adammoss/Desktop/Atmospheres/Rad1Dtest/data',
     'tau_min'      : 1e-8,
     'tau_max'      : 1e6,
     'T_eff'        : 6000.,
@@ -98,8 +98,11 @@ def plot_J(ax, model, results, eps):
     # Plot here
     pct_diff = 100. * (J_analytic - J_calc) / J_calc
 
-    ax.plot(model.tau, pct_diff, '-', label=r'\epsilon = ' + f'{eps}')
-
+    ax.plot(model.tau, pct_diff, '-', label=r'$\epsilon = ' + f'{eps}$')
+    ax.set_xscale('log')
+    ax.legend(loc='best')
+    ax.set_xlabel(r'$\tau$')
+    ax.set_ylabel('% Difference')
 
 def test_epsilon():
     fig1, ax1 = plt.subplots(1, 3, figsize=(12, 4), sharey=True)
