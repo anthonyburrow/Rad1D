@@ -30,7 +30,7 @@ namespace myLib
         double lineRes = 3.0;
         double epsConverge = 1e-8;
         int nZones = 256;
-        int maxIter = 200;
+        int maxIter = 500;
         bool accelerated = true;
         bool NgAccelerated = true;
         int nQuad = 32;

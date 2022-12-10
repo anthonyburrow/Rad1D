@@ -58,7 +58,7 @@ params = {
     'eps'            : 1e-4,        # Thermalization factor
     'T_eff'          : 6000.,       # Characteristic temperature (K) of atmosphere
     'n_zones'        : 256,         # Number of tau points
-    'max_iter'       : 200,         # Maximum number of lambda iterations allowed
+    'max_iter'       : 500,         # Maximum number of lambda iterations allowed
     'accelerated'    : True,        # Use accelerated lambda iteration
     'Ng_accelerated' : True,        # Implement Ng acceleration
     'eps_converge'   : 1e-8,        # Factor to determine J is converged
