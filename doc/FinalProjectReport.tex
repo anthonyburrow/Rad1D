@@ -264,6 +264,8 @@ The largest difference between our J and the analytic solution occurs from $10^{
 \end{figure}
 
 We also investigate the effect of using fewer points in the Gaussian quadrature. Figure 5 shows that if we use fewer points, our calculated source function deviates significantly in the same $\tau$ regime as when we investigate J. 
+Using a different amount of points can effect the time it takes to converge and generate a spectrum. To test this, we simply generated a spectrum 10 times for each number of points, recorded them, then took the average. For using 2, 4, 8, and 32-point, we obtain average times of 3.629, 3.484, 3.583, and 4.238 seconds respectively. This means 2, 4, and 8-point are faster by 14, 18, and 15\% faster than 32-point, but at worst only 9, 4, and 2\% less accurate. Time is not of the essence for us though, so we can afford using 32-point for the best accuracy.
+
 
 \begin{figure}[ht]
  \centering
@@ -287,6 +289,7 @@ In Figure 7, we plot the same convergence test as Figure 1 with using Ng acceler
  \caption{The same convergence plot as Figure 1 but with Ng acceleration implemented. The number of iterations required for convergence decreases significantly.}
 \end{figure}
 
+We run a similar test as with the various Gaussian quadrature points, but now seeing how quickly we can converge and generate a spectrum with the various methods. ALI takes 4.222 seconds and Ng takes 1.695 seconds. LI was not included as the number of tierations it would take to converge is significantly longer than ALI, which would naturally take significantly more time.  
 
 \section{Conclusion}
 
