@@ -12,18 +12,20 @@ params = {
     'tau_min'        : 1e-8,
     'tau_max'        : 1e6,
     'Ng_accelerated' : False,
-    'verbose'        : False,
+    'verbose'        : True,
 }
 
 
 params['n_quad'] = 32
 model = RadModel(params)
+synth = model.gen_spectrum(normalize=False)
 final_iter32 = model.convergence_test()[-1]
 
 
 def plot_pct_diff(ax, quad):
     params['n_quad'] = quad
     model = RadModel(params)
+    synth = model.gen_spectrum(normalize=True)
     final_iter = model.convergence_test()[-1]
 
     pct_diff = 100. * (final_iter - final_iter32) / final_iter32

@@ -12,7 +12,7 @@ params = {
     'eps'          : 1e-4,
     'eps_converge' : 1e-8,
     'max_iter'     : 1000,
-    'verbose'      : False,
+    'verbose'      : True,
 }
 
 iterations = np.arange(1, params['max_iter'] + 1)
@@ -43,6 +43,7 @@ def test_convergence():
 
     # Ng accleration
     model = RadModel(params)
+    synth = model.gen_spectrum(normalize=False)
     results = model.convergence_test(check_converged=False)
 
     plot_SoverB(ax[0], results, label='Ng')
@@ -51,6 +52,7 @@ def test_convergence():
     # ALI
     params['Ng_accelerated'] = False
     model = RadModel(params)
+    synth = model.gen_spectrum(normalize=False)
     results = model.convergence_test(check_converged=False)
 
     plot_SoverB(ax[0], results, label='ALI')
@@ -59,6 +61,7 @@ def test_convergence():
     # Lambda iteration
     params['accelerated'] = False
     model = RadModel(params)
+    synth = model.gen_spectrum(normalize=False)
     results = model.convergence_test(check_converged=False)
 
     plot_SoverB(ax[0], results, label='LI')
