@@ -49,7 +49,6 @@ def test_J_analytic():
         params['eps'] = eps
         model = RadModel(params)
         results = model.convergence_test(check_converged=True)
-        print(results.shape)
 
         plot_J(ax, model, results, eps)                        	
 
