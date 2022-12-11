@@ -21,10 +21,11 @@ namespace myLib
     static const double inv_sqrt_pi = 1.0 / sqrt(pi);
 
     // Physical constants
-    static const double hc = 12398.4198;                   // eV A
+    static const double hc = 1.98644586e-16;               // erg cm
+    static const double hc_eV = 12398.4198;                // eV A
     static const double k = 8.617333262e-5;                // eV K^{-1}
-    static const double k_hc = k / hc;                     // K^{-1} A^{-1}
-    static const double c = 29979.2458;                    // cm s^{-1}
+    static const double k_hc = k / hc_eV;                  // K^{-1} A^{-1}
+    static const double c = 2.99792458e10;                 // cm s^{-1}
     static const double constDB = 4.301415e-7;             // K^{-1/2} amu^{1/2}
 
     static const double hopfA = 0.7104520194746458;
@@ -33,5 +34,5 @@ namespace myLib
 
     // Settings
     static const double expDtauThreshold = 1e-7;      // Dtau where exponentials are expanded
-    static const double interpDtauThreshold = 1e-2;    // Dtau where linear S interpolation is used
+    static const double interpDtauThreshold = 1e-2;   // Dtau where linear S interpolation is used
 }

@@ -50,7 +50,8 @@ def test_Teff():
     ax.set_xlim(params['wave_start'], params['wave_end'])
 
     ax.set_xlabel(r'Wavelength [$\AA$]')
-    ax.set_ylabel('Emergent flux')
+    ax.set_ylabel(r'Emergent flux [$erg s^{-1} cm^{-2} \AA^{-1}$]')
+    ax.ticklabel_format(axis='y', style='sci', scilimits=(0, 0))
 
     plt.tight_layout()
     fn = f'{test_plot_dir}/test_spectrum.pdf'
