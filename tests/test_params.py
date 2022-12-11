@@ -1,10 +1,12 @@
 from Rad1D import RadModel
 import numpy as np
 
+from .conftest import data_dir
+
 
 def test_params():
     params = {
-        'data_dir'    : '/home/masamune/.bin/Rad1D/data',
+        'data_dir'    : data_dir,
         'n_zones'     : 200,
         'verbose'     : False,
     }

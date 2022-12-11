@@ -2,13 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from Rad1D import RadModel
 
-from .conftest import test_plot_dir
+from .conftest import test_plot_dir, data_dir
 from .plot_setup import paper_plot
 paper_plot()
 
 
 params = {
-    'data_dir'     : '/home/masamune/.bin/Rad1D/data',
+    'data_dir'     : data_dir,
     'eps'          : 1e-4,
     'eps_converge' : 1e-8,
     'max_iter'     : 1000,

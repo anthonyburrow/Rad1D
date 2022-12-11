@@ -2,13 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from Rad1D import RadModel
 
-from .conftest import test_plot_dir
+from .conftest import test_plot_dir, data_dir
 from .plot_setup import paper_plot
 paper_plot()
 
 
 params = {
-    'data_dir'       : '/Users/adammoss/Desktop/Atmospheres/Rad1Dtest/data',
+    'data_dir'       : data_dir,
     'tau_min'        : 1e-8,
     'tau_max'        : 1e6,
     'T_eff'          : 6000.,
@@ -79,7 +79,6 @@ def test_J_analytic():
 
         plot_J(ax, model, results, eps)                        	
 
-    # Fig 2 properties
     ax.set_xscale('log')
 
     ax.set_xlabel(r'$\tau$')

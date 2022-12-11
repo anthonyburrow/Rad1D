@@ -2,13 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from Rad1D import RadModel
 
-from .conftest import test_plot_dir
+from .conftest import test_plot_dir, data_dir
 from .plot_setup import paper_plot
 paper_plot()
 
 
 params = {
-    'data_dir'       : '/Users/adammoss/Desktop/Atmospheres/Rad1Dtest/data',
+    'data_dir'       : data_dir,
     'tau_min'        : 1e-8,
     'tau_max'        : 1e6,
     'T_eff'          : 6000.,
@@ -65,7 +65,6 @@ def test_epsilon():
 
         plot_eps(ax[i], model, results, eps)
 
-    # Fig 1 properties
     [_ax.set_xlim(params['tau_min'], params['tau_max']) for _ax in ax]
     bottom_convergence = np.sqrt(np.array(eps_to_check).min())
     ax[0].set_ylim(0.75 * bottom_convergence, 1.25)

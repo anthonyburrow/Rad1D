@@ -1,7 +1,11 @@
 import os
+import pathlib
 
 
 test_plot_dir = './Rad1D_test_plots'
+
+data_dir = pathlib.Path(__file__).parents[1]
+data_dir = str(data_dir.joinpath('data'))
 
 
 def pytest_configure(config):

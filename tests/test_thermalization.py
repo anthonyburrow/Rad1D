@@ -1,6 +1,15 @@
 from Rad1D import RadModel
 import numpy as np
 
+from .conftest import data_dir
+
+
+params = {
+    'data_dir'       : data_dir,
+    'Ng_accelerated' : False,
+    'verbose'        : False,
+}
+
 
 def test_S0_B0():
     min_eps = -4.
@@ -9,16 +18,12 @@ def test_S0_B0():
     print()
 
     for eps in eps_to_check:
-        params = {
-            'data_dir'    : '/home/masamune/.bin/Rad1D/data',
-            'max_iter'    : max(100, int(1. / eps)),
-            'eps'         : eps,
-            'verbose'     : False,
-        }
+        params['max_iter'] = max(100, int(1. / eps))
+        params['eps'] = eps
 
         model = RadModel(params)
-        results = model.convergence_test(5000.)
+        results = model.convergence_test()
 
-        S_B = results[-1][0]
+        S_B = results[-1, 0]
         justify = int(abs(min_eps)) + 2
-        print(f'  eps = {eps:<{justify}} : [S(0)/B(0)] / sqrt(eps) = {S_B / np.sqrt(eps):.3f}')
+        print(f'  eps = {eps:<{justify}} : [S(0)/B(0)] / sqrt(eps) = {S_B / np.sqrt(eps):.6f}')
