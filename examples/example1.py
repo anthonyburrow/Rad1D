@@ -19,7 +19,7 @@ params = {
     'eps_converge'   : 1e-8,        # Factor to determine J is converged
     'n_quad'         : 32,          # Order of Gaussian quadrature integration
     'verbose'        : True,        # Display stdout output
-    'Ng_accelerated' : True,        # Use Ng acceleration
+    'Ng_accelerated' : False,        # Use Ng acceleration
 }
 
 model = RadModel(params)
@@ -76,5 +76,5 @@ ax.set_xlabel(r'$\log \tau$')
 ax.set_ylabel('S / B')
 
 plt.tight_layout()
-fn = './S_B_convergence.pdf'
+fn = './S_B_convergence_noNg.pdf'
 fig.savefig(fn, dpi=125)
