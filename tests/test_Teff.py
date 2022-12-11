@@ -54,5 +54,5 @@ def test_Teff():
     ax.ticklabel_format(axis='y', style='sci', scilimits=(0, 0))
 
     plt.tight_layout()
-    fn = f'{test_plot_dir}/test_spectrum.pdf'
+    fn = f'{test_plot_dir}/spectrum.pdf'
     fig.savefig(fn, dpi=125)

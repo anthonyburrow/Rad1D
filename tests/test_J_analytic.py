@@ -39,7 +39,7 @@ def plot_J(ax, model, results, eps):
 
     pct_diff = 100. * (J_analytic - J_calc) / J_calc
 
-    ax.plot(model.tau, pct_diff, '-', label=r'$\epsilon = ' + f'{eps}$')
+    ax.plot(model.tau, pct_diff, '-', label=r'$\epsilon = $' + fr'$10^{{{int(np.log10(eps))}}}$')
 
 
 def test_J_analytic():

@@ -28,7 +28,7 @@ def plot_eps(ax, model, results, eps):
         ax.plot(model.tau, results[0], c='r', ls='-', lw=1., alpha=0.4)
         for i in range(1, iter_needed):
             ax.plot(model.tau, results[i], c='k', ls='-', lw=1., alpha=0.4)
-        ax.set_title(r'$\epsilon = 1.0$')
+        ax.set_title(r'$\epsilon = 1$')
         return
 
     ax.plot(model.tau, results[0], c='r', ls='-', lw=1., alpha=0.4)
@@ -38,7 +38,7 @@ def plot_eps(ax, model, results, eps):
     ax.axhline(np.sqrt(eps), ls='--', color='k')
 
     ax.text(0.60, 0.1, f'{iter_needed} iterations', transform=ax.transAxes)
-    ax.set_title(r'$\epsilon = $' + f'{eps:.0e}')
+    ax.set_title(r'$\epsilon = $' + fr'$10^{{{int(np.log10(eps))}}}$')
 
 
 def test_epsilon():
