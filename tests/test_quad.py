@@ -43,7 +43,7 @@ def test_quad():
     ax.set_xscale('log')
 
     ax.set_xlabel(r'$\tau$')
-    ax.set_ylabel(r'% Difference from $S_{32}$')
+    ax.set_ylabel(r'Percent Difference from $S_{32}$')
 
     ax.legend()
 
