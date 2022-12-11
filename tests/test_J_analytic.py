@@ -55,7 +55,7 @@ def test_J_analytic():
     ax.set_xscale('log')
 
     ax.set_xlabel(r'$\tau$')
-    ax.set_ylabel(r'Percent difference from analytic J($\tau$)')
+    ax.set_ylabel(r'Percent difference from calculated J($\tau$)')
 
     ax.legend()
 
