@@ -6,6 +6,8 @@ lambda iteration (ALI).
 This project was made in a collaboration including Manuel Barrientos, Anthony
 Burrow, Adam Moss, and Sarah Stangl.
 
+For more details on this project, see `.doc/FinalProjectReport.pdf`.
+
 ## Requirements
 
 This may be compiled and run on either Windows or Linux platforms with an
