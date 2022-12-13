@@ -19,7 +19,7 @@
 \begin{document}
 
 \begin{center}\begin{LARGE}
-\textbf{ASTR 5463 Final Project: ALI Method}
+\textbf{ASTR 5463: Accelerated Lambda Iteration}
 \end{LARGE}\end{center}
 
 \begin{center}
@@ -78,7 +78,7 @@ S^{(n + 1)}_\nu
 \end{align}
 for some $n^\text{th}$ iteration of calculating $S_\nu$ from $J_\nu$. This approach avoids the need to invert $\Lambda_\nu$. However, for cases of highly non-local thermal equilibrium (non-LTE or NLTE) where $\epsilon \ll 1$, the convergence time is slow \citep[see, e.g.,][]{mihalas1978}. In this case, the relative changes in the source function become extremely small long before the correct solution is reached \citep[see][]{hubeny2003}.
 
-Because of this, a more efficient technique for solving this equation is needed. In particular, accelerated lambda iteration (ALI) has been suggested by [\textbf{cite - OAB originally?}], and is put into context of the short-characteristics method (see \autoref{sec:numerical_approach}) by \cite{OandK1987}, which will henceforth be referred to as O\&K. As explained by O\&K, one may consider introducing a perturbation operator $\Lambda^*_\nu$ that contains information about the dominant physics of line-core diffusion. We can then define the exact lambda operator as
+Because of this, a more efficient technique for solving this equation is needed. In particular, accelerated lambda iteration (ALI) has been put into context of the short-characteristics method (see \autoref{sec:numerical_approach}) by \cite{OandK1987}, which will henceforth be referred to as O\&K. As explained by O\&K, one may consider introducing a perturbation operator $\Lambda^*_\nu$ that contains information about the dominant physics of line-core diffusion. We can then define the exact lambda operator as
 \begin{align}
 \Lambda_\nu
 &=
@@ -105,7 +105,7 @@ J_\nu^{(n + 1)} - J_\nu^{(n)}
 \end{align}
 where $J^{FS, (n)} = \Lambda_\nu S^{(n)}$. This may then be used with equation \ref{eq:4} to complete a full ALI cycle.
 
-The advantage of this new iteration scheme is that, when an appropriate perturbation $\Lambda^*_\nu$ is chosen, such as a diagonal or multi-banded diagonal matrix, we may perform the matrix inversion quickly, with $\mathcal{O}(n)$ time, rather than near $\mathcal{O}(n^3)$ time for typical matrix inversion. At the same time, the convergence procedure is accelerated because introducing the perturbation matrix reduces the eigenvalues of the lambda matrix. Typically this perturbation matrix is chosen to be the diagonals, tri-diagonals, or higher-order banded diagonals of the lambda operator [\textbf{why?}].
+The advantage of this new iteration scheme is that, when an appropriate perturbation $\Lambda^*_\nu$ is chosen, such as a diagonal or multi-banded diagonal matrix, we may perform the matrix inversion quickly, with $\mathcal{O}(n)$ time, rather than near $\mathcal{O}(n^3)$ time for typical matrix inversion. At the same time, the convergence procedure is accelerated because introducing the perturbation matrix reduces the eigenvalues of the lambda matrix. Typically this perturbation matrix is chosen to be the diagonals, tri-diagonals, or higher-order banded diagonals of the lambda operator.
 
 In this project, we aim to solve the radiative transfer equation and simultaneously scattering problem for a generally NLTE plane-parallel atmosphere. We specifically perform ALI to do so, and we also add further optimizations to this method, which are described in \autoref{sec:methods} along with assumptions we make to conquer this problem. In \autoref{sec:results}, results of our work are shown, and we discuss what these results suggest.
 
