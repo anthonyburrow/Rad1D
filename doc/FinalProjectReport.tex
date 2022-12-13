@@ -298,6 +298,7 @@ We initialize our starting value of $S_\nu$ to be $S_\nu = B_\nu$, the Planck fu
 
 
 \subsection{Ng Acceleration}
+\label{sec:ng}
 
 
 Once four iterations of $S$ have been computed, we may also use Ng acceleration \citep{ng_1974} to compute the next $S$ vector. This has been shown to further accelerate the convergence of $J$, leading to fewer required iterations and more computational efficiency. Because this project is specifically aimed at illustrating ALI, most of our results in \autoref{sec:results} do not include Ng acceleration. However, we do include in \autoref{sec:results} an illustration of Ng acceleration at play. Below we summarize this process.
@@ -352,11 +353,15 @@ The new $\mathbf{S}^{n + 1}$ is given as in \autoref{eq:22}. This five-iteration
 
 \section{Results and Discussion}
 \label{sec:results}
+
+
 \subsection{ALI Results}
+\label{sec:ali}
 
-We have successfully implemented the ALI method to achieve convergence across all values of $\tau$. Here we populate our $\tau$ grid with $\tau_\text{min} = 10^{-8}$, $\tau_\text{max} = 10^6$, and a grid size of 256 points. In general we also let $T_\text{eff} = 6000$ K.
 
-Figure~\ref{fig:1} shows how the ratio $S / B$ improves with each iteration throughout the atmosphere. We use a default $\epsilon$ of 1e-4 for the majority of our figures unless otherwise stated. At $\tau = 0$, $S / B$ should approach $\sqrt\epsilon$ (in this case, 1e-2). After 1 iteration, S/B is quite far from this solution but rapidly approaches after more iterations. As $\tau$ increases, you reach deeper regions of the star where the LTE condition is more realistic (S = B), so S/B approaches 1. This holds even after just a few iterations. 
+We have successfully implemented the ALI method to achieve convergence across all values of $\tau$. Here we populate our $\tau$ grid with $\tau_\text{min} = 10^{-8}$, $\tau_\text{max} = 10^6$, and a grid size of 256 points. In general we also let $T_\text{eff} = 6000$ K. We use a thermalization of $epsilon = 10^{-4}$ to test our results unless otherwise stated.
+
+\autoref{fig:1} shows how the ratio $S / B$ improves with each iteration throughout the atmosphere. At $\tau = 0$, $S / B$ is expected to approach $\sqrt\epsilon$ (in this case, $10^{-2}$). After one iteration, $S / B$ is quite far from this solution but rapidly approaches the expected value near the surface after more iterations. It should also be noted that expanding the exponentials in the formal solution to second order allowed us to numerically resolve the surface all the way to $\tau = 10^{-8}$. At depth, the LTE result $S = B$ is constant for each iteration, as this was the initial condition for all $\tau$.
 
 \begin{figure}[ht]
  \centering
@@ -365,36 +370,34 @@ Figure~\ref{fig:1} shows how the ratio $S / B$ improves with each iteration thro
  \label{fig:1}
 \end{figure}
 
-As a sanity check, we plot a spectrum generated from our model to ensure we obtain a blackbody curve. Figure~\ref{fig:2} shows this spectrum from 3000 to 7000 \text{\AA}. We have attempted to include an absorption line at 6564 \text{\AA } (H$\alpha$). However, this feature does not show the expected Gaussian shape an absorption feature should have. This is most likely due to our Planck function being independent of $\tau$ and our temperature profile being isothermal.
-
-\begin{figure}[ht]
- \centering
- \includegraphics[width=0.75\textwidth]{spectrum.pdf}
- \caption{Output spectrum using the default parameters. The line feature at 6564 \text{\AA } appears, however the shape is incorrect.}
-  \label{fig:2}
-\end{figure}
-
-We test the effects of varying $\epsilon$ on the number of iterations needed to achieve convergence. Figure~\ref{fig:3} displays these results, with each panel showing a different $\epsilon$. For $\epsilon = 1$, we have pure LTE, so S = B and S/B = 1 everywhere, so only 1 iteration is required. As $\epsilon$ approaches 0 and we deviate away from LTE, more iterations are required to achieve convergence. 
+We also test the effects of varying $\epsilon$ and the number of iterations needed to achieve convergence. Our convergence criterion is that $J$ is said to be converged on the $n^\text{th}$ iteration if
+\begin{align}
+\frac{J_n - J_{n - 1}}{(J_n + J_{n - 1}) / 2} < 10^{-8}
+\end{align}
+for all $\tau$. \autoref{fig:2} displays these results, with each panel showing a different value of $\epsilon$. The number of iterations required to reach convergence is also noted on each panel. For $\epsilon = 1$, we would expect pure LTE, and it is clear that this holds for every iteration. As $\epsilon$ approaches 0 and we deviate from LTE, more iterations are required to achieve convergence.
 
 \begin{figure}[ht]
  \centering
  \includegraphics[width=0.99\textwidth]{eps_convergence.pdf}
  \caption{Convergence plots for different values of $\epsilon$. As $\epsilon$ approaches 0, more iterations are needed to achieve convergence at the surface.}
-   \label{fig:3}
+   \label{fig:2}
 \end{figure}
 
-Since J is the direction-averaged intensity, comparing our J to an analytic value is important as it directly corresponds to emergent flux from the atmosphere. In Figure~\ref{fig:4}, we show the percent difference between our J and J calculated by using a linear Planck function and the Eddington approximation: 
+As a test of the final product of the formal solution, we plot a spectrum generated from our model to ensure we obtain an expected blackbody curve. \autoref{fig:3} shows the emergent flux of our model post-convergence at a set of wavelength points between 3000 and 7000 \text{\AA}. It is clear that we indeed achieve the expected result with no unexpected variation as a function of wavelength.
 
-\begin{equation}
-\begin{split}
-   J(\tau) = a + b\tau + \frac{(b - \sqrt{3}a)e^{-\sqrt{3\epsilon}}}{(\sqrt{3}+\sqrt{3\epsilon})}
-\end{split}
+\begin{figure}[ht]
+ \centering
+ \includegraphics[width=0.75\textwidth]{spectrum.pdf}
+ \caption{Output spectrum using the default parameters. The line feature at 6564 \text{\AA } appears, however the shape is incorrect.}
+  \label{fig:3}
+\end{figure}
+
+Since $J$ is the direction-averaged intensity, comparing our $J$ to an analytic value is important as it directly relates to flux from the atmosphere. In \autoref{fig:4}, we show the percent difference between our calculated $J$ and the $J$ calculated by using the analytic approximation assuming $B$ is linear in $\tau$,
+\begin{align}
+J(\tau) = a + b\tau + \frac{(b - \sqrt{3}a)e^{-\sqrt{3\epsilon}}}{(\sqrt{3}+\sqrt{3\epsilon})},
 \label{eq:24}
-\end{equation}
-
-In our case, the Planck function is not dependent on $\tau$, so b = 0, and a is just the Planck function. 
-The largest difference between our J and the analytic solution occurs from $10^{-3} < \tau < 1$. This is expected, as this region corresponds to where the majority of the flux emerges from the atmosphere. Elsewhere, the difference between the 2 is essentially 0. We vary $\epsilon$ as well but do not obtain significant changes as $\epsilon$ changes.
-
+\end{align}
+however with $b = 0$ because we assume an isothermal atmosphere. The largest difference between our calculated $J$ and the analytic solution occurs from $10^{-2} < \tau < 1$. This is expected, as this region around $\tau \approx 2/3$ is typically characteristic of the emergent flux of the atmosphere. Elsewhere, there is little divergence between results. We vary $\epsilon$ as well for this test, but we do not obtain significant changes as $\epsilon$ varies.
 
 \begin{figure}[ht]
  \centering
@@ -403,11 +406,16 @@ The largest difference between our J and the analytic solution occurs from $10^{
  \label{fig:4}
 \end{figure}
 
-\subsection{Effects of Gaussian Quadrature}
 
-We also investigate the effect of using fewer points in the Gaussian quadrature. Figure~\ref{fig:5} shows that if we use fewer points, our calculated source function deviates significantly in the same $\tau$ regime as when we investigate J. 
-Using a different amount of points can affect the time it takes to converge and generate a spectrum. To test this, we simply generated a spectrum 10 times for each number of points, recorded them, then took the average. For using 2, 4, 8, and 32-point, we obtain average times of 3.629, 3.484, 3.583, and 4.238 seconds respectively. This means 2, 4, and 8-point are faster by 14, 18, and 15\% faster than 32-point, but at worst only 9, 4, and 2\% less accurate. Time is not of the essence for us though, so we can afford to use 32-point for the best accuracy.
+\subsection{Effects of Gauss-Legendre Quadrature}
+\label{sec:quad}
 
+
+We also investigate the effect of choosing fewer $\mu$ values when integrating using Gauss-Legendre quadrature. Ideally one uses as many points as possible for higher degrees of accuracy in the integration to get the formal solution, however this of course increases computation time. In \autoref{fig:5} we display the percent difference in $S_2$, $S_4$, and $S_8$, where $S_n$ is the $S$ calculated for $n$-point quadrature, compared to the 32-point result we typically use, $S_{32}$. The figure shows that if we use fewer points, our calculated source function deviates significantly in the same $\tau \approx 2/3$ regime.
+
+To test the resulting time it takes to generate a typical model for these different cases, we simply calculate a spectrum similarly to that in \autoref{sec:ali} for ~170 wavelength points, which includes the same check for convergence at each step that was described also in \autoref{sec:ali}. On average, for the 2-, 4-, 8-, and 32-point methods, these spectra were able to be generated in 3.629, 3.484, 3.583, and 4.238 seconds, respectively. This means that calculations using 2, 4, and 8 points are faster than 32 points by 14\%, 18\%, and 15\%, respectively, but at worst only 9\%, 4\%, and 2\% less accurate. With the same number of iterations, one would expect computation time to increase linearly with the number of points used in integration. With that in mind, the results imply that, when using fewer points, it takes longer to reach the convergence criterion for the same number of iterations when using fewer points.
+
+Although a few seconds for a simple calculation is not much, it is interesting to note this effect for doing radiative transfer on a larger scale, and the possible results that may propagate from the convergence step in the big picture that ALI addresses.
 
 \begin{figure}[ht]
  \centering
@@ -416,9 +424,11 @@ Using a different amount of points can affect the time it takes to converge and 
  \label{fig:5}
 \end{figure}
 
-\subsection{Ng Acceleration Results}
 
-Finally, we investigate the effects of Ng acceleration on the speed of convergence. The left panel in Figure~\ref{fig:6} shows the number of iterations required by each method to reach convergence at the surface for our default $\epsilon$. ALI unsurprisingly is much faster than normal LI, with Ng acceleration further improving the required amount of iterations. The right panel shows how J varies per iteration for each method. Specifically, we calculate the change in J after each iteration, normalized by the previous J, and then find the maximum change across $\tau$ at each step. This gives us an idea of how significantly J changes, with Ng acceleration obtaining smaller variations in a fewer amount of variations compared to LI and ALI. LI in particular does not do a good job of minimizing this quantity and would require exponentially more iterations to achieve the same result.
+\subsection{Effects of Ng Acceleration}
+
+
+Finally, we investigate the effects of Ng acceleration described in \autoref{sec:ng} on the speed of convergence. The left panel in \autoref{fig:6} shows the number of iterations required to reach convergence at the surface for $\epsilon = 10^{-4}$ for normal lambda iteration (LI), ALI, and ALI with Ng acceleration implemented. As expected, ALI converges much faster than LI, with Ng acceleration further reducing the required number of iterations. The right panel shows the same result in essence, however this is specifically showing the maximum value used to check convergence $\Delta J / \bar{J}$ across all $\tau$. In other words, the dashed line in this right panel at $10^{-8}$ is our definition of convergence. This gives us an idea of how significantly $J$ itself changes, and it shows again the same sentiment, that Ng acceleration converges in fewer iterations compared to both LI and ALI. LI in particular does not perform well to minimize this quantity, and it would require a drastically higher number iterations to achieve the same result.
 
 \begin{figure}[ht]
  \centering
@@ -427,7 +437,7 @@ Finally, we investigate the effects of Ng acceleration on the speed of convergen
   \label{fig:6}
 \end{figure}
 
-In Figure~\ref{fig:7}, we plot the same convergence test as Figure~\ref{fig:1} using Ng acceleration. It becomes clear that fewer iterations are needed, with large jumps in S/B compared to gradual steps using ALI.
+In \autoref{fig:7}, we plot the same convergence test as in \autoref{fig:1}, however now implementing Ng acceleration. We see that there are large gaps in $S / B$ every time the algorithm described in \autoref{sec:ng} makes a new estimate of $S$. Clearly this method works to reduce the number of iterations required to fully converge $J$.
 
 \begin{figure}[ht]
  \centering
@@ -436,12 +446,15 @@ In Figure~\ref{fig:7}, we plot the same convergence test as Figure~\ref{fig:1} u
   \label{fig:7}
 \end{figure}
 
-We run a similar test as with the various Gaussian quadrature points, but now seeing how quickly we can converge and generate a spectrum with the various methods. ALI takes 4.222 seconds and Ng takes 1.695 seconds. LI was not included as the number of iterations it would take to converge is significantly longer than ALI, which would naturally take significantly more time.  
+Finally, we perform a similar test as in \autoref{sec:quad}, however now to see how quickly $J$ converges and a spectrum may be generated using the different iteration methods. On average, ALI takes 4.222 seconds, and ALI with Ng acceleration takes 1.695 seconds. LI was not included as the number of iterations it would take to converge with $\epsilon = 10^{-4}$ is significantly longer than ALI and frankly is not worth the time spent to compute it.
+
 
 \section{Conclusion}
 
-In this project, we implemented three different iterative methods in order to solve the radiative transfer equation in the NLTE scattering problem.
 
+In this project, we implemented accelerated lambda iteration in order to solve the radiative transfer equation and the NLTE scattering problem. We have tested the results thoroughly for an isothermal, grey atmosphere, which have all had positive results that show our method to be successful in capturing the expected behavior for a solution to the radiative transfer problem. We also show that ALI is able to converge much faster than normal lambda iteration, which is useful for computational efficiency. Finally, we make use of Ng acceleration, and show that such a simple implementation is able to solve such a complicated problem using drastically less time and resources.
+
+Our implementation of this method is available at \href{https://github.com/anthonyburrow/Rad1D}{github.com/anthonyburrow/Rad1D} wherein all parameters available for any user to test this method are shown and described.
 
 
 \clearpage
