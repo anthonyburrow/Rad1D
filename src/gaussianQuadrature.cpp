@@ -40,7 +40,7 @@ namespace myLib
                 break;
             }
             case 32:
-            {   // point datat taken from https://pomax.github.io/bezierinfo/legendre-gauss.html
+            {   // point data taken from https://pomax.github.io/bezierinfo/legendre-gauss.html
                 radModel.quadMu = { 0.997263862, 0.985611512, 0.964762256, 0.934906076, 0.896321156, 0.849367614, 0.794483796, 0.732182119,
                                     0.663044267, 0.587715757, 0.506899909, 0.421351276, 0.331868602, 0.239287362, 0.144471962, 0.048307666 };
                 radModel.quadW = { 0.007018610, 0.016274395, 0.025392065, 0.034273863, 0.042835898, 0.050998059, 0.058684093, 0.065822223,
