@@ -5,6 +5,7 @@ __pycache__/
 .DS_Store
 
 *.pdf
+!doc/FinalProjectReport.pdf
 !doc/figs/*.pdf
 
 Rad1D_test_plots/
