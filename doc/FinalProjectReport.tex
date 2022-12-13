@@ -26,231 +26,370 @@
 \textbf{Manuel Barrientos, Anthony Burrow, Adam Moss, Sarah Stangl}
 \end{center}
 
+
 \section{Introduction}
-One of the most fundamental problems in stellar atmospheres is being able to solve two equations simultaneously, the radiative transfer equation and the statistical equilibrium equation \citep[e.g.,][]{OandK1987,hubeny2003}. The first one is given by
-\begin{equation}
-    \mu \frac{d I_{\mu \nu}}{d \tau_{\nu}}= I_{\nu \mu} - S_{\nu},
-\label{eq:1}
-\end{equation}
-where I$_{\nu \mu}$ is the specific intensity and S$_{\nu}$ the source function. The former depends on the directional cosine $\mu$, the monochromatic optical depth $\tau_{\nu}$, and both quantities depend on the frequency $\nu$. The formal solution for this equation is can be written as
-\begin{equation}
-    I_{\mu \nu} = \Lambda_{\nu \mu}[S_{\nu}],
+
+
+One of the most fundamental problems in stellar atmospheres is being able to solve two equations simultaneously, the radiative transfer equation and the statistical equilibrium equation \citep[e.g.,][]{OandK1987,hubeny2003}. The first one is given for the plane-parallel case as
+\begin{align}
+\mu \frac{d I_\nu(\mu, \tau)}{d \tau_\nu}
+&=
+I_\nu(\mu, \tau_\nu) - S_\nu(\tau_\nu),
+\end{align}
+where $I_\nu(\mu, \tau_\nu)$ is the specific intensity and $S_\nu$ the source function. The former depends on the directional cosine $\mu$, the monochromatic optical depth $\tau_\nu$, and both quantities depend on the frequency $\nu$. Because of the complicated coupling of the quantities in this equation, the formal solution to this integral-differential equation must be solved numerically. The first-moment equation may be written as
+\begin{align}
+J_\nu
+&=
+\Lambda_\nu S_\nu,
 \label{eq:2}
-\end{equation}
-where $\Lambda$ is an operator acting on S$_{\nu}$. When integrating this expression with respect to $\mu$, we get
-\begin{equation}
-    J_{\nu} = \Lambda_{\nu}[S_{\nu}]; \; \text{ where } \; J_{\nu}= \frac{1}{2}\int_{-1}^{1} I_{\mu \nu} d \mu \; \text{ and } \;\Lambda_{\nu}= \frac{1}{2} \int_{-1}^{1} \Lambda_{\mu \nu} d\mu,
-\label{eq:3}
-\end{equation}
-here J$_{\nu}$ is the first moment. The second one can be expressed as the line source function
-\begin{equation}
-    S_{\nu}= (1 - \epsilon)J_{\nu} + \epsilon B_{\nu},
+\end{align}
+with $\Lambda_\nu$ being a wavelength-dependent operator that may act on $S(\tau)$, and
+\begin{align}
+J_\nu(\tau)
+&=
+\frac{1}{2} \int_{-1}^1 I_\nu(\mu, \tau_\nu) d\mu
+\end{align}
+is the mean intensity. The second one can be expressed as the source function
+\begin{align}
+S_\nu
+&=
+(1 - \epsilon) J_\nu + \epsilon B_\nu,
 \label{eq:4}
-\end{equation}
-where $\epsilon$ is the collisional destruction probability, and B is the Planck function. When replacing J$_{\nu}$ expression of equation (\ref{eq:3}) in (\ref{eq:4}), we get the following
-\begin{equation}
-   S_{\nu}= (1 - \epsilon)\Lambda_{\nu}[S_{\nu}] + \epsilon B_{\nu}.
-\end{equation}
-Considering that $\Lambda$ is a linear operator, the solution for this equation can be written as
-\begin{equation}
-   S_{\nu}= [1 - (1 - \epsilon)
-   \Lambda_{\nu}]^{-1}[\epsilon B_{\nu}].
-\end{equation}
-Due to the length and the angle-frequency coupling in the $\Lambda$ matrix, the inverting process will require a lot of computational time when using a direct approach to solve the problem. This is why is important to explore faster and more efficient methods.
+\end{align}
+where $\epsilon$ is the thermalization (also known as the collisional destruction probability), and $B_\nu$ is the Planck function. Combining Equations \ref{eq:2} and \ref{eq:4}, this may be written as
+\begin{align}
+S_\nu
+&=
+(1 - \epsilon) \Lambda_\nu S_\nu + \epsilon B_\nu,
+\end{align}
+or in other words,
+\begin{align}
+S_\nu
+&=
+[1 - (1 - \epsilon) \Lambda_\nu]^{-1} \epsilon B_\nu,
+\end{align}
+However, because this equation must be solved numerically, and $\Lambda_\nu$ is typically expressible as an $N \times N$ matrix, where $N$ is the number of points on the $\tau$ grid used, inverting this matrix quickly becomes computationally expensive. It is therefore important to explore faster and more efficient methods of solving the formal solution.
 
-\subsection{Regular and Accelerated Lambda Iterations}
+The formal solution can instead be solved using an iterative method by converging $J_\nu$. By iteratively applying the lambda operator to the source function $S_\nu$, the approximation for $J_\nu$ is improved with each iteration. This lambda iteration may be written as
+\begin{align}
+S^{(n + 1)}_\nu
+&=
+(1 - \epsilon) \Lambda_\nu S^{(n)}_\nu + \epsilon B_\nu.
+\end{align}
+for some $n^\text{th}$ iteration of calculating $S_\nu$ from $J_\nu$. This approach avoids the need to invert $\Lambda_\nu$. However, for cases of highly non-local thermal equilibrium (non-LTE or NLTE) where $\epsilon \ll 1$, the convergence time is slow \citep[see, e.g.,][]{mihalas1978}. In this case, the relative changes in the source function become extremely small long before the correct solution is reached \citep[see][]{hubeny2003}.
 
+Because of this, a more efficient technique for solving this equation is needed. In particular, accelerated lambda iteration (ALI) has been suggested by [\textbf{cite - OAB originally?}], and is put into context of the short-characteristics method (see \autoref{sec:numerical_approach}) by \cite{OandK1987}, which will henceforth be referred to as O\&K. As explained by O\&K, one may consider introducing a perturbation operator $\Lambda^*_\nu$ that contains information about the dominant physics of line-core diffusion. We can then define the exact lambda operator as
+\begin{align}
+\Lambda_\nu
+&=
+\Lambda^*_\nu + (\Lambda_\nu - \Lambda^*_\nu).
+\end{align}
+From here one may create a new iteration method by attributing the first term in this lambda operator to the $(n + 1)^\text{th}$ iteration, and the other terms to the previous $n^\text{th}$ iteration; in other words,
+\begin{align}
+S^{(n + 1)}_\nu
+&=
+(1 - \epsilon) \Lambda^*_\nu S^{(n + 1)}_\nu + (1 - \epsilon) (\Lambda_\nu - \Lambda^*_\nu) S^{(n)}_\nu + \epsilon B_\nu,
+\end{align}
+which becomes
+\begin{align}
+[1 - (1 - \epsilon) \Lambda^*_\nu] S^{(n + 1)}_\nu
+&=
+(1 - \epsilon) (\Lambda_\nu - \Lambda^*_\nu) S^{(n)}_\nu + \epsilon B_\nu.
+\end{align}
+One may also write this in terms of $J_\nu$ as
+\begin{align}
+J_\nu^{(n + 1)} - J_\nu^{(n)}
+&=
+[1 - (1 - \epsilon) \Lambda^*_\nu]^{-1} (J_\nu^{FS, (n)} - J_\nu^{(n)})
+\label{eq:11}
+\end{align}
+where $J^{FS, (n)} = \Lambda_\nu S^{(n)}$. This may then be used with equation \ref{eq:4} to complete a full ALI cycle.
 
+The advantage of this new iteration scheme is that, when an appropriate perturbation $\Lambda^*_\nu$ is chosen, such as a diagonal or multi-banded diagonal matrix, we may perform the matrix inversion quickly, with $\mathcal{O}(n)$ time, rather than near $\mathcal{O}(n^3)$ time for typical matrix inversion. At the same time, the convergence procedure is accelerated because introducing the perturbation matrix reduces the eigenvalues of the lambda matrix. Typically this perturbation matrix is chosen to be the diagonals, tri-diagonals, or higher-order banded diagonals of the lambda operator [\textbf{why?}].
 
-Solving the radiative transfer equation in the non-local thermal equilibrium (NLTE) scattering problem is difficult. In fact, if we want to use a direct approach to solve it, the amount of computer time necessary to find a solution goes through the roof. On the other hand, with the application of an iterative solution technique that uses perturbation operators implicitly in the NLTE solution, we can attack this problem in a more time-efficient way. In particular, in this project, we will use the approach by \citep{OandK1987} which requires the perturbation operator to be an accurate approximation to the diagonal of the lambda matrix.
+In this project, we aim to solve the radiative transfer equation and simultaneously scattering problem for a generally NLTE plane-parallel atmosphere. We specifically perform ALI to do so, and we also add further optimizations to this method, which are described in \autoref{sec:methods} along with assumptions we make to conquer this problem. In \autoref{sec:results}, results of our work are shown, and we discuss what these results suggest.
 
-
-
-
-parts in the paper
 
 \section{Methods}
+\label{sec:methods}
 
-subsection
-Initial Conditions:
 
-For $i = 2, ..., N - 1$,
-\begin{align*}
+\subsection{Numerical Approach}
+\label{sec:numerical_approach}
+
+
+To perform ALI, we first use the short-characteristics method of solving the formal solution given by O\&K. This method solves the set of equations
+\begin{align}
+\begin{split}
+I^+_\nu(\tau_\nu, \mu)
+&=
+I^+_\nu(T_\nu, \mu) e^{-(T_\nu - \tau_\nu) / \mu} + \int_{\tau_\nu}^{T_\nu} S_\nu(t) e^{-(t - \tau_\nu) / \mu} dt / \mu,
+\\
+I^-_\nu(\tau_\nu, \mu)
+&=
+I^+_\nu(0, \mu) e^{\tau_\nu / \mu} + \int_0^{\tau_\nu} S_\nu(t) e^{-(\tau_\nu - t) / \mu} dt / (-\mu),
+\end{split}
+\end{align}
+where $I^+_\nu$ and $I^-_\nu$ are outward-going and inward-going rays, respectively, and $T_\nu$ is the monochromatic slab thickness. To solve this, the short-characteristics method performs integration by interpolating $S_\nu(\tau)$ at each set of two to three adjacent points. This can be written as
+\begin{align}
+\begin{split}
+I^+(\tau_i, \mu)
+&=
+I^+(\tau_{i + 1}, \mu) e^{-\Delta\tau_i} + \Delta I^+(S, \mu),
+\\
+I^-(\tau_i, \mu)
+&=
+I^-(\tau_{i - 1}, \mu) e^{-\Delta\tau_{i - 1}} + \Delta I^-(S, \mu),
+\label{eq:13}
+\end{split}
+\end{align}
+where $\Delta I^\pm$ represents the integral evaluations, and $\Delta \tau_i = (\tau_{i + 1} - \tau_i) / |\mu|$. We also have left out the $\nu$ subscripts for convenience; note that this process must still be performed for each wavelength point on the chosen grid. This can be written in terms of interpolation coefficients $\alpha^\pm_i$, $\beta^\pm_i$, $\gamma^\pm_i$ as
+\begin{align}
+\Delta I^\pm_i
+&=
+\alpha^\pm_i S_{i - 1} + \beta^\pm_i S_i + \gamma^\pm_i S_{i + 1}.
+\label{eq:16}
+\end{align}
+O\&K gives parabolic interpolation coefficients as
+\begin{align}
+\begin{split}
 \alpha_i^-
 &=
 e_{0, i} +
 \frac{e_{2, i} - (\Delta\tau_i + 2\Delta\tau_{i - 1}) e_{1, i}}
      {\Delta\tau_{i - 1} (\Delta\tau_i + \Delta\tau_{i - 1})},
-\\ \beta_i^-
+\\
+\beta_i^-
 &=
 \frac{(\Delta\tau_i + \Delta\tau_{i - 1}) e_{1, i} - e_{2, i}}
-     {\Delta\tau_{i - 1} \Delta\tau_i}
-\\ \gamma_i^-
+     {\Delta\tau_{i - 1} \Delta\tau_i},
+\\
+\gamma_i^-
 &=
 \frac{e_{2, i} - \Delta\tau_{i - 1} e_{1, i}}
-     {\Delta\tau_i (\Delta\tau_i + \Delta\tau_{i - 1})}
-\\ \alpha_i^+
+     {\Delta\tau_i (\Delta\tau_i + \Delta\tau_{i - 1})},
+\\
+\alpha_i^+
 &=
 \frac{e_{2, i + 1} - \Delta\tau_i e_{1, i + 1}}
-     {\Delta\tau_{i - 1} (\Delta\tau_i + \Delta\tau_{i - 1})}
-\\ \beta_i^+
+     {\Delta\tau_{i - 1} (\Delta\tau_i + \Delta\tau_{i - 1})},
+\\
+\beta_i^+
 &=
 \frac{(\Delta\tau_i + \Delta\tau_{i - 1}) e_{1, i + 1} - e_{2, i + 1}}
-     {\Delta\tau_{i - 1} \Delta\tau_i}
-\\ \gamma_i^+
+     {\Delta\tau_{i - 1} \Delta\tau_i},
+\\
+\gamma_i^+
 &=
 e_{0, i + 1} +
 \frac{e_{2, i + 1} - (\Delta\tau_{i - 1} + 2\Delta\tau_i) e_{1, i + 1}}
      {\Delta\tau_i (\Delta\tau_i + \Delta\tau_{i - 1})},
-\end{align*}
+\end{split}
+\end{align}
 where
-\begin{align*}
+\begin{align}
+\begin{split}
 e_{0, i}
 &=
 1 - e^{-\Delta\tau_{i - 1}},
-\\ e_{1, i}
+\\
+e_{1, i}
 &=
 \Delta\tau_{i - 1} - e_{0, i}
-\\ e_{2, i}
+\\
+e_{2, i}
 &=
 (\Delta\tau_{i - 1})^2 - 2 e_{1, i}.
-\end{align*}
-
-\begin{align*}
-\text{i}_{i - 1}^- (\mu, \nu)
+\end{split}
+\end{align}
+For the boundaries $i = 1$ and $i = N$, linear interpolation must be performed instead; O\&K gives the linear interpolation coefficients as
+\begin{align}
+\begin{split}
+\alpha_i^-
 &=
-\Delta\text{i}_{i - 1}^- (S, \mu, \nu)
-\\ &=
+e_{0, i} - \frac{e_{1, i}}{\Delta \tau_{i - 1}},
+\\
+\beta_i^-
+&=
+\frac{e_{1, i}}{\Delta \tau_{i - 1}},
+\\
+\gamma_i^-
+&=
+0,
+\\
+\alpha_i^+
+&=
+0,
+\\
+\beta_i^+
+&=
+\frac{e_{1, i + 1}}{\Delta \tau_i},
+\\
+\gamma_i^+
+&=
+e_{0, i + 1} - \frac{e_{1, i + 1}}{\Delta \tau_i}.
+\end{split}
+\end{align}
+At low $\Delta \tau_i < 10^{-2}$, we also enforce the use of linear interpolation as well to avoid numerical problems. It should also be noted that, to also avoid problems with exponentials at very low $\Delta \tau_i < 10^{-7}$, the $e^{-\Delta \tau_i}$ have have been Taylor-expanded to second order, and $e_{0, i}$, $e_{1, i}$, and $e_{2, i}$ were adjusted accordingly to appropriately estimate our results when we want to resolve $\tau$ as low as $10^{-8}$.
+
+Now, it is helpful to think of the lambda operator as a matrix that acts on a depth-dependent vector $S(\tau_i)$ to receive the formal solution implicitly through $J(\tau_i)$. We may construct this matrix column-wise, such that the elements of each row are given by
+\begin{align}
+\Lambda_{ij} = \frac{1}{2} \int_0^1 d\mu \left[ \hat{i}^-_{i, j} (\mu) + \hat{i}^+_{i, j} (\mu) \right],
+\end{align}
+where for a given $\mu$,
+\begin{align}
+\begin{split}
+\hat{i}_{i - 1, i}^-
+&=
 \gamma_{i - 1}^-,
-\\ \text{i}_{i}^- (\mu, \nu)
+\\
+\hat{i}_{i, i}^-
 &=
-\text{i}_{i - 1}^- (\mu, \nu) e^{-\Delta\tau_{i - 1}} +
-    \Delta\text{i}_{i}^- (S, \mu, \nu)
-\\ &=
-\gamma_{i - 1}^- e^{-\Delta\tau_{i - 1}} + \beta_{i}^-,
-\\ \text{i}_{i + 1}^- (\mu, \nu)
+\hat{i}_{i - 1, i}^- e^{-\Delta\tau_{i - 1}} + \beta_{i}^-,
+\\
+\hat{i}_{i + 1, i}^-
 &=
-\text{i}_{i}^- (\mu, \nu) e^{-\Delta\tau_{i - 1}} +
-    \Delta\text{i}_{i + 1}^- (S, \mu, \nu)
-\\ &=
-[\gamma_{i - 1}^- e^{-\Delta\tau_{i - 1}} + \beta_{i}^-] e^{-\Delta\tau_{i}} +
-    \alpha_{i + 1}^-,
-\end{align*}
-
-\begin{align*}
-\text{i}_{i + 1}^+ (\mu, \nu)
+\hat{i}_{i, i}^- e^{-\Delta\tau_{i}} + \alpha_{i + 1}^-,
+\\
+\hat{i}_{k, i}^-
 &=
-\Delta\text{i}_{i + 1}^+ (S, \mu, \nu)
-\\ &=
+\hat{i}_{k - 1, i}^- e^{-\Delta\tau_{k - 1}} \quad \text{for } k = i + 2, i + 3, \dots, N,
+\\
+\hat{i}_{k, i}^-
+&=
+0 \quad \text{otherwise},
+\end{split}
+\end{align}
+and
+\begin{align}
+\begin{split}
+\hat{i}_{i + 1, i}^+
+&=
 \alpha_{i + 1}^+,
-\\ \text{i}_{i}^+ (\mu, \nu)
+\\
+\hat{i}_{i, i}^+
 &=
-\text{i}_{i + 1}^+ (\mu, \nu) e^{-\Delta\tau_{i}} +
-    \Delta\text{i}_{i}^+ (S, \mu, \nu)
-\\ &=
-\alpha_{i + 1}^+ e^{-\Delta\tau_{i}} + \beta_{i}^+,
-\\ \text{i}_{i - 1}^+ (\mu, \nu)
+\hat{i}_{i + 1, i}^+ e^{-\Delta\tau_{i}} + \beta_{i}^+,
+\\
+\hat{i}_{i - 1, i}^+
 &=
-\text{i}_{i}^+ (\mu, \nu) e^{-\Delta\tau_{i - 1}} +
-    \Delta\text{i}_{i - 1}^+ (S, \mu, \nu)
-\\ &=
-[\alpha_{i + 1}^+ e^{-\Delta\tau_{i}} + \beta_{i}^+] e^{-\Delta\tau_{i - 1}} +
-    \gamma_{i - 1}^+.
-\end{align*}
+\hat{i}_{i, i}^+ e^{-\Delta\tau_{i - 1}} + \gamma_{i - 1}^+,
+\\
+\hat{i}_{k, i}^+
+&=
+\hat{i}_{k + 1, i}^+ e^{-\Delta\tau_k} \quad \text{for } k = i - 2, i - 3, \dots, 1,
+\\
+\hat{i}_{k, i}^+
+&=
+0 \quad \text{otherwise}.
+\end{split}
+\end{align}
+There is a clear symmetry here between the outgoing and incident rays. Using this form of the lambda matrix along with the vector $S_i$ will ensure that equations \ref{eq:13} are satisfied, such that the formal solution is calculated. As for the integrals used to determine the matrix elements of the lambda operator, we choose $\mu$ values based on 32-point Gauss-Legendre quadrature, and sum the values of $\hat{i}$ in a weighted sum. In \autoref{sec:results} we discuss how changes to this integration method alter the result.
+
+Once the formal solution is able to be calculated, one may construct $\Lambda^*$ and perform iterations of the ALI algorithm. For this work we specifically construct $\Lambda^*$ using the tridiagonals of the lambda operator, as a tridiagonal matrix equation solution is able to be quickly computed. From here, Equations \ref{eq:11} and \ref{eq:4} may be used to iteratively calculate a converged value of $J$, which solves the scattering problem, allowing the true formal solution to be solved, which may then be used to determine emergent flux or other desired quantities.
+
+
+\subsection{Initial Conditions}
+
+
+To begin ALI formalism from the previous section, certain initial conditions must first be assumed to begin iteration. First, we assume a grey atmosphere by assuming a $\tau_\nu = \tau$ grid that is only a log-space between some $\tau_\text{min}$ and $\tau_\text{max}$. We also typically set the first element of this grid to $\tau = 0$, and we replace the closest value to $\tau = 1$ with 1. Once the $\tau$ grid is established, $\Lambda$ is able to be calculated for a given $\nu$. Here this only needs to be done once because we assume the grey case, however our code is written to handle wavelength-dependent values of $\tau$.
+
+We initialize our starting value of $S_\nu$ to be $S_\nu = B_\nu$, the Planck function. To do so, we require a temperature profile; we choose for simplicity to have an isothermal atmosphere with $T = T_\text{eff}$, where $T_\text{eff}$ is an input parameter to our model. We also assume that there is no incident intensity at the surface $\tau = 0$ such that $\hat{i}^-_{0, 0} = 0$, and at depth the outgoing intensity goes as $B_\nu$, and therefore $\hat{i}^+_{N, N} = 1$. One may also insert an technique such as the diffusion approximation here, however for an isothermal atmosphere the $B_\nu$-derivative would be zero and would be irrelevant. From here, the iteration process described in \autoref{sec:numerical_approach} may begin and $J$ may be converged.
+
 
 \subsection{Ng Acceleration}
-Once three iterations have been computed, we can use Ng Acceleration \citep{ng_1974} to compute the next S value and accelerate convergence. Ng Acceleration uses the last 4 S values to compute the next. 
 
-The vectors $\mathbf{S^{n-1}},  \mathbf{S^{n-2}}, \mathbf{S^{n-3}}$ occupy a $\mathbf{2D}$ surface in the linear source function, $\mathbf{S}^{*}$ defined by,
 
-\begin{equation}
-    \mathbf{S^{*}} = (1-a-b)\mathbf{S^{n-1}} + a\mathbf{S^{n-2}} + b\mathbf{S^{n-3}}
-\end{equation}
+Once four iterations of $S$ have been computed, we may also use Ng acceleration \citep{ng_1974} to compute the next $S$ vector. This has been shown to further accelerate the convergence of $J$, leading to fewer required iterations and more computational efficiency. Because this project is specifically aimed at illustrating ALI, most of our results in \autoref{sec:results} do not include Ng acceleration. However, we do include in \autoref{sec:results} an illustration of Ng acceleration at play. Below we summarize this process.
 
-for constants $a,b$ such that the next iteration $\mathbf{S^{**}}$,
-
-\begin{equation}
+Previous iterations of the vector $\mathbf{S}$: $\mathbf{S}^{n-1}, \mathbf{S}^{n-2}, \mathbf{S}^{n-3}$ occupy a two-dimensional surface in the linear source function, $\mathbf{S}^n$, defined by
+\begin{align}
+\mathbf{S}^n = (1 - a - b) \mathbf{S}^{n-1} + a \mathbf{S}^{n-2} + b \mathbf{S}^{n-3}
+\end{align}
+for constants $a$ and $b$ such that the next iteration $\mathbf{S}^{n + 1}$ is also
+\begin{align}
 \begin{split}
-    \mathbf{S^{**}} &= \epsilon \mathbf{B} +(1-\epsilon)\Lambda \mathbf{S^{*}}\\
-    & = (1-a-b)\mathbf{S^{n}} + a\mathbf{S^{n-1}} + b\mathbf{S^{n-2}}
+\mathbf{S}^{n + 1}
+&= (1 - \epsilon) \Lambda \mathbf{S}^n + \epsilon \mathbf{B}
+\\
+& = (1 - a - b) \mathbf{S}^n + a \mathbf{S}^{n - 1} + b \mathbf{S}^{n - 2},
+\label{eq:22}
 \end{split}
-\end{equation}. 
-
-and the magnitude-squared of the difference between the iterations,
-
-\begin{equation}\label{eq:mini}
-    | \mathbf{S^{**}} - \mathbf{S^{*}}|^{2} 
-\end{equation}
-
-is minimized. The $a,b$ values minimizing Equation \ref{eq:mini} is given by,
-
-\begin{equation}
-    a = \frac{C_{1}B_{2}-C_{2}B_{1}}{A_{1}B_{2}-A_{2}B_{1}}
-\end{equation}
-
-\begin{equation}
-    b = \frac{C_{2}A_{1} - C_{1}A_{2}}{A_{1}B_{2}-A_{2}B_{1}}
-\end{equation}
-
-where,
-
-\begin{equation}
+\end{align}
+where the squared magnitude of the difference between the iterations,
+\begin{align}
+| \mathbf{S}^{n + 1} - \mathbf{S}^n |^2,
+\label{eq:mini}
+\end{align}
+is minimized. The $a, b$ values minimizing \autoref{eq:mini} may be found to be
+\begin{align}
 \begin{split}
-    A_{1} = Q_{1}\cdot Q_{1},\quad B_{1}=Q_{1}\cdot Q_{2},\quad C_{1}=Q_{1}\cdot Q_{3}\\
-    A_{2} = Q_{2}\cdot Q_{1},\quad B_{2}=Q_{2}\cdot Q_{2},\quad C_{2}=Q_{2}\cdot Q_{3}
+a &= \frac{C_1 B_2 - C_2 B_1}{A_1 B_2 - A_2 B_1}
+\\
+b &= \frac{C_2 A_1 - C_1 A_2}{A_1 B_2 - A_2 B_1},
 \end{split}
-\end{equation}
-
-and 
-
-\begin{equation}
-    \begin{split}
-        & Q_{1} = \mathbf{S^{n}}-2\mathbf{S^{n-1}}+\mathbf{S^{n-2}}\\
-        & Q_{2} = \mathbf{S^{n}}-\mathbf{S^{n-1}}-\mathbf{S^{n-2}}+\mathbf{S^{n-3}}\\
-        & Q_{3} = \mathbf{S^{n}}-\mathbf{S^{n-1}}.
-    \end{split}
-\end{equation}
-
-The new $\mathbf{S^{n+1}}$ is given by,
-
-\begin{equation}
-    \mathbf{S^{n+1}} = (1-a-b)\mathbf{S^{n}} + a\mathbf{S^{n-1}} + b\mathbf{S^{n-2}}.
-\end{equation}
-
-Before Ng Acceleration can be used again, 3 iterations must pass.
+\end{align}
+where
+\begin{align}
+\begin{split}
+A_1 &= Q_1 \cdot Q_1, \quad B_1 = Q_1 \cdot Q_2, \quad C_1 = Q_1 \cdot Q_3
+\\
+A_2 &= Q_2 \cdot Q_1, \quad B_2 = Q_2 \cdot Q_2, \quad C_2 = Q_2 \cdot Q_3
+\end{split}
+\end{align}
+and
+\begin{align}
+\begin{split}
+Q_1 &= \mathbf{S}^n - 2 \mathbf{S}^{n - 1} + \mathbf{S}^{n - 2}
+\\
+Q_2 &= \mathbf{S}^n - \mathbf{S}^{n - 1} - \mathbf{S}^{n - 2} + \mathbf{S}^{n - 3}
+\\
+Q_3 &= \mathbf{S}^n - \mathbf{S}^{n - 1}.
+\end{split}
+\end{align}
+The new $\mathbf{S}^{n + 1}$ is given as in \autoref{eq:22}. This five-iteration process is then able to be repeated until convergence.
 
 
 \section{Results and Discussion}
-We have successfully implemented ALI in our code to achieve convergence at the surface in fewer iterations. Figure 1 shows how the ratio of S-to-B improves with each iteration throughout the star. We use the default parameters listed in the project description: $\epsilon = 1e-4$, $\tau_{min} = 10^{-8}$, $\tau_{max} = 10^{6}$. At $\tau_{min}$, S/B should approach $\sqrt\epsilon$ (in this case, 1e-2). After 1 iteration, S/B is quite far from this solution, but rapidly approaches after more iterations. As $\tau$ increases, you reach deeper regions of the star where the LTE condition is more realistic (S = B), so S/B approaches 1. This holds even after just a few iterations. 
+\label{sec:results}
+\subsection{ALI Results}
+
+We have successfully implemented the ALI method to achieve convergence across all values of $\tau$. Here we populate our $\tau$ grid with $\tau_\text{min} = 10^{-8}$, $\tau_\text{max} = 10^6$, and a grid size of 256 points. In general we also let $T_\text{eff} = 6000$ K.
+
+Figure~\ref{fig:1} shows how the ratio $S / B$ improves with each iteration throughout the atmosphere. We use a default $\epsilon$ of 1e-4 for the majority of our figures unless otherwise stated. At $\tau = 0$, $S / B$ should approach $\sqrt\epsilon$ (in this case, 1e-2). After 1 iteration, S/B is quite far from this solution but rapidly approaches after more iterations. As $\tau$ increases, you reach deeper regions of the star where the LTE condition is more realistic (S = B), so S/B approaches 1. This holds even after just a few iterations. 
 
 \begin{figure}[ht]
  \centering
  \includegraphics[width=0.75\textwidth]{S_B_convergence_noNg.pdf}
- \caption{An example convergence plot with our default parameters using ALI. Each gray line represents a new iteration, with 500 iterations total. At the surface, S/B approaches $\sqrt\epsilon$ while at depth, S/B approaches 1.}
+ \caption{An example convergence plot with our default parameters using ALI. Each gray line represents a new iteration, with 500 iterations in total. At the surface, S/B approaches $\sqrt\epsilon$ while at depth, S/B approaches 1.}
+ \label{fig:1}
 \end{figure}
 
-As a sanity check, we plot a spectrum generated from our model to ensure we obtain a blackbody curve. Figure 2 shows this spectrum from 3000 to 7000 $\AA$. We have attempted including an absorption line at 6564 $\AA$ (H$\alpha$). However, this feature does not show the expected Gaussian shape an absorption feature should have. This is most likely due to our Planck function being independent of $\tau$ and our temperature profile being isothermal. 
+As a sanity check, we plot a spectrum generated from our model to ensure we obtain a blackbody curve. Figure~\ref{fig:2} shows this spectrum from 3000 to 7000 \text{\AA}. We have attempted to include an absorption line at 6564 \text{\AA } (H$\alpha$). However, this feature does not show the expected Gaussian shape an absorption feature should have. This is most likely due to our Planck function being independent of $\tau$ and our temperature profile being isothermal.
 
 \begin{figure}[ht]
  \centering
- \includegraphics[width=0.75\textwidth]{test_spectrum.pdf}
- \caption{Output spectrum using the default parameters. The line feature at 6564 $\AA$ appears, however the shape is incorrect.}
+ \includegraphics[width=0.75\textwidth]{spectrum.pdf}
+ \caption{Output spectrum using the default parameters. The line feature at 6564 \text{\AA } appears, however the shape is incorrect.}
+  \label{fig:2}
 \end{figure}
 
-We test the effects of varying $\epsilon$ on the number of iterations needed to achieve convergence. Figure 3 displays these results, with each panel showing a different $\epsilon$. For $\epsilon = 1$, we have pure LTE, so S = B and S/B = 1 everywhere, so only 1 iteration is required. As $\epsilon$ approaches 0 and we deviate away from LTE, more iterations are required to achieve convergence. 
+We test the effects of varying $\epsilon$ on the number of iterations needed to achieve convergence. Figure~\ref{fig:3} displays these results, with each panel showing a different $\epsilon$. For $\epsilon = 1$, we have pure LTE, so S = B and S/B = 1 everywhere, so only 1 iteration is required. As $\epsilon$ approaches 0 and we deviate away from LTE, more iterations are required to achieve convergence. 
 
 \begin{figure}[ht]
  \centering
  \includegraphics[width=0.99\textwidth]{eps_convergence.pdf}
  \caption{Convergence plots for different values of $\epsilon$. As $\epsilon$ approaches 0, more iterations are needed to achieve convergence at the surface.}
+   \label{fig:3}
 \end{figure}
 
-Since J is the direction-averaged intensity, comparing our J to an analytic value is important as it directly corresponds to emergent flux from the atmosphere. In Figure 4 we show the percent difference between our J and J calculated from using a linear Planck function and the Eddington approximation: 
+Since J is the direction-averaged intensity, comparing our J to an analytic value is important as it directly corresponds to emergent flux from the atmosphere. In Figure~\ref{fig:4}, we show the percent difference between our J and J calculated by using a linear Planck function and the Eddington approximation: 
 
 \begin{equation}
 \begin{split}
    J(\tau) = a + b\tau + \frac{(b - \sqrt{3}a)e^{-\sqrt{3\epsilon}}}{(\sqrt{3}+\sqrt{3\epsilon})}
 \end{split}
+\label{eq:24}
 \end{equation}
 
 In our case, the Planck function is not dependent on $\tau$, so b = 0, and a is just the Planck function. 
@@ -261,40 +400,51 @@ The largest difference between our J and the analytic solution occurs from $10^{
  \centering
  \includegraphics[width=0.75\textwidth]{J_comparison.pdf}
  \caption{Comparison of our J to the analytic solution. The greatest differences occur around $\tau = 2/3$, where we expect the greatest impact in the emergent flux from the atmosphere. Varying $\epsilon$ does not impact J to a significant degree.}
+ \label{fig:4}
 \end{figure}
 
-We also investigate the effect of using fewer points in the Gaussian quadrature. Figure 5 shows that if we use fewer points, our calculated source function deviates significantly in the same $\tau$ regime as when we investigate J. 
-Using a different amount of points can effect the time it takes to converge and generate a spectrum. To test this, we simply generated a spectrum 10 times for each number of points, recorded them, then took the average. For using 2, 4, 8, and 32-point, we obtain average times of 3.629, 3.484, 3.583, and 4.238 seconds respectively. This means 2, 4, and 8-point are faster by 14, 18, and 15\% faster than 32-point, but at worst only 9, 4, and 2\% less accurate. Time is not of the essence for us though, so we can afford using 32-point for the best accuracy.
+\subsection{Effects of Gaussian Quadrature}
+
+We also investigate the effect of using fewer points in the Gaussian quadrature. Figure~\ref{fig:5} shows that if we use fewer points, our calculated source function deviates significantly in the same $\tau$ regime as when we investigate J. 
+Using a different amount of points can affect the time it takes to converge and generate a spectrum. To test this, we simply generated a spectrum 10 times for each number of points, recorded them, then took the average. For using 2, 4, 8, and 32-point, we obtain average times of 3.629, 3.484, 3.583, and 4.238 seconds respectively. This means 2, 4, and 8-point are faster by 14, 18, and 15\% faster than 32-point, but at worst only 9, 4, and 2\% less accurate. Time is not of the essence for us though, so we can afford to use 32-point for the best accuracy.
 
 
 \begin{figure}[ht]
  \centering
  \includegraphics[width=0.75\textwidth]{quadrature.pdf}
  \caption{Deviations from 32-point Gaussian quadrature as a function of $\tau$. Similarly to Figure 4, the greatest difference occurs from $0.1 < \tau < 1$. }
+ \label{fig:5}
 \end{figure}
 
-Finally, we investigate the effects of Ng acceleration on the speed of convergence. The left panel in Figure 6 shows the number of iterations required by each method to reach convergence at the surface for our default $\epsilon$. ALI unsurprisingly is much faster than normal LI, with Ng acceleration further improving the required amount of iterations. The right panel shows how J varies per iteration for each method. Specifically, we calculate the change in J after each iteration, normalized by the previous J, and then find the maximum change across $\tau$ at each step. This gives us an idea of how significantly J changes, with Ng acceleration obtaining smaller variations in a fewer amount of variations compared to LI and ALI. LI in particular does not do a good job of minimizing this quantity, and would require exponentially more iterations to achieve the same result.
+\subsection{Ng Acceleration Results}
+
+Finally, we investigate the effects of Ng acceleration on the speed of convergence. The left panel in Figure~\ref{fig:6} shows the number of iterations required by each method to reach convergence at the surface for our default $\epsilon$. ALI unsurprisingly is much faster than normal LI, with Ng acceleration further improving the required amount of iterations. The right panel shows how J varies per iteration for each method. Specifically, we calculate the change in J after each iteration, normalized by the previous J, and then find the maximum change across $\tau$ at each step. This gives us an idea of how significantly J changes, with Ng acceleration obtaining smaller variations in a fewer amount of variations compared to LI and ALI. LI in particular does not do a good job of minimizing this quantity and would require exponentially more iterations to achieve the same result.
 
 \begin{figure}[ht]
  \centering
  \includegraphics[width=0.99\textwidth]{iterations.pdf}
- \caption{Left: The amount of iterations required for S/B to converge at the surface for each method used in our code. Lambda iteration takes significantly longer than ALI as expected. Ng acceleration improves the required number of iterations even further. The jagged pattern is a result of how the algorithm is designed. Right: Variations in J as a function of iteration. Ng acceleration minimizes the change in J faster than ALI, though this does not take effect until about 40 iterations, and then levels off before dropping again at 700 iterations.}
+ \caption{Left: The number of iterations required for S/B to converge at the surface for each method used in our code. Lambda iteration takes significantly longer than ALI as expected. Ng acceleration improves the required number of iterations even further. The jagged pattern is a result of how the algorithm is designed. Right: Variations in J as a function of iteration. Ng acceleration minimizes the change in J faster than ALI, though this does not take effect until about 40 iterations, and then levels off before dropping again at 700 iterations.}
+  \label{fig:6}
 \end{figure}
 
-In Figure 7, we plot the same convergence test as Figure 1 with using Ng acceleration. It becomes clear that fewer iterations are needed, with large jumps in S/B compared to gradual steps using ALI.
+In Figure~\ref{fig:7}, we plot the same convergence test as Figure~\ref{fig:1} using Ng acceleration. It becomes clear that fewer iterations are needed, with large jumps in S/B compared to gradual steps using ALI.
 
 \begin{figure}[ht]
  \centering
  \includegraphics[width=0.75\textwidth]{doc/figs/S_B_convergence.pdf}
  \caption{The same convergence plot as Figure 1 but with Ng acceleration implemented. The number of iterations required for convergence decreases significantly.}
+  \label{fig:7}
 \end{figure}
 
-We run a similar test as with the various Gaussian quadrature points, but now seeing how quickly we can converge and generate a spectrum with the various methods. ALI takes 4.222 seconds and Ng takes 1.695 seconds. LI was not included as the number of tierations it would take to converge is significantly longer than ALI, which would naturally take significantly more time.  
+We run a similar test as with the various Gaussian quadrature points, but now seeing how quickly we can converge and generate a spectrum with the various methods. ALI takes 4.222 seconds and Ng takes 1.695 seconds. LI was not included as the number of iterations it would take to converge is significantly longer than ALI, which would naturally take significantly more time.  
 
 \section{Conclusion}
 
+In this project, we implemented three different iterative methods in order to solve the radiative transfer equation in the NLTE scattering problem.
 
 
+
+\clearpage
 \bibliography{FinalProjectReport}
 
 \end{document}
